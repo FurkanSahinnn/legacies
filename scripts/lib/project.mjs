@@ -47,6 +47,8 @@ const DEFAULT_CONFIG = {
   compactBudget: 9000,
   promptContext: true,
   promptBudget: 2500,
+  subagentContext: true,
+  subagentBudget: 4000,
   stopReminder: true,
   reminderMinFiles: 3,
   reminderIdleMinutes: 45,

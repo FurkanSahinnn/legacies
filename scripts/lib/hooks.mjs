@@ -11,7 +11,7 @@ import {
   matchPaths,
   trackedFiles,
 } from './codeindex.mjs';
-import { buildContext, renderAutoCard, renderCheckpoint, sessionFiles } from './context.mjs';
+import { buildContext, buildSubagentContext, renderAutoCard, renderCheckpoint, sessionFiles } from './context.mjs';
 import { projectBrief, workspaceBrief } from './crossproject.mjs';
 import { expandTerms, glossaryIndex } from './glossary.mjs';
 import { checkFileWrite, checkShellCommand } from './guards.mjs';
@@ -473,9 +473,24 @@ export function onSessionEnd(input) {
   return null;
 }
 
+// Claude Code's own helper agents answer questions about Claude Code itself, not about the project.
+const HELPER_AGENTS = new Set(['claude-code-guide', 'statusline-setup']);
+
+// A subagent starts without the session's context; it gets a short brief of the project's memory.
+export function onSubagentStart(input) {
+  if (HELPER_AGENTS.has(input.agent_type) || process.env.LEGACIES_SUBAGENT_CONTEXT === 'off') return null;
+  const { paths } = locate(input);
+  if (!paths) return null;
+  const config = loadConfig(paths);
+  if (config.subagentContext === false) return null;
+  const text = buildSubagentContext({ paths, budget: config.subagentBudget });
+  return text ? additional('SubagentStart', text) : null;
+}
+
 export const HANDLERS = {
   'session-start': onSessionStart,
   'directory-added': onDirectoryAdded,
+  'subagent-start': onSubagentStart,
   'user-prompt-submit': onUserPromptSubmit,
   'pre-tool-use': onPreToolUse,
   'post-tool-use': onPostToolUse,

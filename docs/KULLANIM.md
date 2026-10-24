@@ -41,6 +41,7 @@ Bunlar için bir şey yapman gerekmez:
 | Oturum başında | Proje kartını, güncel durumu, son devir kartını ve not dizinini bağlama ekler |
 | Her mesajda | Mesajla ilgili notları ve kod konumlarını ekler; ilgili bir şey yoksa sessiz kalır |
 | Araç çağrılarında | `--no-verify`'ı ve koda yazılan sırları engeller; lint ya da format ayarı değişecekse sana sorar |
+| Bir alt ajan başlarken | Ona hafızanın kısa bir özetini verir: notların başlıkları ve proje kartı. Alt ajan not ya da kart yazmaz; bulduklarını ana oturuma bildirir |
 | Konuşma sıkıştırılırken | Kontrol noktası kaydeder; sıkıştırmadan sonra son isteklerin birebir geri gelir |
 | Bitirirken | Son karttan beri dosya değiştiyse ve 3+ dosya ya da 45 dakika dolduysa bir kez devir kartı ister (en fazla 30 dakikada bir) |
 | Oturum kapanınca | Kart yazılmamışsa ve düzenleme ya da en az 3 istek varsa mekanik bir kart bırakır |
