@@ -1,0 +1,46 @@
+{
+  "id": "oss-release",
+  "layer": "process",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "open-source",
+    "sanitization",
+    "secrets",
+    "licensing",
+    "release",
+    "readme",
+    "license",
+    "contributing",
+    "pii",
+    "scanning"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "agent",
+      "name": "opensource-forker",
+      "from": "ecc/agents/opensource-forker.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "opensource-packager",
+      "from": "ecc/agents/opensource-packager.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "opensource-sanitizer",
+      "from": "ecc/agents/opensource-sanitizer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "opensource-pipeline",
+      "from": "ecc/skills/opensource-pipeline/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

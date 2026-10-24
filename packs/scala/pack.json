@@ -1,0 +1,36 @@
+{
+  "id": "scala",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "scala",
+    "sbt",
+    "jvm"
+  ],
+  "detect": {
+    "files": [
+      "build.sbt",
+      "build.sc",
+      "build.mill",
+      ".scalafmt.conf",
+      "project/build.properties",
+      "*.scala"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "scala-patterns",
+      "from": "original/skills/scala-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "scala-coding-style",
+      "from": "original/rules/scala/coding-style.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

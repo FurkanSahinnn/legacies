@@ -1,0 +1,127 @@
+{
+  "id": "swift-ios",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "swift",
+    "ios",
+    "foundation-models",
+    "on-device-llm",
+    "app-icons",
+    "sf-symbols",
+    "xcode-assets",
+    "swiftui",
+    "liquid-glass",
+    "uikit",
+    "actors",
+    "persistence",
+    "concurrency",
+    "swift-6.2",
+    "main-actor",
+    "dependency-injection",
+    "swift-testing",
+    "mocking",
+    "observable",
+    "navigation"
+  ],
+  "detect": {
+    "files": [
+      "Package.swift",
+      "/*.xcodeproj/project.pbxproj",
+      "*.swift"
+    ],
+    "contains": [
+      {
+        "files": "*.swift",
+        "text": "import FoundationModels"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "swift-build-resolver",
+      "from": "ecc/agents/swift-build-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "swift-reviewer",
+      "from": "ecc/agents/swift-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "swift-coding-style",
+      "from": "ecc/rules/swift/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "swift-patterns",
+      "from": "ecc/rules/swift/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "swift-security",
+      "from": "ecc/rules/swift/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "swift-testing",
+      "from": "ecc/rules/swift/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "foundation-models-on-device",
+      "from": "ecc/skills/foundation-models-on-device/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "ios-icon-gen",
+      "from": "ecc/skills/ios-icon-gen/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "liquid-glass-design",
+      "from": "ecc/skills/liquid-glass-design/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "swift-actor-persistence",
+      "from": "ecc/skills/swift-actor-persistence/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "swift-concurrency-6-2",
+      "from": "ecc/skills/swift-concurrency-6-2/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "swift-protocol-di-testing",
+      "from": "ecc/skills/swift-protocol-di-testing/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "swiftui-patterns",
+      "from": "ecc/skills/swiftui-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:swift/hooks.md",
+      "reason": "ecc:rule:swift/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

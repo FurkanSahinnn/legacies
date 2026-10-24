@@ -1,0 +1,73 @@
+{
+  "id": "ruby-rails",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "ruby",
+    "rails",
+    "hotwire",
+    "activerecord",
+    "rspec",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "config/application.rb",
+      "config/routes.rb",
+      "*.rb"
+    ],
+    "gem": [
+      "rails"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "ruby-reviewer",
+      "from": "ecc/agents/ruby-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "ruby-coding-style",
+      "from": "ecc/rules/ruby/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "ruby-patterns",
+      "from": "ecc/rules/ruby/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "ruby-security",
+      "from": "ecc/rules/ruby/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "ruby-testing",
+      "from": "ecc/rules/ruby/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "rails-patterns",
+      "from": "ecc/skills/rails-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:ruby/hooks.md",
+      "reason": "ecc:rule:ruby/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

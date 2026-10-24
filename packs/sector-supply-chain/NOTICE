@@ -1,0 +1,11 @@
+This pack contains files adapted from ECC (https://github.com/affaan-m/ECC) that are licensed under the
+Apache License, Version 2.0; see LICENSE-Apache-2.0.txt. legacies modified them (frontmatter trimmed, argument tokens escaped).
+
+- skills/carrier-relationship-management/SKILL.md
+- skills/customs-trade-compliance/SKILL.md
+- skills/energy-procurement/SKILL.md
+- skills/inventory-demand-planning/SKILL.md
+- skills/logistics-exception-management/SKILL.md
+- skills/production-scheduling/SKILL.md
+- skills/quality-nonconformance/SKILL.md
+- skills/returns-reverse-logistics/SKILL.md

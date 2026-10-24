@@ -1,0 +1,467 @@
+{
+  "name": "legacies",
+  "owner": {
+    "name": "Furkan Şahin"
+  },
+  "metadata": {
+    "description": "legacies: projeye özel yerel hafıza plugin'i"
+  },
+  "plugins": [
+    {
+      "name": "legacies",
+      "source": "./",
+      "description": "Per-project local memory and the core of the legacies packs: session-start and post-compaction context, pre-compaction checkpoints, handoff cards, pack selection.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-ai-agents",
+      "source": "./packs/ai-agents",
+      "description": "legacies ai-agents pack: 7 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-ai-llm",
+      "source": "./packs/ai-llm",
+      "description": "legacies ai-llm pack: 5 skills, 1 agent. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-ml-engineering",
+      "source": "./packs/ml-engineering",
+      "description": "legacies ml-engineering pack: 3 skills, 1 agent. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-pytorch",
+      "source": "./packs/pytorch",
+      "description": "legacies pytorch pack: 1 skill, 1 agent. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-django",
+      "source": "./packs/django",
+      "description": "legacies django pack: 5 skills, 2 agents. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-fastapi",
+      "source": "./packs/fastapi",
+      "description": "legacies fastapi pack: 1 skill, 1 agent. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-javascript-node",
+      "source": "./packs/javascript-node",
+      "description": "legacies javascript-node pack: 4 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-quarkus",
+      "source": "./packs/quarkus",
+      "description": "legacies quarkus pack: 4 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-spring-boot",
+      "source": "./packs/spring-boot",
+      "description": "legacies spring-boot pack: 4 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-clickhouse",
+      "source": "./packs/clickhouse",
+      "description": "legacies clickhouse pack: 1 skill. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-db-migrations",
+      "source": "./packs/db-migrations",
+      "description": "legacies db-migrations pack: 1 skill. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-mysql",
+      "source": "./packs/mysql",
+      "description": "legacies mysql pack: 1 skill. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-postgres",
+      "source": "./packs/postgres",
+      "description": "legacies postgres pack: 1 skill, 1 agent. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-prisma",
+      "source": "./packs/prisma",
+      "description": "legacies prisma pack: 1 skill. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-redis",
+      "source": "./packs/redis",
+      "description": "legacies redis pack: 1 skill. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-containers",
+      "source": "./packs/containers",
+      "description": "legacies containers pack: 2 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-deployment",
+      "source": "./packs/deployment",
+      "description": "legacies deployment pack: 4 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-networking",
+      "source": "./packs/networking",
+      "description": "legacies networking pack: 2 agents. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-angular",
+      "source": "./packs/angular",
+      "description": "legacies angular pack: 1 skill, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-frontend-design",
+      "source": "./packs/frontend-design",
+      "description": "legacies frontend-design pack: 3 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-motion",
+      "source": "./packs/motion",
+      "description": "legacies motion pack: 3 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-nuxt",
+      "source": "./packs/nuxt",
+      "description": "legacies nuxt pack: 1 skill, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-react",
+      "source": "./packs/react",
+      "description": "legacies react pack: 5 skills, 1 agent, 2 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-vue",
+      "source": "./packs/vue",
+      "description": "legacies vue pack: 2 skills, 1 agent, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-cpp",
+      "source": "./packs/cpp",
+      "description": "legacies cpp pack: 2 skills, 2 agents, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-csharp-dotnet",
+      "source": "./packs/csharp-dotnet",
+      "description": "legacies csharp-dotnet pack: 3 skills, 1 agent, 1 rule. Adapted from ECC, with content written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-fsharp",
+      "source": "./packs/fsharp",
+      "description": "legacies fsharp pack: 1 skill, 1 agent, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-go",
+      "source": "./packs/go",
+      "description": "legacies go pack: 3 skills, 2 agents, 4 rules. Adapted from ECC, with content written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-java",
+      "source": "./packs/java",
+      "description": "legacies java pack: 3 skills, 2 agents, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-kotlin",
+      "source": "./packs/kotlin",
+      "description": "legacies kotlin pack: 5 skills, 2 agents, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-perl",
+      "source": "./packs/perl",
+      "description": "legacies perl pack: 3 skills, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-php-laravel",
+      "source": "./packs/php-laravel",
+      "description": "legacies php-laravel pack: 4 skills, 1 agent, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-python",
+      "source": "./packs/python",
+      "description": "legacies python pack: 3 skills, 1 agent, 1 rule. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-ruby-rails",
+      "source": "./packs/ruby-rails",
+      "description": "legacies ruby-rails pack: 1 skill, 1 agent, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-rust",
+      "source": "./packs/rust",
+      "description": "legacies rust pack: 3 skills, 2 agents, 4 rules. Adapted from ECC, with content written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-swift-ios",
+      "source": "./packs/swift-ios",
+      "description": "legacies swift-ios pack: 7 skills, 2 agents, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-typescript",
+      "source": "./packs/typescript",
+      "description": "legacies typescript pack: 2 agents, 1 rule. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-android",
+      "source": "./packs/android",
+      "description": "legacies android pack: 2 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-arkts-harmonyos",
+      "source": "./packs/arkts-harmonyos",
+      "description": "legacies arkts-harmonyos pack: 1 agent, 4 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-flutter-dart",
+      "source": "./packs/flutter-dart",
+      "description": "legacies flutter-dart pack: 2 skills, 2 agents, 4 rules, 1 command. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-react-native",
+      "source": "./packs/react-native",
+      "description": "legacies react-native pack: 1 skill, 7 rules. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-api-design",
+      "source": "./packs/api-design",
+      "description": "legacies api-design pack: 2 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-architecture",
+      "source": "./packs/architecture",
+      "description": "legacies architecture pack: 4 skills, 1 agent. Adapted from ECC, with content written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-coding-standards",
+      "source": "./packs/coding-standards",
+      "description": "legacies coding-standards pack: 3 skills, 1 agent. Adapted from ECC, with content written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-docs-governance",
+      "source": "./packs/docs-governance",
+      "description": "legacies docs-governance pack: 5 skills, 2 agents. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-git-workflow",
+      "source": "./packs/git-workflow",
+      "description": "legacies git-workflow pack: 2 skills, 1 agent, 1 command. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-performance",
+      "source": "./packs/performance",
+      "description": "legacies performance pack: 5 skills, 1 agent. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-web-quality",
+      "source": "./packs/web-quality",
+      "description": "legacies web-quality pack: 3 skills, 2 agents, 1 rule. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-agent-workflows",
+      "source": "./packs/agent-workflows",
+      "description": "legacies agent-workflows pack: 10 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-oss-release",
+      "source": "./packs/oss-release",
+      "description": "legacies oss-release pack: 1 skill, 3 agents. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-requirements",
+      "source": "./packs/requirements",
+      "description": "legacies requirements pack: 2 skills, 1 agent, 1 command. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-sector-healthcare",
+      "source": "./packs/sector-healthcare",
+      "description": "legacies sector-healthcare pack: 4 skills, 1 agent. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-sector-supply-chain",
+      "source": "./packs/sector-supply-chain",
+      "description": "legacies sector-supply-chain pack: 8 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-sector-web3",
+      "source": "./packs/sector-web3",
+      "description": "legacies sector-web3 pack: 5 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-security",
+      "source": "./packs/security",
+      "description": "legacies security pack: 3 skills, 1 agent. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-vendor-integrations",
+      "source": "./packs/vendor-integrations",
+      "description": "legacies vendor-integrations pack: 3 skills. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-testing-core",
+      "source": "./packs/testing-core",
+      "description": "legacies testing-core pack: 4 skills, 1 agent, 1 command. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-testing-e2e",
+      "source": "./packs/testing-e2e",
+      "description": "legacies testing-e2e pack: 4 skills, 1 agent. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-dev-tools",
+      "source": "./packs/dev-tools",
+      "description": "legacies dev-tools pack: 6 skills, 1 agent, 1 command. Adapted from ECC; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-svelte",
+      "source": "./packs/svelte",
+      "description": "legacies svelte pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-astro",
+      "source": "./packs/astro",
+      "description": "legacies astro pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-remix",
+      "source": "./packs/remix",
+      "description": "legacies remix pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-electron",
+      "source": "./packs/electron",
+      "description": "legacies electron pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-tauri",
+      "source": "./packs/tauri",
+      "description": "legacies tauri pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-flask",
+      "source": "./packs/flask",
+      "description": "legacies flask pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-php-symfony",
+      "source": "./packs/php-symfony",
+      "description": "legacies php-symfony pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-sqlalchemy",
+      "source": "./packs/sqlalchemy",
+      "description": "legacies sqlalchemy pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-sqlite",
+      "source": "./packs/sqlite",
+      "description": "legacies sqlite pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-elixir",
+      "source": "./packs/elixir",
+      "description": "legacies elixir pack: 2 skills, 1 rule. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-scala",
+      "source": "./packs/scala",
+      "description": "legacies scala pack: 1 skill, 1 rule. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-haskell",
+      "source": "./packs/haskell",
+      "description": "legacies haskell pack: 1 skill, 1 rule. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-r-lang",
+      "source": "./packs/r-lang",
+      "description": "legacies r-lang pack: 1 skill, 1 rule. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-shell",
+      "source": "./packs/shell",
+      "description": "legacies shell pack: 1 skill, 1 rule. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-godot",
+      "source": "./packs/godot",
+      "description": "legacies godot pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    },
+    {
+      "name": "legacies-cypress",
+      "source": "./packs/cypress",
+      "description": "legacies cypress pack: 1 skill. Written for legacies; not yet evaluated.",
+      "version": "0.4.0"
+    }
+  ]
+}

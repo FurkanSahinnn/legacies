@@ -1,0 +1,64 @@
+{
+  "id": "angular",
+  "layer": "frontend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "angular",
+    "signals",
+    "typescript",
+    "forms",
+    "routing",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "angular.json"
+    ],
+    "npm": [
+      "@angular/core"
+    ]
+  },
+  "members": [
+    {
+      "kind": "rule",
+      "name": "angular-coding-style",
+      "from": "ecc/rules/angular/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "angular-patterns",
+      "from": "ecc/rules/angular/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "angular-security",
+      "from": "ecc/rules/angular/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "angular-testing",
+      "from": "ecc/rules/angular/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "angular-developer",
+      "from": "ecc/skills/angular-developer/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:angular/hooks.md",
+      "reason": "ecc:rule:angular/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "id": "nuxt",
+  "layer": "frontend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "nuxt",
+    "vue",
+    "ssr",
+    "hydration",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "nuxt.config.*"
+    ],
+    "npm": [
+      "nuxt"
+    ]
+  },
+  "members": [
+    {
+      "kind": "rule",
+      "name": "nuxt-coding-style",
+      "from": "ecc/rules/nuxt/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "nuxt-patterns",
+      "from": "ecc/rules/nuxt/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "nuxt-security",
+      "from": "ecc/rules/nuxt/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "nuxt-testing",
+      "from": "ecc/rules/nuxt/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "nuxt4-patterns",
+      "from": "ecc/skills/nuxt4-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:nuxt/hooks.md",
+      "reason": "ecc:rule:nuxt/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

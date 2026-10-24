@@ -1,0 +1,99 @@
+{
+  "id": "php-laravel",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "php",
+    "laravel",
+    "eloquent",
+    "queues",
+    "security",
+    "csrf",
+    "xss",
+    "sanctum",
+    "phpunit",
+    "pest",
+    "factories",
+    "verification",
+    "static-analysis",
+    "psr-12",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "artisan",
+      "composer.json",
+      "*.php"
+    ],
+    "composer": [
+      "laravel/framework"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "php-reviewer",
+      "from": "ecc/agents/php-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "php-coding-style",
+      "from": "ecc/rules/php/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "php-patterns",
+      "from": "ecc/rules/php/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "php-security",
+      "from": "ecc/rules/php/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "php-testing",
+      "from": "ecc/rules/php/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "laravel-patterns",
+      "from": "ecc/skills/laravel-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "laravel-security",
+      "from": "ecc/skills/laravel-security/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "laravel-tdd",
+      "from": "ecc/skills/laravel-tdd/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "laravel-verification",
+      "from": "ecc/skills/laravel-verification/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:php/hooks.md",
+      "reason": "ecc:rule:php/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "id": "vue",
+  "layer": "frontend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "vue",
+    "vant",
+    "element-plus",
+    "ant-design-vue",
+    "screenshot-to-code",
+    "composition-api",
+    "pinia",
+    "vue-router",
+    "nuxt",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "*.vue"
+    ],
+    "npm": [
+      "vue"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "vue-reviewer",
+      "from": "ecc/agents/vue-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "vue-coding-style",
+      "from": "ecc/rules/vue/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "vue-patterns",
+      "from": "ecc/rules/vue/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "vue-security",
+      "from": "ecc/rules/vue/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "vue-testing",
+      "from": "ecc/rules/vue/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "ui-to-vue",
+      "from": "ecc/skills/ui-to-vue/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "vue-patterns",
+      "from": "ecc/skills/vue-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:vue/hooks.md",
+      "reason": "ecc:rule:vue/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    },
+    {
+      "id": "ecc:command:vue-review",
+      "reason": "ecc:agent:vue-reviewer ile birleşir: ajanı çağıran sarmalayıcı komut"
+    }
+  ]
+}

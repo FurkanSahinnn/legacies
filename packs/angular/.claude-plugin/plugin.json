@@ -1,0 +1,22 @@
+{
+  "name": "legacies-angular",
+  "version": "0.4.0",
+  "description": "legacies angular pack: 1 skill, 4 rules. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "signals",
+    "typescript",
+    "forms",
+    "routing",
+    "style",
+    "tooling",
+    "patterns"
+  ],
+  "dependencies": [
+    "legacies"
+  ]
+}

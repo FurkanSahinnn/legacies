@@ -1,0 +1,29 @@
+{
+  "id": "svelte",
+  "layer": "frontend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "svelte",
+    "sveltekit"
+  ],
+  "detect": {
+    "files": [
+      "svelte.config.*",
+      "*.svelte"
+    ],
+    "npm": [
+      "svelte",
+      "@sveltejs/kit"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "svelte-sveltekit",
+      "from": "original/skills/svelte-sveltekit/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

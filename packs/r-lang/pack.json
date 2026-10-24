@@ -1,0 +1,37 @@
+{
+  "id": "r-lang",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "r",
+    "tidyverse",
+    "shiny",
+    "quarto"
+  ],
+  "detect": {
+    "files": [
+      "renv.lock",
+      "*.Rproj",
+      ".Rprofile",
+      ".lintr",
+      "*.R",
+      "*.Rmd"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "r-patterns",
+      "from": "original/skills/r-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "r-coding-style",
+      "from": "original/rules/r/coding-style.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

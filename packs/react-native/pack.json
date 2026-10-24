@@ -1,0 +1,95 @@
+{
+  "id": "react-native",
+  "layer": "mobile",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "react-native",
+    "expo",
+    "expo-router",
+    "tanstack-query",
+    "accessibility",
+    "style",
+    "tooling",
+    "patterns",
+    "performance",
+    "release",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "metro.config.*"
+    ],
+    "npm": [
+      "react-native",
+      "expo"
+    ],
+    "contains": [
+      {
+        "files": "app.json",
+        "text": "\"expo\""
+      },
+      {
+        "files": "app.config.*",
+        "text": "expo/config"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "rule",
+      "name": "react-native-accessibility",
+      "from": "ecc/rules/react-native/accessibility.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "react-native-coding-style",
+      "from": "ecc/rules/react-native/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "react-native-patterns",
+      "from": "ecc/rules/react-native/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "react-native-performance",
+      "from": "ecc/rules/react-native/performance.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "react-native-production-readiness",
+      "from": "ecc/rules/react-native/production-readiness.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "react-native-security",
+      "from": "ecc/rules/react-native/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "react-native-testing",
+      "from": "ecc/rules/react-native/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "react-native-patterns",
+      "from": "ecc/skills/react-native-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:react-native/hooks.md",
+      "reason": "ecc:rule:react-native/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

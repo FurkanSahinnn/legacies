@@ -1,0 +1,33 @@
+{
+  "id": "flask",
+  "layer": "backend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "flask",
+    "python",
+    "wsgi"
+  ],
+  "detect": {
+    "files": [
+      ".flaskenv"
+    ],
+    "pypi": [
+      "flask",
+      "flask-sqlalchemy",
+      "flask-migrate",
+      "flask-login",
+      "flask-jwt-extended",
+      "flask-wtf"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "flask-patterns",
+      "from": "original/skills/flask-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

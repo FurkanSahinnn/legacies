@@ -1,0 +1,122 @@
+{
+  "id": "dev-tools",
+  "layer": "tools",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "codescene",
+    "code-health",
+    "mcp",
+    "refactoring",
+    "context7",
+    "documentation",
+    "flox",
+    "nix",
+    "dev-environments",
+    "github",
+    "gh-cli",
+    "issues",
+    "pull-requests",
+    "releases",
+    "jira",
+    "atlassian",
+    "rest-api",
+    "uncloud",
+    "self-hosting",
+    "caddy"
+  ],
+  "detect": {
+    "dirs": [
+      ".flox"
+    ],
+    "contains": [
+      {
+        "files": ".mcp.json",
+        "text": "codescene"
+      },
+      {
+        "files": ".mcp.json",
+        "text": "context7"
+      },
+      {
+        "files": ".mcp.json",
+        "text": "atlassian"
+      },
+      {
+        "files": ".mcp.json",
+        "text": "jira"
+      },
+      {
+        "files": "*compose*.yaml",
+        "text": "x-ports"
+      },
+      {
+        "files": "*compose*.yaml",
+        "text": "x-caddy"
+      },
+      {
+        "files": "*compose*.yml",
+        "text": "x-ports"
+      },
+      {
+        "files": "*compose*.yml",
+        "text": "x-caddy"
+      },
+      {
+        "files": ".env*",
+        "text": "JIRA_"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "docs-lookup",
+      "from": "ecc/agents/docs-lookup.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "command",
+      "name": "jira",
+      "from": "ecc/commands/jira.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "codehealth-mcp",
+      "from": "ecc/skills/codehealth-mcp/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "documentation-lookup",
+      "from": "ecc/skills/documentation-lookup/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "flox-environments",
+      "from": "ecc/skills/flox-environments/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "github-ops",
+      "from": "ecc/skills/github-ops/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "jira-integration",
+      "from": "ecc/skills/jira-integration/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "uncloud",
+      "from": "ecc/skills/uncloud/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

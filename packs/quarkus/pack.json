@@ -1,0 +1,54 @@
+{
+  "id": "quarkus",
+  "layer": "backend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "quarkus",
+    "java",
+    "camel",
+    "panache",
+    "cdi",
+    "jwt",
+    "oidc",
+    "rbac",
+    "junit5",
+    "rest-assured",
+    "jacoco",
+    "verification",
+    "graalvm",
+    "owasp"
+  ],
+  "detect": {
+    "jvm": [
+      "io.quarkus"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "quarkus-patterns",
+      "from": "ecc/skills/quarkus-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "quarkus-security",
+      "from": "ecc/skills/quarkus-security/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "quarkus-tdd",
+      "from": "ecc/skills/quarkus-tdd/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "quarkus-verification",
+      "from": "ecc/skills/quarkus-verification/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

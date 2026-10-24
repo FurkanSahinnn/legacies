@@ -1,0 +1,87 @@
+{
+  "id": "testing-e2e",
+  "layer": "testing",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "browser-automation",
+    "playwright",
+    "visual-regression",
+    "axe",
+    "core-web-vitals",
+    "e2e",
+    "page-object-model",
+    "ci",
+    "demo-video",
+    "screen-recording",
+    "windows",
+    "wpf",
+    "winforms",
+    "pywinauto",
+    "ui-automation",
+    "flaky-tests"
+  ],
+  "detect": {
+    "files": [
+      "playwright.config.*",
+      "cypress.config.*"
+    ],
+    "dirs": [
+      "e2e"
+    ],
+    "npm": [
+      "@playwright/test",
+      "cypress"
+    ],
+    "pypi": [
+      "pywinauto"
+    ],
+    "contains": [
+      {
+        "files": "*.csproj",
+        "text": "UseWPF"
+      },
+      {
+        "files": "*.csproj",
+        "text": "UseWindowsForms"
+      },
+      {
+        "files": "*.vcxproj",
+        "text": "<SubSystem>Windows</SubSystem>"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "e2e-testing",
+      "from": "legacies/skills/e2e-testing/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "e2e-runner",
+      "from": "ecc/agents/e2e-runner.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "browser-qa",
+      "from": "ecc/skills/browser-qa/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "ui-demo",
+      "from": "ecc/skills/ui-demo/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "windows-desktop-e2e",
+      "from": "ecc/skills/windows-desktop-e2e/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

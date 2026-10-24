@@ -1,0 +1,106 @@
+{
+  "id": "go",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "go",
+    "golang",
+    "table-driven-tests",
+    "fuzzing",
+    "benchmarks",
+    "build",
+    "go-vet",
+    "lint",
+    "concurrency",
+    "error-handling",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing",
+    "tdd",
+    "coverage"
+  ],
+  "detect": {
+    "files": [
+      "go.mod",
+      "*.go"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "go-build-resolver",
+      "from": "ecc/agents/go-build-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "go-reviewer",
+      "from": "ecc/agents/go-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "golang-coding-style",
+      "from": "ecc/rules/golang/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "golang-patterns",
+      "from": "ecc/rules/golang/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "golang-security",
+      "from": "ecc/rules/golang/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "golang-testing",
+      "from": "ecc/rules/golang/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "golang-patterns",
+      "from": "ecc/skills/golang-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "golang-testing",
+      "from": "ecc/skills/golang-testing/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "go-web-services",
+      "from": "original/skills/go-web-services/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:golang/hooks.md",
+      "reason": "ecc:rule:golang/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    },
+    {
+      "id": "ecc:command:go-build",
+      "reason": "ecc:agent:go-build-resolver ile birleşir: ajanı çağıran sarmalayıcı komut"
+    },
+    {
+      "id": "ecc:command:go-review",
+      "reason": "ecc:agent:go-reviewer ile birleşir: ajanı çağıran sarmalayıcı komut"
+    },
+    {
+      "id": "ecc:command:go-test",
+      "reason": "legacies'te var: tdd-workflow; tablo testleri/-race/cover kısmı go paketine (golang/testing kuralı, ECC golang-testing skill)"
+    }
+  ]
+}

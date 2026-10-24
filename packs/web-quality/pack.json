@@ -1,0 +1,102 @@
+{
+  "id": "web-quality",
+  "layer": "principles",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "accessibility",
+    "wcag",
+    "aria",
+    "ios",
+    "android",
+    "i18n",
+    "localization",
+    "translations",
+    "json-locales",
+    "seo",
+    "structured-data",
+    "sitemap",
+    "core-web-vitals",
+    "a11y",
+    "ui",
+    "mobile",
+    "web",
+    "css",
+    "html",
+    "style"
+  ],
+  "detect": {
+    "files": [
+      "robots.txt",
+      "sitemap.xml",
+      "next-sitemap.config.*"
+    ],
+    "npm": [
+      "next-sitemap"
+    ]
+  },
+  "members": [
+    {
+      "kind": "rule",
+      "name": "web-web",
+      "from": "legacies/rules/web/web.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "a11y-architect",
+      "from": "ecc/agents/a11y-architect.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "seo-specialist",
+      "from": "ecc/agents/seo-specialist.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "accessibility",
+      "from": "ecc/skills/accessibility/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "i18n-sync",
+      "from": "ecc/skills/i18n-sync/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "seo",
+      "from": "ecc/skills/seo/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:web/coding-style.md",
+      "reason": "legacies'te var: web"
+    },
+    {
+      "id": "ecc:rule:web/design-quality.md",
+      "reason": "legacies'te var: web"
+    },
+    {
+      "id": "ecc:rule:web/hooks.md",
+      "reason": "legacies'te var: web (hook önerisi alınmamış)"
+    },
+    {
+      "id": "ecc:rule:web/performance.md",
+      "reason": "legacies'te var: web"
+    },
+    {
+      "id": "ecc:rule:web/security.md",
+      "reason": "legacies'te var: web"
+    },
+    {
+      "id": "ecc:rule:web/testing.md",
+      "reason": "legacies'te var: web"
+    }
+  ]
+}

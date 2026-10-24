@@ -1,0 +1,31 @@
+{
+  "id": "remix",
+  "layer": "frontend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "react-router",
+    "remix",
+    "ssr"
+  ],
+  "detect": {
+    "files": [
+      "react-router.config.*",
+      "remix.config.*",
+      "app/routes.ts"
+    ],
+    "npm": [
+      "@remix-run/*",
+      "@react-router/dev"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "react-router-framework",
+      "from": "original/skills/react-router-framework/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

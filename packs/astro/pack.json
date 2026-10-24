@@ -1,0 +1,30 @@
+{
+  "id": "astro",
+  "layer": "frontend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "astro",
+    "islands",
+    "content-collections"
+  ],
+  "detect": {
+    "files": [
+      "astro.config.*",
+      "*.astro"
+    ],
+    "npm": [
+      "astro",
+      "@astrojs/*"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "astro-patterns",
+      "from": "original/skills/astro-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

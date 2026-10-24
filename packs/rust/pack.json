@@ -1,0 +1,107 @@
+{
+  "id": "rust",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "rust",
+    "ownership",
+    "traits",
+    "concurrency",
+    "cargo-test",
+    "property-testing",
+    "async-testing",
+    "cargo",
+    "borrow-checker",
+    "build",
+    "unsafe",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing",
+    "tdd",
+    "cargo-llvm-cov"
+  ],
+  "detect": {
+    "files": [
+      "Cargo.toml",
+      "*.rs"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "rust-build-resolver",
+      "from": "ecc/agents/rust-build-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "rust-reviewer",
+      "from": "ecc/agents/rust-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "rust-coding-style",
+      "from": "ecc/rules/rust/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "rust-patterns",
+      "from": "ecc/rules/rust/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "rust-security",
+      "from": "ecc/rules/rust/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "rust-testing",
+      "from": "ecc/rules/rust/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "rust-patterns",
+      "from": "ecc/skills/rust-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "rust-testing",
+      "from": "ecc/skills/rust-testing/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "rust-web-services",
+      "from": "original/skills/rust-web-services/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:rust/hooks.md",
+      "reason": "ecc:rule:rust/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    },
+    {
+      "id": "ecc:command:rust-build",
+      "reason": "ecc:agent:rust-build-resolver ile birleşir: ajanı çağıran sarmalayıcı komut"
+    },
+    {
+      "id": "ecc:command:rust-review",
+      "reason": "ecc:agent:rust-reviewer ile birleşir: ajanı çağıran sarmalayıcı komut"
+    },
+    {
+      "id": "ecc:command:rust-test",
+      "reason": "legacies'te var: tdd-workflow; cargo test/llvm-cov kısmı rust paketine (rust/testing kuralı, ECC rust-testing skill)"
+    }
+  ]
+}

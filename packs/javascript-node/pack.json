@@ -1,0 +1,68 @@
+{
+  "id": "javascript-node",
+  "layer": "backend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "nodejs",
+    "express",
+    "nextjs-api-routes",
+    "backend",
+    "bun",
+    "javascript",
+    "typescript",
+    "runtime",
+    "nestjs",
+    "dto-validation",
+    "guards",
+    "vite",
+    "hmr",
+    "plugins",
+    "ssr",
+    "library-mode"
+  ],
+  "detect": {
+    "files": [
+      "bun.lock",
+      "bun.lockb",
+      "bunfig.toml",
+      "nest-cli.json",
+      "vite.config.*"
+    ],
+    "npm": [
+      "express",
+      "fastify",
+      "koa",
+      "@hapi/hapi",
+      "@nestjs/core",
+      "vite"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "backend-patterns",
+      "from": "ecc/skills/backend-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "bun-runtime",
+      "from": "ecc/skills/bun-runtime/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "nestjs-patterns",
+      "from": "ecc/skills/nestjs-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "vite-patterns",
+      "from": "ecc/skills/vite-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

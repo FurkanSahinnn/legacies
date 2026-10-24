@@ -1,0 +1,6 @@
+node_modules/
+.legacies/
+*.tmp
+evals/results/
+catalog/pack-evals/*/results/
+packs/*/pack-evals/results/

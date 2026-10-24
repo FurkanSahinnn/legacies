@@ -1,0 +1,108 @@
+{
+  "id": "cpp",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "cpp",
+    "cpp-core-guidelines",
+    "raii",
+    "modern-cpp",
+    "googletest",
+    "ctest",
+    "sanitizers",
+    "cmake",
+    "build",
+    "linker",
+    "memory-safety",
+    "concurrency",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing",
+    "tdd",
+    "coverage"
+  ],
+  "detect": {
+    "files": [
+      "CMakeLists.txt",
+      "conanfile.txt",
+      "vcpkg.json",
+      "meson.build",
+      "*.cpp",
+      "*.cc",
+      "*.hpp",
+      "*.cxx"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "cpp-build-resolver",
+      "from": "ecc/agents/cpp-build-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "cpp-reviewer",
+      "from": "ecc/agents/cpp-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "cpp-coding-style",
+      "from": "ecc/rules/cpp/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "cpp-patterns",
+      "from": "ecc/rules/cpp/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "cpp-security",
+      "from": "ecc/rules/cpp/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "cpp-testing",
+      "from": "ecc/rules/cpp/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "cpp-coding-standards",
+      "from": "ecc/skills/cpp-coding-standards/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "cpp-testing",
+      "from": "ecc/skills/cpp-testing/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:cpp/hooks.md",
+      "reason": "ecc:rule:cpp/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    },
+    {
+      "id": "ecc:command:cpp-build",
+      "reason": "ecc:agent:cpp-build-resolver ile birleşir: ajanı çağıran sarmalayıcı komut"
+    },
+    {
+      "id": "ecc:command:cpp-review",
+      "reason": "ecc:agent:cpp-reviewer ile birleşir: ajanı çağıran sarmalayıcı komut"
+    },
+    {
+      "id": "ecc:command:cpp-test",
+      "reason": "legacies'te var: tdd-workflow; GoogleTest/gcov kısmı cpp paketine (cpp/testing kuralı, ECC cpp-testing skill)"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "id": "ml-engineering",
+  "layer": "ai",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "machine-learning",
+    "problem-framing",
+    "baseline-models",
+    "mlops",
+    "data-contracts",
+    "model-evaluation",
+    "model-deployment",
+    "recommendation",
+    "ranking",
+    "feeds",
+    "reranking",
+    "ml",
+    "feature-store",
+    "model-serving",
+    "training"
+  ],
+  "detect": {
+    "files": [
+      "*.ipynb",
+      "dvc.yaml",
+      "MLproject"
+    ],
+    "pypi": [
+      "scikit-learn",
+      "xgboost",
+      "lightgbm",
+      "mlflow",
+      "torch",
+      "tensorflow"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "mle-reviewer",
+      "from": "ecc/agents/mle-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "ml-adoption-playbook",
+      "from": "ecc/skills/ml-adoption-playbook/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "mle-workflow",
+      "from": "ecc/skills/mle-workflow/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "recsys-pipeline-architect",
+      "from": "ecc/skills/recsys-pipeline-architect/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

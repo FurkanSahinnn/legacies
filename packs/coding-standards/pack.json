@@ -1,0 +1,55 @@
+{
+  "id": "coding-standards",
+  "layer": "principles",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "coding-standards",
+    "naming",
+    "readability",
+    "immutability",
+    "error-handling",
+    "typescript",
+    "python",
+    "go",
+    "retries",
+    "circuit-breaker",
+    "refactoring",
+    "dead-code",
+    "knip",
+    "depcheck"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "skill",
+      "name": "error-handling",
+      "from": "legacies/skills/error-handling/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "refactor-cleaner",
+      "from": "ecc/agents/refactor-cleaner.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "coding-standards",
+      "from": "ecc/skills/coding-standards/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "design-patterns",
+      "from": "original/skills/design-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:command:refactor-clean",
+      "reason": "ecc:agent:refactor-cleaner ile birleşir: çok dilli araç tespiti ajana katılmalı"
+    }
+  ]
+}

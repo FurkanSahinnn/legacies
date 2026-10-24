@@ -1,0 +1,52 @@
+{
+  "id": "git-workflow",
+  "layer": "principles",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "git",
+    "conventional-commits",
+    "branching",
+    "rebase",
+    "commit",
+    "pull-request",
+    "github"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "agent",
+      "name": "commit-reviewer",
+      "from": "ecc/agents/commit-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "command",
+      "name": "pr",
+      "from": "ecc/commands/pr.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "conventional-commit-review",
+      "from": "ecc/skills/conventional-commit-review/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "git-workflow",
+      "from": "ecc/skills/git-workflow/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:command:prp-commit",
+      "reason": "ecc:agent:commit-reviewer ile birleşir: doğal dille dosya seçip commit"
+    },
+    {
+      "id": "ecc:command:prp-pr",
+      "reason": "ecc:command:pr ile aynı (takma ad)"
+    }
+  ]
+}

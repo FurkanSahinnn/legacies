@@ -1,0 +1,69 @@
+{
+  "id": "fsharp",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "fsharp",
+    "dotnet",
+    "xunit",
+    "fscheck",
+    "functional",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "*.fsproj",
+      "*.fsx"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "fsharp-reviewer",
+      "from": "ecc/agents/fsharp-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "fsharp-coding-style",
+      "from": "ecc/rules/fsharp/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "fsharp-patterns",
+      "from": "ecc/rules/fsharp/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "fsharp-security",
+      "from": "ecc/rules/fsharp/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "fsharp-testing",
+      "from": "ecc/rules/fsharp/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "fsharp-testing",
+      "from": "ecc/skills/fsharp-testing/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:fsharp/hooks.md",
+      "reason": "ecc:rule:fsharp/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

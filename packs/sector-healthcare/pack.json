@@ -1,0 +1,73 @@
+{
+  "id": "sector-healthcare",
+  "layer": "sector",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "healthcare",
+    "cdss",
+    "clinical-scoring",
+    "emr",
+    "ehr",
+    "clinical-ui",
+    "patient-safety",
+    "phi",
+    "deployment-gates",
+    "pii",
+    "hipaa",
+    "gdpr",
+    "audit-trail",
+    "baa"
+  ],
+  "detect": {
+    "npm": [
+      "@medplum/core",
+      "fhir-kit-client"
+    ],
+    "pypi": [
+      "fhir.resources",
+      "hl7apy"
+    ],
+    "jvm": [
+      "ca.uhn.hapi.fhir"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "healthcare-reviewer",
+      "from": "ecc/agents/healthcare-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "healthcare-cdss-patterns",
+      "from": "ecc/skills/healthcare-cdss-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "healthcare-emr-patterns",
+      "from": "ecc/skills/healthcare-emr-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "healthcare-eval-harness",
+      "from": "ecc/skills/healthcare-eval-harness/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "healthcare-phi-compliance",
+      "from": "ecc/skills/healthcare-phi-compliance/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:skill:hipaa-compliance",
+      "reason": "merge → healthcare-phi-compliance: HIPAA giriş noktası PHI uyum skill'iyle örtüşüyor; ince (80 satır, kod yok)"
+    }
+  ]
+}

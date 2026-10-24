@@ -1,0 +1,29 @@
+{
+  "id": "cypress",
+  "layer": "testing",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "cypress",
+    "e2e",
+    "component-testing"
+  ],
+  "detect": {
+    "files": [
+      "cypress.config.*",
+      "*.cy.*"
+    ],
+    "npm": [
+      "cypress"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "cypress-testing",
+      "from": "original/skills/cypress-testing/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

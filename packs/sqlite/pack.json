@@ -1,0 +1,53 @@
+{
+  "id": "sqlite",
+  "layer": "data",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "sqlite",
+    "libsql",
+    "embedded-database"
+  ],
+  "detect": {
+    "files": [
+      "*.sqlite",
+      "*.sqlite3",
+      "litestream.yml"
+    ],
+    "npm": [
+      "better-sqlite3",
+      "sqlite3",
+      "@libsql/client"
+    ],
+    "pypi": [
+      "aiosqlite",
+      "apsw"
+    ],
+    "cargo": [
+      "rusqlite",
+      "libsql"
+    ],
+    "go": [
+      "github.com/mattn/go-sqlite3",
+      "modernc.org/sqlite",
+      "github.com/ncruces/go-sqlite3"
+    ],
+    "nuget": [
+      "Microsoft.Data.Sqlite",
+      "Microsoft.EntityFrameworkCore.Sqlite"
+    ],
+    "pub": [
+      "sqflite",
+      "drift"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "sqlite-patterns",
+      "from": "original/skills/sqlite-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

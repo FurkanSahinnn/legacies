@@ -1,0 +1,81 @@
+{
+  "id": "csharp-dotnet",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "csharp",
+    "dotnet",
+    "xunit",
+    "fluentassertions",
+    "dependency-injection",
+    "async",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "*.csproj",
+      "*.sln",
+      "*.cs"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "csharp-reviewer",
+      "from": "legacies/agents/csharp-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "csharp-csharp",
+      "from": "legacies/rules/csharp/csharp.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "csharp-testing",
+      "from": "ecc/skills/csharp-testing/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "dotnet-patterns",
+      "from": "ecc/skills/dotnet-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "efcore-patterns",
+      "from": "original/skills/efcore-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:csharp/coding-style.md",
+      "reason": "legacies'te var: csharp"
+    },
+    {
+      "id": "ecc:rule:csharp/hooks.md",
+      "reason": "legacies'te var: csharp"
+    },
+    {
+      "id": "ecc:rule:csharp/patterns.md",
+      "reason": "legacies'te var: csharp"
+    },
+    {
+      "id": "ecc:rule:csharp/security.md",
+      "reason": "legacies'te var: csharp"
+    },
+    {
+      "id": "ecc:rule:csharp/testing.md",
+      "reason": "legacies'te var: csharp"
+    }
+  ]
+}

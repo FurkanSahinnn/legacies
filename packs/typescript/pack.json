@@ -1,0 +1,66 @@
+{
+  "id": "typescript",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "typescript",
+    "javascript",
+    "async",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "tsconfig.json",
+      "*.ts",
+      "*.tsx"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "typescript-reviewer",
+      "from": "legacies/agents/typescript-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "build-error-resolver",
+      "from": "legacies/agents/build-error-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "typescript-typescript",
+      "from": "legacies/rules/typescript/typescript.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:typescript/coding-style.md",
+      "reason": "legacies'te var: typescript"
+    },
+    {
+      "id": "ecc:rule:typescript/hooks.md",
+      "reason": "legacies'te var: typescript (hook önerisi alınmamış)"
+    },
+    {
+      "id": "ecc:rule:typescript/patterns.md",
+      "reason": "legacies'te var: typescript"
+    },
+    {
+      "id": "ecc:rule:typescript/security.md",
+      "reason": "legacies'te var: typescript"
+    },
+    {
+      "id": "ecc:rule:typescript/testing.md",
+      "reason": "legacies'te var: react/testing"
+    }
+  ]
+}

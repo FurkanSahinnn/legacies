@@ -1,0 +1,22 @@
+{
+  "name": "legacies-vendor-integrations",
+  "version": "0.4.0",
+  "description": "legacies vendor-integrations pack: 3 skills. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "email",
+    "mailtrap",
+    "transactional-email",
+    "nutrient",
+    "pdf",
+    "ocr",
+    "document-processing",
+    "x"
+  ],
+  "dependencies": [
+    "legacies"
+  ]
+}

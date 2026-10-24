@@ -1,0 +1,30 @@
+{
+  "id": "prisma",
+  "layer": "data",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "prisma",
+    "typescript",
+    "orm",
+    "serverless"
+  ],
+  "detect": {
+    "files": [
+      "schema.prisma"
+    ],
+    "npm": [
+      "prisma",
+      "@prisma/client"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "prisma-patterns",
+      "from": "ecc/skills/prisma-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

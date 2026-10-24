@@ -1,0 +1,51 @@
+{
+  "id": "architecture",
+  "layer": "principles",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "hexagonal",
+    "ports-and-adapters",
+    "clean-architecture",
+    "dependency-inversion",
+    "architecture",
+    "system-design",
+    "scalability",
+    "adr",
+    "trade-offs"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "agent",
+      "name": "architect",
+      "from": "ecc/agents/architect.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "hexagonal-architecture",
+      "from": "ecc/skills/hexagonal-architecture/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "ddd-patterns",
+      "from": "original/skills/ddd-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "cqrs-event-sourcing",
+      "from": "original/skills/cqrs-event-sourcing/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "microservices-patterns",
+      "from": "original/skills/microservices-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

@@ -1,0 +1,55 @@
+{
+  "id": "networking",
+  "layer": "devops",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "networking",
+    "router",
+    "switch",
+    "config-review",
+    "netops",
+    "dns",
+    "routing",
+    "troubleshooting"
+  ],
+  "detect": {
+    "contains": [
+      {
+        "files": "ansible.cfg",
+        "text": "network_cli"
+      },
+      {
+        "files": "configs/*.cfg",
+        "text": "interface"
+      },
+      {
+        "files": "configs/*/*.cfg",
+        "text": "interface"
+      },
+      {
+        "files": "*.yml",
+        "text": "network_cli"
+      },
+      {
+        "files": "*.yaml",
+        "text": "network_cli"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "network-config-reviewer",
+      "from": "ecc/agents/network-config-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "network-troubleshooter",
+      "from": "ecc/agents/network-troubleshooter.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

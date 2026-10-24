@@ -1,0 +1,48 @@
+{
+  "id": "security",
+  "layer": "security",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "mcp",
+    "supply-chain",
+    "config-review",
+    "security",
+    "vulnerability-hunting",
+    "bug-bounty",
+    "owasp",
+    "auth",
+    "secrets",
+    "xss",
+    "csrf",
+    "injection"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "skill",
+      "name": "security-review",
+      "from": "legacies/skills/security-review/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "security-reviewer",
+      "from": "legacies/agents/security-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "mcp-dependency-review",
+      "from": "ecc/skills/mcp-dependency-review/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "security-bounty-hunter",
+      "from": "ecc/skills/security-bounty-hunter/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

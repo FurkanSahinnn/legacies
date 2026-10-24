@@ -1,0 +1,33 @@
+{
+  "id": "clickhouse",
+  "layer": "data",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "clickhouse",
+    "analytics",
+    "olap",
+    "sql"
+  ],
+  "detect": {
+    "npm": [
+      "@clickhouse/client"
+    ],
+    "pypi": [
+      "clickhouse-connect",
+      "clickhouse-driver"
+    ],
+    "compose": [
+      "clickhouse"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "clickhouse-io",
+      "from": "ecc/skills/clickhouse-io/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

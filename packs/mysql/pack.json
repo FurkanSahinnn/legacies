@@ -1,0 +1,34 @@
+{
+  "id": "mysql",
+  "layer": "data",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "mysql",
+    "mariadb",
+    "indexing",
+    "replication"
+  ],
+  "detect": {
+    "npm": [
+      "mysql2"
+    ],
+    "pypi": [
+      "pymysql",
+      "mysqlclient"
+    ],
+    "compose": [
+      "mysql",
+      "mariadb"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "mysql-patterns",
+      "from": "ecc/skills/mysql-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

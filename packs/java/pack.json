@@ -1,0 +1,103 @@
+{
+  "id": "java",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "java",
+    "spring-boot",
+    "quarkus",
+    "optional",
+    "streams",
+    "jpa",
+    "hibernate",
+    "spring-data",
+    "n+1",
+    "mybatis",
+    "sql",
+    "maven",
+    "gradle",
+    "build",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "pom.xml",
+      "*.java",
+      "*Mapper.xml"
+    ],
+    "jvm": [
+      "spring-boot-starter-data-jpa",
+      "hibernate-core",
+      "jakarta.persistence-api",
+      "mybatis"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "java-build-resolver",
+      "from": "ecc/agents/java-build-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "java-reviewer",
+      "from": "ecc/agents/java-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "java-coding-style",
+      "from": "ecc/rules/java/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "java-patterns",
+      "from": "ecc/rules/java/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "java-security",
+      "from": "ecc/rules/java/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "java-testing",
+      "from": "ecc/rules/java/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "java-coding-standards",
+      "from": "ecc/skills/java-coding-standards/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "jpa-patterns",
+      "from": "ecc/skills/jpa-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "mybatis-patterns",
+      "from": "ecc/skills/mybatis-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:java/hooks.md",
+      "reason": "ecc:rule:java/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

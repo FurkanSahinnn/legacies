@@ -1,0 +1,616 @@
+{
+  "ecc/skills/prompt-caching-strategy/SKILL.md": [
+    {
+      "find": "2. Run the offline example and edge cases with\n   `node tests/skills/prompt-caching-strategy.test.js` in the ECC repository.",
+      "replace": "2. Run the offline example and edge cases through `compareCacheCost` above."
+    },
+    {
+      "find": "quality\n  (use prompt-optimizer instead), or asks about general caching infrastructure.",
+      "replace": "quality,\n  or asks about general caching infrastructure."
+    },
+    {
+      "find": "- **prompt-optimizer** improves prompt quality before optimizing reuse.\n- **context-budget** identifies unnecessary context; caching still consumes it.\n",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/mle-workflow/SKILL.md": [
+    {
+      "find": "Most ECC SWE workflows apply directly",
+      "replace": "Most SWE workflows apply directly"
+    },
+    {
+      "find": "The recommended `minimal --with capability:machine-learning` install keeps the core agent surface available alongside this skill. For skill-only or agent-limited harnesses, pair `skill:mle-workflow` with `agent:mle-reviewer` where the target supports agents.\n\n",
+      "replace": ""
+    },
+    {
+      "find": "Streamlined ECC path",
+      "replace": "Streamlined path"
+    },
+    {
+      "find": "| `product-capability` / `architecture-decision-records` |",
+      "replace": "| `intent-driven-development` (requirements pack) / `architecture-decision-records` |"
+    },
+    {
+      "find": "| `repo-scan` / `codebase-onboarding` / `code-tour` |",
+      "replace": "| `code-map` / `onboard` / `code-tour` |"
+    },
+    {
+      "find": "| `plan` / `feature-dev` |",
+      "replace": "| `plan` |"
+    },
+    {
+      "find": "| `build-fix` / `pr-test-analyzer` |",
+      "replace": "| `pytorch-build-resolver` (pytorch pack) / `pr-test-analyzer` |"
+    },
+    {
+      "find": "| `quality-gate` / `test-coverage` |",
+      "replace": "| `test-coverage` |"
+    },
+    {
+      "find": "| `security-review` / `security-scan` |",
+      "replace": "| `security-review` / `security-reviewer` (security pack) |"
+    },
+    {
+      "find": "| `cost-aware-llm-pipeline` / `token-budget-advisor` |",
+      "replace": "| `cost-aware-llm-pipeline` |"
+    },
+    {
+      "find": "| `strategic-compact` / `dmux-workflows` |",
+      "replace": "| `handoff` / `parallel-execution-optimizer` (agent-workflows pack) |"
+    },
+    {
+      "find": "`product-capability`, `plan`, `architecture-decision-records`, `mle-workflow`",
+      "replace": "`intent-driven-development`, `plan`, `architecture-decision-records`, `mle-workflow`"
+    },
+    {
+      "find": "`repo-scan`, `database-reviewer`",
+      "replace": "`code-map`, `database-reviewer`"
+    },
+    {
+      "find": "`ai-regression-testing`, `quality-gate`, `test-coverage`",
+      "replace": "`ai-regression-testing`, `test-coverage`"
+    },
+    {
+      "find": "`security-review`, `security-scan`",
+      "replace": "`security-review`, `security-reviewer`"
+    }
+  ],
+  "ecc/skills/docker-patterns/SKILL.md": [
+    {
+      "find": "  the executable `/tmp` mount. Its default size is 2 GiB and can be adjusted\n  with `ECC_TMPFS_SIZE`; `ECC_WORKSPACE_SIZE` separately controls the private\n  workspace mount.",
+      "replace": "  the executable `/tmp` mount. Size the `/tmp` and private workspace mounts\n  explicitly."
+    },
+    {
+      "find": "### Exercise the ECC Plugin Setup Harness\n\nUse `docker/plugin-setup/compose.yaml` as the reference implementation. It provides:\n\n- `fixture-tests` for the focused install manifest, target, and executor suite.\n- `real-cli` for the pinned Debian-based generic Linux image.\n- `real-cli-ubuntu` for the pinned Ubuntu image.\n\nValidate the Compose model before building:\n\n```bash\ndocker compose -f docker/plugin-setup/compose.yaml config --quiet\n```\n\nBuild both real Linux images:\n\n```bash\ndocker compose -f docker/plugin-setup/compose.yaml \\\n  build real-cli real-cli-ubuntu\n```\n\nRun the safe default flow in each image:\n\n```bash\ndocker compose -p ecc-plugin-debian-test \\\n  -f docker/plugin-setup/compose.yaml \\\n  run --rm -T real-cli dry-run\n\ndocker compose -p ecc-plugin-ubuntu-test \\\n  -f docker/plugin-setup/compose.yaml \\\n  run --rm -T real-cli-ubuntu dry-run\n```\n\nThe dry run executes the current public command contract:\n\n```bash\necc install --profile core --target claude-project --dry-run --json\n```\n\nBefore that command runs, the container creates a locally packed npm artifact\nfrom the read-only checkout with `npm pack --ignore-scripts`. It extracts the\nself-created tarball under `/tmp`, validates the `ecc-universal` package name,\nrequired install manifests, and the confined `package.json` `bin.ecc` mapping,\nthen invokes the extracted `ecc` executable. The runtime stays on\n`network_mode: none`, does not execute package lifecycle scripts, and does not\nrely on host `node_modules`; its exact pinned production dependencies are\nalready present in the image.\n\nThe harness rejects an empty plan, a non-`claude-project` target, any operation\noutside `/workspace/project/.claude`, or any dry run that creates the target\ndirectory. `install` performs the isolated apply twice, checks its managed\ninstall state, lists the installed target, and runs `doctor`.\n\n### Start, Open, Reconnect, and Clean Up a Named Session\n\nStart a detached container without `--rm` so leaving a terminal does not remove\nthe session:\n\n```bash\ndocker compose -p ecc-plugin-session \\\n  -f docker/plugin-setup/compose.yaml \\\n  run --detach --name ecc-plugin-shell real-cli shell\n```\n\nThe container copies the read-only fixture to the stable private directory\n`/workspace/project`. Confirm it is running, then emit the Docker side of the\nterminal-opener v1 data contract:\n\n```bash\ndocker inspect --format '{{.State.Running}}' ecc-plugin-shell\nnode docker/plugin-setup/interactive-plan.js \\\n  --container ecc-plugin-shell \\\n  --workdir /workspace/project \\\n  --json \\\n  -- bash\n```\n\nThe JSON result has exactly an `executable` and `argv` boundary (plus\n`contractVersion: 1`): the executable is `docker`, and argv begins with\n`exec`, `-it`, and `-w`. Pass that data to the separate terminal-opener skill\nwhen it is installed. This Docker harness deliberately does not import a\nterminal adapter, interpolate a shell command, or manage a host GUI process.\nUntil then, open the same PTY in the current host terminal directly:\n\n```bash\ndocker exec -it -w /workspace/project ecc-plugin-shell bash\n```\n\nExit the shell without stopping the detached container. Reconnect with the\nsame `docker exec -it` command. When finished, remove the exact named container\nand its Compose project resources:\n\n```bash\ndocker rm --force ecc-plugin-shell\ndocker compose -p ecc-plugin-session \\\n  -f docker/plugin-setup/compose.yaml \\\n  down --remove-orphans\n```\n\nHost credentials are absent by default and credential directories are never\nmounted. The default service also has no network access. When an authenticated\nprovider session genuinely needs a network, build `real-cli` first and then opt\nin visibly with `docker compose -f docker/plugin-setup/compose.yaml\n--profile networked run --service-ports real-cli-networked shell`. The\n`--service-ports` flag publishes the service's loopback callback mapping.\nPrefer authenticating inside that disposable session. If a CI run must\ninherit a host environment credential, make that opt-in at invocation with an\nexplicit Compose `--env NAME` flag, understand that the value is inspectable\nand can be exfiltrated for the container lifetime, and remove the exact named\ncontainer immediately after.\n\n### Authenticate Codex Inside the Networked Session\n\n`codex login` binds its OAuth callback server to `127.0.0.1:1455` inside the\ncontainer. A Docker port publish forwards to the container interface, not\nloopback, so the host browser's redirect to `http://localhost:1455` is refused\nwithout a bridge. The `real-cli-networked` service publishes host\n`127.0.0.1:1455` to container port `1456`; bridge that port to loopback before\nlogging in:\n\n```bash\n(\n  set -e\n  npm install --global @openai/codex@0.162.0   # the harness image does not ship codex\n  node /ecc/docker/plugin-setup/codex-auth-relay.js &\n  relay_pid=$!\n  trap 'kill \"$relay_pid\" 2>/dev/null || true; wait \"$relay_pid\" 2>/dev/null || true' EXIT\n  codex login\n)\n```\n\nThe networked service sets `NPM_CONFIG_PREFIX=/tmp/ecc-npm` and adds its `bin`\ndirectory to `PATH`. This keeps the pinned installation writable for UID 1000\non the executable `/tmp` mount while the root filesystem remains read-only.\n\nComplete the sign-in in the host browser. Each attempt mints a fresh\n`state`/`code`, so always follow the newest printed link. The token stays in\nthe disposable container's `~/.codex/auth.json`; removing the named container\ndeletes that credential copy. The login block stops the relay on success or failure.\nOnly one container can hold host port 1455 at a time\nbecause the OAuth redirect targets a fixed port.\n\nThe host publish is restricted to loopback. Inside the container, the relay\nlistens on all interfaces so Docker can forward to it; other containers on the\nsame bridge network can reach it while it runs. Use a dedicated network without\nuntrusted peers for this login, and remove the exact named container after use.\nIdle callback connections close after 30 seconds.\n\nRun the same focused suite natively on the host:\n\n```bash\nnpm run test:plugin-setup-platform\n```\n\nInspect the produced identity and environment before trusting the image:\n\n```bash\ndocker image inspect ecc-plugin-setup:debian ecc-plugin-setup:ubuntu\n```\n\nClean each named test project without deleting unrelated volumes or images:\n\n```bash\ndocker compose -p ecc-plugin-debian-test \\\n  -f docker/plugin-setup/compose.yaml down --remove-orphans\ndocker compose -p ecc-plugin-ubuntu-test \\\n  -f docker/plugin-setup/compose.yaml down --remove-orphans\n```\n\n",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/frontend-design-direction/SKILL.md": [
+    {
+      "find": "description: Set an ECC-specific frontend design direction for production UI work.",
+      "replace": "description: Set a frontend design direction for production UI work."
+    },
+    {
+      "find": "Note: ECC intentionally does not rebundle the canonical Anthropic\n`frontend-design` skill. Install that from `anthropics/skills` when you want the\nofficial upstream skill. This skill is the ECC-specific design-direction salvage\nof the useful local guidance from #1659.",
+      "replace": "Note: this is not the canonical Anthropic `frontend-design` skill. Install that\nfrom `anthropics/skills` when you want the official upstream skill."
+    }
+  ],
+  "ecc/rules/nuxt/coding-style.md": [
+    {
+      "find": "- ECC skills: `nuxt4-patterns`, `vite-patterns`, `frontend-patterns`.",
+      "replace": "- Related skills: `nuxt4-patterns`, `vite-patterns`."
+    }
+  ],
+  "ecc/rules/nuxt/patterns.md": [
+    {
+      "find": "- ECC skills: `nuxt4-patterns`, `vite-patterns`, `frontend-patterns`.",
+      "replace": "- Related skills: `nuxt4-patterns`, `vite-patterns`."
+    }
+  ],
+  "ecc/rules/nuxt/security.md": [
+    {
+      "find": "- ECC skills: `security-review`, `nuxt4-patterns`.",
+      "replace": "- Related skills: `security-review`, `nuxt4-patterns`."
+    }
+  ],
+  "ecc/rules/nuxt/testing.md": [
+    {
+      "find": "- ECC skills: `nuxt4-patterns`, `e2e-testing`, `vite-patterns`.",
+      "replace": "- Related skills: `nuxt4-patterns`, `e2e-testing`, `vite-patterns`."
+    }
+  ],
+  "ecc/rules/vue/coding-style.md": [
+    {
+      "find": "- ECC skills: `frontend-patterns`, `vite-patterns`.",
+      "replace": "- Related skills: `vue-patterns`, `vite-patterns`."
+    }
+  ],
+  "ecc/rules/vue/patterns.md": [
+    {
+      "find": "- ECC skills: `frontend-patterns`, `vite-patterns`.",
+      "replace": "- Related skills: `vue-patterns`, `vite-patterns`."
+    }
+  ],
+  "ecc/rules/vue/security.md": [
+    {
+      "find": "- ECC skills: `frontend-patterns`, `vite-patterns`.",
+      "replace": "- Related skills: `vue-patterns`, `vite-patterns`."
+    }
+  ],
+  "ecc/rules/vue/testing.md": [
+    {
+      "find": "- ECC skills: `frontend-patterns`, `vite-patterns`.",
+      "replace": "- Related skills: `vue-patterns`, `vite-patterns`."
+    }
+  ],
+  "ecc/rules/react-native/accessibility.md": [
+    {
+      "find": "> Extends the ECC quality bar to accessibility (a11y).",
+      "replace": "> Extends the base quality bar to accessibility (a11y)."
+    }
+  ],
+  "ecc/rules/react-native/production-readiness.md": [
+    {
+      "find": "> Extends the ECC philosophy to ship-grade concerns",
+      "replace": "> Extends the base quality bar to ship-grade concerns"
+    }
+  ],
+  "ecc/rules/react-native/patterns.md": [
+    {
+      "find": "(Zod is already the validation default in ECC's `typescript/` rules.)",
+      "replace": "(Zod is already the validation default in the TypeScript rules.)"
+    }
+  ],
+  "ecc/rules/react-native/security.md": [
+    {
+      "find": "\n- Use `/security-scan` (AgentShield) on the agent configuration itself.",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/react-native-patterns/SKILL.md": [
+    {
+      "find": "Zod is used for validation to stay consistent with ECC's existing `typescript/` rules.",
+      "replace": "Zod is used for validation to stay consistent with the existing TypeScript rules."
+    },
+    {
+      "find": "- `frontend-patterns` — React/Next.js (web) patterns;",
+      "replace": "- `react-patterns` (react pack) — React/Next.js (web) patterns;"
+    }
+  ],
+  "ecc/skills/coding-standards/SKILL.md": [
+    {
+      "find": "- domain-specific framework guidance when a narrower ECC skill already exists",
+      "replace": "- domain-specific framework guidance when a narrower skill already exists"
+    },
+    {
+      "find": "- Use `frontend-patterns` for React, state, forms, rendering, and UI architecture.",
+      "replace": "- Use `react-patterns` (react pack) for React, state, forms, rendering, and UI architecture."
+    }
+  ],
+  "ecc/skills/context-and-decisions/SKILL.md": [
+    {
+      "find": "route hard-to-reverse decisions to ECC's existing architecture-decision-records skill.",
+      "replace": "route hard-to-reverse decisions to the existing architecture-decision-records skill."
+    },
+    {
+      "find": "\n- `docs-governance`: cross-capability routing and closeout order.",
+      "replace": ""
+    }
+  ],
+  "ecc/agents/seo-specialist.md": [
+    {
+      "find": "Use `skills/seo` for the canonical ECC SEO workflow and implementation guidance.",
+      "replace": "Use the `seo` skill for the SEO workflow and implementation guidance."
+    }
+  ],
+  "ecc/skills/agent-introspection-debugging/SKILL.md": [
+    {
+      "find": "- framework-specific debugging when a narrower ECC skill already exists",
+      "replace": "- framework-specific debugging when a narrower skill already exists"
+    },
+    {
+      "find": "## Integration with ECC\n\n- Use `verification-loop` after recovery if code was changed.\n- Use `continuous-learning-v2` when the failure pattern is worth turning into an instinct or later skill.\n- Use `council` when the issue is not technical failure but decision ambiguity.\n- Use `workspace-surface-audit` if the failure came from conflicting local state or repo drift.",
+      "replace": "## Related Skills\n\n- Use `verification-loop` after recovery if code was changed.\n- Use `council` when the issue is not technical failure but decision ambiguity."
+    }
+  ],
+  "ecc/skills/autonomous-loops/SKILL.md": [
+    {
+      "find": " Retained for compatibility only: when new autonomous loop guidance is needed, use continuous-agent-loop instead.",
+      "replace": ""
+    },
+    {
+      "find": "> Compatibility note (v1.8.0): `autonomous-loops` is retained for one release.\n> The canonical skill name is now `continuous-agent-loop`. New loop guidance\n> should be authored there, while this skill remains available to avoid\n> breaking existing workflows.\n\n",
+      "replace": ""
+    },
+    {
+      "find": "| [NanoClaw REPL](#2-nanoclaw-repl) | Low | Interactive persistent sessions |\n| [Infinite Agentic Loop](#3-infinite-agentic-loop) | Medium | Parallel content generation, spec-driven work |\n| [Continuous Claude PR Loop](#4-continuous-claude-pr-loop) | Medium | Multi-day iterative projects with CI gates |\n| [De-Sloppify Pattern](#5-the-de-sloppify-pattern) | Add-on | Quality cleanup after any Implementer step |\n| [Ralphinho / RFC-Driven DAG](#6-ralphinho--rfc-driven-dag-orchestration) | High | Large features, multi-unit parallel work with merge queue |",
+      "replace": "| [Infinite Agentic Loop](#2-infinite-agentic-loop) | Medium | Parallel content generation, spec-driven work |\n| [Continuous Claude PR Loop](#3-continuous-claude-pr-loop) | Medium | Multi-day iterative projects with CI gates |\n| [De-Sloppify Pattern](#4-the-de-sloppify-pattern) | Add-on | Quality cleanup after any Implementer step |\n| [Ralphinho / RFC-Driven DAG](#5-ralphinho--rfc-driven-dag-orchestration) | High | Large features, multi-unit parallel work with merge queue |"
+    },
+    {
+      "find": "(#5-the-de-sloppify-pattern)",
+      "replace": "(#4-the-de-sloppify-pattern)"
+    },
+    {
+      "find": "## 2. NanoClaw REPL\n\n**ECC's built-in persistent loop.** A session-aware REPL that calls `claude -p` synchronously with full conversation history.\n\n```bash\n# Start the default session\nnode scripts/claw.js\n\n# Named session with skill context\nCLAW_SESSION=my-project CLAW_SKILLS=tdd-workflow,security-review node scripts/claw.js\n```\n\n### How It Works\n\n1. Loads conversation history from `~/.claude/claw/{session}.md`\n2. Each user message is sent to `claude -p` with full history as context\n3. Responses are appended to the session file (Markdown-as-database)\n4. Sessions persist across restarts\n\n### When NanoClaw vs Sequential Pipeline\n\n| Use Case | NanoClaw | Sequential Pipeline |\n|----------|----------|-------------------|\n| Interactive exploration | Yes | No |\n| Scripted automation | No | Yes |\n| Session persistence | Built-in | Manual |\n| Context accumulation | Grows per turn | Fresh each step |\n| CI/CD integration | Poor | Excellent |\n\nSee the `/claw` command documentation for full details.\n\n---\n\n",
+      "replace": ""
+    },
+    {
+      "find": "## 3. Infinite Agentic Loop",
+      "replace": "## 2. Infinite Agentic Loop"
+    },
+    {
+      "find": "## 4. Continuous Claude PR Loop",
+      "replace": "## 3. Continuous Claude PR Loop"
+    },
+    {
+      "find": "## 5. The De-Sloppify Pattern",
+      "replace": "## 4. The De-Sloppify Pattern"
+    },
+    {
+      "find": "## 6. Ralphinho / RFC-Driven DAG Orchestration",
+      "replace": "## 5. Ralphinho / RFC-Driven DAG Orchestration"
+    },
+    {
+      "find": "| Quick iteration on one thing | No | Yes (NanoClaw or pipeline) |",
+      "replace": "| Quick iteration on one thing | No | Yes (sequential pipeline) |"
+    },
+    {
+      "find": "├─ Yes → Sequential Pipeline or NanoClaw",
+      "replace": "├─ Yes → Sequential Pipeline"
+    },
+    {
+      "find": "Use ECC's `/verify` command or `verification-loop` skill as a gate before commits.",
+      "replace": "Use the `verification-loop` skill as a gate before commits."
+    },
+    {
+      "find": "| NanoClaw | ECC | `/claw` command in this repo |\n| Verification Loop | ECC | `skills/verification-loop/` in this repo |\n",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/council/SKILL.md": [
+    {
+      "find": "Should we ship ECC 2.0 as alpha now,",
+      "replace": "Should we ship v2.0 as alpha now,"
+    },
+    {
+      "find": "| Breaking a feature into implementation steps | `planner` |",
+      "replace": "| Breaking a feature into implementation steps | `plan` |"
+    },
+    {
+      "find": "- use `knowledge-ops` to store the lesson in the right durable location\n- or use `/save-session` if the outcome belongs in session memory",
+      "replace": "- use `remember` to store the lesson in the right durable location\n- or use `handoff` if the outcome belongs in session memory"
+    },
+    {
+      "find": "- `knowledge-ops` — persist durable decision deltas correctly",
+      "replace": "- `remember` — persist durable decision deltas correctly"
+    }
+  ],
+  "ecc/skills/iterative-retrieval/SKILL.md": [
+    {
+      "find": "\n- `continuous-learning` skill - For patterns that improve over time\n- Agent definitions bundled with ECC (manual install path: `agents/`)",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/story-lifecycle/SKILL.md": [
+    {
+      "find": "**opt-in, project-local planning**, not a synchronized project-management authority and\nnever canonical ECC execution state — see [Authority](#authority) and",
+      "replace": "**opt-in, project-local planning**, not a synchronized project-management authority — see\n[Authority](#authority) and"
+    },
+    {
+      "find": "| Work is coordinated through GitHub issues | the `epic-*` commands (`/epic-decompose`, `/epic-claim`, `/epic-sync`, …) |\n| Team already uses Jira, Linear, or Taiga | `project-flow-ops` or the matching MCP integration |",
+      "replace": "| Work is coordinated through GitHub issues | issue-backed coordination in GitHub itself |\n| Team already uses Jira, Linear, or Taiga | the matching MCP integration |"
+    },
+    {
+      "find": "`.stories/` is an **opt-in planning projection**. It is never canonical ECC Task, Evidence,\nCompletion, or Integration state. Where ECC execution-capsule contracts, an issue tracker,\nor another external task/evidence system is configured, that system stays authoritative:",
+      "replace": "`.stories/` is an **opt-in planning projection**. Where an issue tracker or another\nexternal task/evidence system is configured, that system stays authoritative:"
+    },
+    {
+      "find": "ECC's `epic-*` commands own **issue-backed** coordination: GitHub issues are the",
+      "replace": "**Issue-backed** coordination is a separate system: GitHub issues are the"
+    },
+    {
+      "find": "from the epic and its remaining stories (manually or via `project-flow-ops`), note",
+      "replace": "from the epic and its remaining stories, note"
+    },
+    {
+      "find": "- Running `.stories/` alongside issue-backed `epic-*` coordination for the same work",
+      "replace": "- Running `.stories/` alongside issue-backed coordination for the same work"
+    },
+    {
+      "find": "\n- `project-flow-ops` / `epic-*` commands — issue-backed coordination; use for the handoff\n  described above instead of syncing `.stories/`",
+      "replace": ""
+    },
+    {
+      "find": "use `tdd-workflow` (or the `tdd-guide` agent) to turn the acceptance",
+      "replace": "use `tdd-workflow` to turn the acceptance"
+    }
+  ],
+  "ecc/skills/mcp-dependency-review/SKILL.md": [
+    {
+      "find": "For example, in `npx --package ecc-universal ecc`, classify `ecc-universal` as the package selector and treat `ecc` as the executable.",
+      "replace": "For example, in `npx --package example-tool example-command`, classify `example-tool` as the package selector and treat `example-command` as the executable."
+    },
+    {
+      "find": "this ECC skill does not require it",
+      "replace": "this skill does not require it"
+    },
+    {
+      "find": "\n- `security-scan` — broader security scanning workflow.",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/module-regression/SKILL.md": [
+    {
+      "find": "Successful exit codes are regression evidence, never canonical ECC completion or integration authority.",
+      "replace": "Successful exit codes are regression evidence, never completion or integration authority."
+    }
+  ],
+  "ecc/skills/test-collaboration/SKILL.md": [
+    {
+      "find": "It never grants canonical ECC Task, Completion or Integration authority,",
+      "replace": "It never grants task completion or integration authority,"
+    }
+  ],
+  "ecc/skills/agent-architecture-audit/SKILL.md": [
+    {
+      "find": "\"schema_version\": \"ecc.agent-architecture-audit.report.v1\",",
+      "replace": "\"schema_version\": \"agent-architecture-audit.report.v1\","
+    },
+    {
+      "find": "use `security-review` or `security-review/scan`",
+      "replace": "use `security-review`"
+    },
+    {
+      "find": "- Agent performance benchmarking — use `agent-eval`",
+      "replace": "- Agent performance benchmarking — use `eval-harness` (ai-llm pack)"
+    },
+    {
+      "find": "- `agent-eval` — Benchmark agent performance head-to-head",
+      "replace": "- `eval-harness` — Measure agent reliability with capability and regression evals"
+    },
+    {
+      "find": "- `autonomous-agent-harness` — Set up autonomous agent operations",
+      "replace": "- `enterprise-agent-ops` — Operate long-lived agent systems in production"
+    }
+  ],
+  "ecc/skills/benchmark/SKILL.md": [
+    {
+      "find": "stored in git-tracked .ecc/benchmarks JSON.",
+      "replace": "stored in git-tracked .benchmarks/ JSON."
+    },
+    {
+      "find": "Stores baselines in `.ecc/benchmarks/` as JSON.",
+      "replace": "Stores baselines in `.benchmarks/` as JSON."
+    }
+  ],
+  "ecc/skills/rails-patterns/SKILL.md": [
+    {
+      "find": "see the Ruby patterns rules — `rules/ruby/patterns.md` in this repository, installed as `rules/ecc/ruby/patterns.md`.",
+      "replace": "see the Ruby patterns rules (`rules/ruby-patterns.md` in this pack)."
+    },
+    {
+      "find": "- Ruby patterns rules (`rules/ruby/patterns.md`, installed as `rules/ecc/ruby/patterns.md`) — the decisions",
+      "replace": "- Ruby patterns rules (`rules/ruby-patterns.md` in this pack) — the decisions"
+    }
+  ],
+  "ecc/skills/codehealth-mcp/SKILL.md": [
+    {
+      "find": "Complements style/lint skills (`coding-standards`, `plankton-code-quality`) with",
+      "replace": "Complements style/lint skills such as `coding-standards` with"
+    },
+    {
+      "find": "**Opt-in (ECC):** The `codescene` block in `mcp-configs/mcp-servers.json` is a template only. ECC plugin installs do not auto-enable bundled MCP servers. Copy the entry into your config only if you want it. You can exclude it during ECC install/sync with `ECC_DISABLED_MCPS=codescene,...`.",
+      "replace": "**Opt-in:** Nothing enables this MCP server automatically. Add the `codescene` entry to your config only if you want it."
+    },
+    {
+      "find": "- Pair with `verification-loop`, `tdd-workflow`, or `/quality-gate` as a structural check",
+      "replace": "- Pair with `verification-loop` or `tdd-workflow` as a structural check"
+    },
+    {
+      "find": "## When to Activate\n\nSame triggers as **When to Use** above — this heading is what ECC uses for skill auto-activation.\n\n",
+      "replace": ""
+    },
+    {
+      "find": "Copy the `codescene` entry from `mcp-configs/mcp-servers.json` into your harness MCP config.",
+      "replace": "Add a `codescene` entry to your harness MCP config."
+    },
+    {
+      "find": "## Pairing with ECC\n\n| ECC skill / flow | Code Health MCP role |\n|------------------|----------------------|\n| `coding-standards` | Style/naming; Code Health = structure/complexity |\n| `plankton-code-quality` | Write-time lint/format; Code Health = pre/post edit structural gate |\n| `verification-loop` / `/quality-gate` | Add structural regression check before \"done\" |",
+      "replace": "## Pairing with Other Skills\n\n| Skill | Code Health MCP role |\n|-------|----------------------|\n| `coding-standards` | Style/naming; Code Health = structure/complexity |\n| `verification-loop` | Add structural regression check before \"done\" |"
+    },
+    {
+      "find": "**Context tip:** ECC recommends keeping MCP count low.",
+      "replace": "**Context tip:** Keep the number of enabled MCP servers low."
+    },
+    {
+      "find": "- `plankton-code-quality` — write-time lint/format hooks\n",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/github-ops/SKILL.md": [
+    {
+      "find": "For the ECC repository's maintainer release path, especially `ECC-031` and any\nfollow-up where tag identity, npm provenance, and announcement evidence must\nall line up, read [references/ecc-release-checklist.md](references/ecc-release-checklist.md)\nbefore mutating tags, npm dist-tags, or GitHub Releases. That checklist\ncaptures the exact-green-main, signed-tag, registry-readback, and announcement\nrequirements that the generic examples below do not.\n\n",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/agent-security-hardening/SKILL.md": [
+    {
+      "find": "- Use `security-scan` for repository-wide automated vulnerability scanning.",
+      "replace": "- Use a dedicated vulnerability scanner for repository-wide automated scanning."
+    },
+    {
+      "find": "- `security-review`\n- `security-scan`",
+      "replace": "- `security-review`"
+    }
+  ],
+  "ecc/skills/vite-patterns/SKILL.md": [
+    {
+      "find": "- `frontend-patterns` — React component patterns",
+      "replace": "- `react-patterns` (react pack) — React component patterns"
+    }
+  ],
+  "ecc/skills/dashboard-builder/SKILL.md": [
+    {
+      "find": "- `research-ops`\n- `backend-patterns`\n- `terminal-ops`",
+      "replace": "- `backend-patterns`"
+    }
+  ],
+  "ecc/skills/angular-developer/SKILL.md": [
+    {
+      "find": "- `frontend-patterns` — general frontend patterns for context on React/Next.js approaches",
+      "replace": "- `react-patterns` (react pack) — React component patterns, for context on React/Next.js approaches"
+    }
+  ],
+  "ecc/skills/frontend-a11y/SKILL.md": [
+    {
+      "find": "- `frontend-patterns` — general React component and state patterns",
+      "replace": "- `react-patterns` — general React component and state patterns"
+    }
+  ],
+  "ecc/agents/vue-reviewer.md": [
+    {
+      "find": "\n- Commands: `/vue-review`",
+      "replace": ""
+    },
+    {
+      "find": "- Rules: `rules/vue/coding-style.md`, `rules/vue/hooks.md`, `rules/vue/patterns.md`, `rules/vue/security.md`, `rules/vue/testing.md`",
+      "replace": "- Rules: the Vue rules of this pack, installed into the project's `.claude/rules/` (coding style, patterns, security, testing)"
+    }
+  ],
+  "ecc/skills/vue-patterns/SKILL.md": [
+    {
+      "find": "- `frontend-patterns` — Cross-framework frontend architecture\n",
+      "replace": ""
+    },
+    {
+      "find": "- `typescript` — TypeScript best practices applied to Vue projects\n",
+      "replace": "- The typescript pack — TypeScript rules and review applied to Vue projects\n"
+    }
+  ],
+  "ecc/commands/flutter-test.md": [
+    {
+      "find": "- After running `/flutter-build` to ensure tests pass",
+      "replace": "- After fixing build errors with the `dart-build-resolver` agent, to ensure tests pass"
+    },
+    {
+      "find": "## Related Commands\n\n- `/flutter-build` — Fix build errors before running tests\n- `/flutter-review` — Review code after tests pass",
+      "replace": "## Related Agents and Skills\n\n- `dart-build-resolver` agent — Fix build errors before running tests\n- `flutter-reviewer` agent — Review code after tests pass"
+    }
+  ],
+  "ecc/rules/react-native/testing.md": [
+    {
+      "find": "Use the `tdd-guide` agent proactively for new features",
+      "replace": "Use the `tdd-workflow` skill proactively for new features"
+    }
+  ],
+  "ecc/skills/contract-first/SKILL.md": [
+    {
+      "find": "- `frontend-patterns` - consumer-side data access and UI integration",
+      "replace": "- `react-patterns` (react pack) - consumer-side data access and UI integration"
+    }
+  ],
+  "ecc/agents/doc-updater.md": [
+    {
+      "find": " Backs the /update-codemaps and /update-docs commands.",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/code-tour/SKILL.md": [
+    {
+      "find": "| The task is broad codebase onboarding without a tour artifact | `codebase-onboarding` |",
+      "replace": "| The task is broad codebase onboarding without a tour artifact | `onboard` |"
+    },
+    {
+      "find": "- `codebase-onboarding`\n- `coding-standards`",
+      "replace": "- `onboard`\n- `coding-standards`"
+    }
+  ],
+  "ecc/skills/living-docs-governance/SKILL.md": [
+    {
+      "find": "use `codebase-onboarding` first.",
+      "replace": "use `onboard` first."
+    }
+  ],
+  "ecc/skills/accessibility/SKILL.md": [
+    {
+      "find": "- `frontend-patterns`\n- `design-system`",
+      "replace": "- `frontend-a11y` (react pack)\n- `design-system`"
+    }
+  ],
+  "ecc/skills/seo/SKILL.md": [
+    {
+      "find": "- `seo-specialist`\n- `frontend-patterns`\n- `brand-voice`\n- `market-research`",
+      "replace": "- `seo-specialist`"
+    }
+  ],
+  "ecc/skills/gan-style-harness/SKILL.md": [
+    {
+      "find": "### Via Command\n\n```bash\n# Full three-agent harness\n/project:gan-build \"Build a project management app with Kanban boards, team collaboration, and dark mode\"\n\n# With custom config\n/project:gan-build \"Build a recipe sharing platform\" --max-iterations 10 --pass-threshold 7.5\n\n# Frontend design mode (generator + evaluator only, no planner)\n/project:gan-design \"Create a landing page for a crypto portfolio tracker\"\n```\n\n",
+      "replace": ""
+    },
+    {
+      "find": "### Via Shell Script\n\n```bash\n# Basic usage\n./scripts/gan-harness.sh \"Build a music streaming dashboard\"\n\n# With options\nGAN_MAX_ITERATIONS=10 \\\nGAN_PASS_THRESHOLD=7.5 \\\nGAN_EVAL_CRITERIA=\"functionality,performance,security\" \\\n./scripts/gan-harness.sh \"Build a REST API for task management\"\n```\n\n",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/loop-design-check/SKILL.md": [
+    {
+      "find": "mechanism layer; see `autonomous-loops` / `continuous-agent-loop`.",
+      "replace": "mechanism layer; see `autonomous-loops`."
+    },
+    {
+      "find": "architecture): see `autonomous-loops` / `continuous-agent-loop`.",
+      "replace": "architecture): see `autonomous-loops`."
+    }
+  ],
+  "ecc/agents/spec-miner.md": [
+    {
+      "find": "Fully self-bootstrapping — no dependency on codebase-onboarding.",
+      "replace": "Fully self-bootstrapping — no dependency on a prior onboarding pass."
+    },
+    {
+      "find": "it does not require `codebase-onboarding`.",
+      "replace": "it does not require the `onboard` skill."
+    },
+    {
+      "find": "precise enough for code-explorer to jump to.",
+      "replace": "precise enough for code navigation to jump to."
+    },
+    {
+      "find": "It does not require `codebase-onboarding` or any other agent to run first.",
+      "replace": "It does not require the `onboard` skill or any agent to run first."
+    },
+    {
+      "find": "- **After you run**: `code-explorer` will use your specs",
+      "replace": "- **After you run**: later code exploration will use your specs"
+    },
+    {
+      "find": "`planner` will add `## ADDED Requirements` blocks; `tdd-guide` will read",
+      "replace": "`plan` will add `## ADDED Requirements` blocks; `tdd-workflow` will read"
+    },
+    {
+      "find": "- **Future changes**: `plan` will add `## ADDED Requirements` blocks; `tdd-workflow` will read `#### Scenario:` blocks to generate test skeletons; `code-reviewer` will grep `<!-- enforced: -->` to verify implementation still matches spec; MODIFIED Requirements will match by `<!-- id: -->`, not by name",
+      "replace": "- **Future changes**: later deltas add `## ADDED Requirements` blocks; test skeletons can be generated from `#### Scenario:` blocks; a reviewer can grep `<!-- enforced: -->` to check that the implementation still matches the spec; MODIFIED Requirements match by `<!-- id: -->`, not by name"
+    }
+  ],
+  "ecc/skills/x-api/SKILL.md": [
+    {
+      "find": "## Integration with Content Engine\n\nUse `brand-voice` plus `content-engine` to generate platform-native content, then post via X API:",
+      "replace": "## Drafting and Posting Content\n\nGenerate platform-native content in the user's voice, then post via X API:"
+    },
+    {
+      "find": "3. Generate content with `content-engine` in X-native format",
+      "replace": "3. Generate content in X-native format"
+    },
+    {
+      "find": "\n\n## Related Skills\n\n- `brand-voice` — Build a reusable voice profile from real X and site/source material\n- `content-engine` — Generate platform-native content for X\n- `crosspost` — Distribute content across X, LinkedIn, and other platforms\n- `connections-optimizer` — Reorganize the X graph before drafting network-driven outreach",
+      "replace": ""
+    }
+  ],
+  "ecc/skills/i18n-sync/SKILL.md": [
+    {
+      "find": "- [frontend-patterns](../frontend-patterns/SKILL.md)\n",
+      "replace": ""
+    }
+  ]
+}

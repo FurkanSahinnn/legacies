@@ -1,0 +1,46 @@
+{
+  "id": "motion",
+  "layer": "frontend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "motion",
+    "framer-motion",
+    "react",
+    "gestures",
+    "drag-and-drop",
+    "animation-tokens",
+    "reduced-motion",
+    "ssr",
+    "page-transitions",
+    "modals",
+    "toasts"
+  ],
+  "detect": {
+    "npm": [
+      "motion",
+      "framer-motion"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "motion-advanced",
+      "from": "ecc/skills/motion-advanced/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "motion-foundations",
+      "from": "ecc/skills/motion-foundations/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "motion-patterns",
+      "from": "ecc/skills/motion-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

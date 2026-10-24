@@ -1,0 +1,33 @@
+{
+  "id": "electron",
+  "layer": "desktop",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "electron",
+    "desktop"
+  ],
+  "detect": {
+    "files": [
+      "forge.config.*",
+      "electron-builder.yml",
+      "electron-builder.json",
+      "electron.vite.config.*"
+    ],
+    "npm": [
+      "electron",
+      "electron-builder",
+      "@electron-forge/cli",
+      "electron-vite"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "electron-patterns",
+      "from": "original/skills/electron-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

@@ -1,0 +1,22 @@
+{
+  "name": "legacies-web-quality",
+  "version": "0.4.0",
+  "description": "legacies web-quality pack: 3 skills, 2 agents, 1 rule. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "accessibility",
+    "wcag",
+    "aria",
+    "ios",
+    "android",
+    "i18n",
+    "localization",
+    "translations"
+  ],
+  "dependencies": [
+    "legacies"
+  ]
+}

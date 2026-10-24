@@ -1,0 +1,133 @@
+{
+  "id": "react",
+  "layer": "frontend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "accessibility",
+    "react",
+    "nextjs",
+    "aria",
+    "state-management",
+    "turbopack",
+    "bundling",
+    "hooks",
+    "server-components",
+    "suspense",
+    "performance",
+    "bundle-size",
+    "react-testing-library",
+    "vitest",
+    "jest",
+    "msw",
+    "vite",
+    "webpack",
+    "hydration",
+    "build"
+  ],
+  "detect": {
+    "files": [
+      "next.config.*"
+    ],
+    "npm": [
+      "react",
+      "next"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "react-patterns",
+      "from": "legacies/skills/react-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "react-performance",
+      "from": "legacies/skills/react-performance/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "react-testing",
+      "from": "legacies/skills/react-testing/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "react-reviewer",
+      "from": "legacies/agents/react-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "react-react",
+      "from": "legacies/rules/react/react.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "react-testing",
+      "from": "legacies/rules/react/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "frontend-a11y",
+      "from": "ecc/skills/frontend-a11y/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "nextjs-turbopack",
+      "from": "ecc/skills/nextjs-turbopack/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:skill:frontend-patterns",
+      "reason": "merge → react-patterns: React/Next bileşen ve durum kalıpları react-patterns ve react-performance ile büyük ölçüde örtüşüyor"
+    },
+    {
+      "id": "ecc:agent:react-build-resolver",
+      "reason": "legacies'te var: build-error-resolver; Vite/webpack/hydration bölümü react paketine eklenebilir"
+    },
+    {
+      "id": "ecc:rule:react/coding-style.md",
+      "reason": "legacies'te var: react/react"
+    },
+    {
+      "id": "ecc:rule:react/hooks.md",
+      "reason": "legacies'te var: react/react"
+    },
+    {
+      "id": "ecc:rule:react/patterns.md",
+      "reason": "legacies'te var: react/react"
+    },
+    {
+      "id": "ecc:rule:react/security.md",
+      "reason": "legacies'te var: react/react"
+    },
+    {
+      "id": "ecc:rule:react/testing.md",
+      "reason": "legacies'te var: react/testing"
+    },
+    {
+      "id": "ecc:rule:web/patterns.md",
+      "reason": "legacies'te var: react/react"
+    },
+    {
+      "id": "ecc:command:react-build",
+      "reason": "legacies'te var: build-error-resolver"
+    },
+    {
+      "id": "ecc:command:react-review",
+      "reason": "legacies'te var: react-reviewer"
+    },
+    {
+      "id": "ecc:command:react-test",
+      "reason": "legacies'te var: react-testing, tdd-workflow"
+    }
+  ]
+}

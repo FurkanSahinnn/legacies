@@ -1,0 +1,70 @@
+{
+  "id": "deployment",
+  "layer": "devops",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "post-deploy",
+    "canary",
+    "smoke-test",
+    "monitoring",
+    "grafana",
+    "signoz",
+    "dashboards",
+    "observability",
+    "ci-cd",
+    "docker",
+    "health-checks",
+    "rollback",
+    "github-actions",
+    "production-readiness",
+    "audit",
+    "launch"
+  ],
+  "detect": {
+    "files": [
+      "Dockerfile",
+      "vercel.json",
+      "netlify.toml",
+      "fly.toml",
+      "render.yaml",
+      "Procfile",
+      "prometheus.yml",
+      "grafana/*.json"
+    ],
+    "npm": [
+      "@opentelemetry/*",
+      "prom-client"
+    ],
+    "pypi": [
+      "opentelemetry-sdk"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "canary-watch",
+      "from": "ecc/skills/canary-watch/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "dashboard-builder",
+      "from": "ecc/skills/dashboard-builder/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "deployment-patterns",
+      "from": "ecc/skills/deployment-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "production-audit",
+      "from": "ecc/skills/production-audit/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

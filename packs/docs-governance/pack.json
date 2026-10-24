@@ -1,0 +1,92 @@
+{
+  "id": "docs-governance",
+  "layer": "principles",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "adr",
+    "architecture",
+    "documentation",
+    "impact-analysis",
+    "change-management",
+    "governance",
+    "codetour",
+    "onboarding",
+    "vscode",
+    "domain-glossary",
+    "context-md",
+    "ubiquitous-language",
+    "audit",
+    "docs-drift",
+    "docs",
+    "code-comments",
+    "code-review",
+    "readme",
+    "env-docs"
+  ],
+  "detect": {
+    "dirs": [
+      ".tours"
+    ],
+    "contains": [
+      {
+        "files": ".vscode/extensions.json",
+        "text": "vsls-contrib.codetour"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "comment-analyzer",
+      "from": "ecc/agents/comment-analyzer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "doc-updater",
+      "from": "ecc/agents/doc-updater.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "architecture-decision-records",
+      "from": "ecc/skills/architecture-decision-records/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "change-impact",
+      "from": "ecc/skills/change-impact/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "code-tour",
+      "from": "ecc/skills/code-tour/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "context-and-decisions",
+      "from": "ecc/skills/context-and-decisions/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "living-docs-governance",
+      "from": "ecc/skills/living-docs-governance/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:skill:docs-governance",
+      "reason": "merge → living-docs-governance: ECC skill yönlendiricisi; salt-okunur doküman denetim betiği oraya taşınabilir"
+    },
+    {
+      "id": "ecc:command:update-docs",
+      "reason": "ecc:agent:doc-updater ile birleşir: kaynak-doğruluk dosyalarından doküman senkronu"
+    }
+  ]
+}

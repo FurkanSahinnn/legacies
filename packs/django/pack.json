@@ -1,0 +1,81 @@
+{
+  "id": "django",
+  "layer": "backend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "django",
+    "celery",
+    "background-jobs",
+    "python",
+    "drf",
+    "orm",
+    "security",
+    "csrf",
+    "auth",
+    "pytest-django",
+    "factory-boy",
+    "tdd",
+    "verification",
+    "ruff",
+    "mypy",
+    "bandit",
+    "migrations",
+    "pip",
+    "poetry",
+    "code-review"
+  ],
+  "detect": {
+    "files": [
+      "manage.py"
+    ],
+    "pypi": [
+      "django"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "django-build-resolver",
+      "from": "ecc/agents/django-build-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "django-reviewer",
+      "from": "ecc/agents/django-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "django-celery",
+      "from": "ecc/skills/django-celery/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "django-patterns",
+      "from": "ecc/skills/django-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "django-security",
+      "from": "ecc/skills/django-security/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "django-tdd",
+      "from": "ecc/skills/django-tdd/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "django-verification",
+      "from": "ecc/skills/django-verification/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

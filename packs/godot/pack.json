@@ -1,0 +1,28 @@
+{
+  "id": "godot",
+  "layer": "games",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "godot",
+    "gdscript",
+    "game-dev"
+  ],
+  "detect": {
+    "files": [
+      "project.godot",
+      "export_presets.cfg",
+      "*.gd",
+      "*.tscn"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "godot-gdscript",
+      "from": "original/skills/godot-gdscript/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

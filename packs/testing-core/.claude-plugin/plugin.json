@@ -1,0 +1,22 @@
+{
+  "name": "legacies-testing-core",
+  "version": "0.4.0",
+  "description": "legacies testing-core pack: 4 skills, 1 agent, 1 command. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "regression-testing",
+    "ai-assisted-dev",
+    "api-testing",
+    "ui-state",
+    "debugging",
+    "qa",
+    "regression",
+    "downstream-consumers"
+  ],
+  "dependencies": [
+    "legacies"
+  ]
+}

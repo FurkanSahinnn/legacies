@@ -1,0 +1,22 @@
+{
+  "name": "legacies-sector-web3",
+  "version": "0.4.0",
+  "description": "legacies sector-web3 pack: 5 skills. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "x402",
+    "payments",
+    "agents",
+    "base",
+    "solana",
+    "evm",
+    "solidity",
+    "defi"
+  ],
+  "dependencies": [
+    "legacies"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "android",
+  "layer": "mobile",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "android",
+    "kotlin",
+    "kmp",
+    "clean-architecture",
+    "compose",
+    "jetpack-compose"
+  ],
+  "detect": {
+    "files": [
+      "/*/src/main/AndroidManifest.xml",
+      "/*/src/androidMain/AndroidManifest.xml"
+    ],
+    "jvm": [
+      "org.jetbrains.compose",
+      "androidx.compose"
+    ],
+    "contains": [
+      {
+        "files": "/*/build.gradle*",
+        "text": "com.android.application"
+      },
+      {
+        "files": "/*/build.gradle*",
+        "text": "com.android.library"
+      },
+      {
+        "files": "/gradle/libs.versions.toml",
+        "text": "com.android.application"
+      },
+      {
+        "files": "/gradle/libs.versions.toml",
+        "text": "com.android.library"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "android-clean-architecture",
+      "from": "ecc/skills/android-clean-architecture/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "compose-multiplatform-patterns",
+      "from": "ecc/skills/compose-multiplatform-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

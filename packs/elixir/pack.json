@@ -1,0 +1,43 @@
+{
+  "id": "elixir",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "elixir",
+    "phoenix",
+    "liveview",
+    "otp"
+  ],
+  "detect": {
+    "files": [
+      "mix.exs",
+      "mix.lock",
+      ".formatter.exs",
+      "*.heex",
+      "*.ex",
+      "*.exs"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "elixir-patterns",
+      "from": "original/skills/elixir-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "phoenix-liveview",
+      "from": "original/skills/phoenix-liveview/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "elixir-coding-style",
+      "from": "original/rules/elixir/coding-style.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

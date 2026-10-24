@@ -1,0 +1,92 @@
+{
+  "id": "ai-agents",
+  "layer": "ai",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "llm-apps",
+    "agents",
+    "audit",
+    "tool-design",
+    "action-space",
+    "prompt-injection",
+    "tool-security",
+    "multi-tenant",
+    "chatbots",
+    "channel-policy",
+    "scraping",
+    "llm-enrichment",
+    "github-actions",
+    "scheduling",
+    "operations",
+    "observability",
+    "kill-switch",
+    "human-in-the-loop",
+    "approvals",
+    "outbound-messages"
+  ],
+  "detect": {
+    "npm": [
+      "@anthropic-ai/claude-agent-sdk",
+      "@openai/agents",
+      "@langchain/langgraph",
+      "@mastra/core",
+      "crawlee",
+      "cheerio"
+    ],
+    "pypi": [
+      "claude-agent-sdk",
+      "openai-agents",
+      "langgraph",
+      "crewai",
+      "autogen-agentchat",
+      "scrapy",
+      "beautifulsoup4"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "agent-architecture-audit",
+      "from": "ecc/skills/agent-architecture-audit/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "agent-harness-construction",
+      "from": "ecc/skills/agent-harness-construction/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "agent-security-hardening",
+      "from": "ecc/skills/agent-security-hardening/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "counterparty-channel-discipline",
+      "from": "ecc/skills/counterparty-channel-discipline/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "data-scraper-agent",
+      "from": "ecc/skills/data-scraper-agent/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "enterprise-agent-ops",
+      "from": "ecc/skills/enterprise-agent-ops/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "operator-approval-loop",
+      "from": "ecc/skills/operator-approval-loop/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

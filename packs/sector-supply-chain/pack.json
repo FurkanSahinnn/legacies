@@ -1,0 +1,71 @@
+{
+  "id": "sector-supply-chain",
+  "layer": "sector",
+  "status": "unmeasured",
+  "license": "Apache-2.0",
+  "topics": [
+    "logistics",
+    "freight",
+    "customs",
+    "trade",
+    "energy",
+    "procurement",
+    "retail",
+    "demand-planning",
+    "manufacturing",
+    "quality",
+    "returns"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "skill",
+      "name": "carrier-relationship-management",
+      "from": "ecc/skills/carrier-relationship-management/SKILL.md",
+      "license": "Apache-2.0"
+    },
+    {
+      "kind": "skill",
+      "name": "customs-trade-compliance",
+      "from": "ecc/skills/customs-trade-compliance/SKILL.md",
+      "license": "Apache-2.0"
+    },
+    {
+      "kind": "skill",
+      "name": "energy-procurement",
+      "from": "ecc/skills/energy-procurement/SKILL.md",
+      "license": "Apache-2.0"
+    },
+    {
+      "kind": "skill",
+      "name": "inventory-demand-planning",
+      "from": "ecc/skills/inventory-demand-planning/SKILL.md",
+      "license": "Apache-2.0"
+    },
+    {
+      "kind": "skill",
+      "name": "logistics-exception-management",
+      "from": "ecc/skills/logistics-exception-management/SKILL.md",
+      "license": "Apache-2.0"
+    },
+    {
+      "kind": "skill",
+      "name": "production-scheduling",
+      "from": "ecc/skills/production-scheduling/SKILL.md",
+      "license": "Apache-2.0"
+    },
+    {
+      "kind": "skill",
+      "name": "quality-nonconformance",
+      "from": "ecc/skills/quality-nonconformance/SKILL.md",
+      "license": "Apache-2.0"
+    },
+    {
+      "kind": "skill",
+      "name": "returns-reverse-logistics",
+      "from": "ecc/skills/returns-reverse-logistics/SKILL.md",
+      "license": "Apache-2.0"
+    }
+  ],
+  "merged": []
+}

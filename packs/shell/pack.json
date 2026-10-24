@@ -1,0 +1,34 @@
+{
+  "id": "shell",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "bash",
+    "shell",
+    "posix-sh"
+  ],
+  "detect": {
+    "files": [
+      ".shellcheckrc",
+      "*.bats",
+      "*.sh",
+      "*.bash"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "shell-scripting",
+      "from": "original/skills/shell-scripting/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "shell-coding-style",
+      "from": "original/rules/shell/coding-style.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

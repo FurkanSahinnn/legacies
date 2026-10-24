@@ -1,0 +1,54 @@
+{
+  "id": "spring-boot",
+  "layer": "backend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "spring-boot",
+    "java",
+    "rest",
+    "caching",
+    "spring-security",
+    "authn",
+    "authz",
+    "csrf",
+    "junit5",
+    "mockmvc",
+    "testcontainers",
+    "verification",
+    "spotbugs",
+    "jacoco"
+  ],
+  "detect": {
+    "jvm": [
+      "spring-boot-starter"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "springboot-patterns",
+      "from": "ecc/skills/springboot-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "springboot-security",
+      "from": "ecc/skills/springboot-security/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "springboot-tdd",
+      "from": "ecc/skills/springboot-tdd/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "springboot-verification",
+      "from": "ecc/skills/springboot-verification/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

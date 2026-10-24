@@ -1,0 +1,18 @@
+{
+  "name": "legacies-clickhouse",
+  "version": "0.4.0",
+  "description": "legacies clickhouse pack: 1 skill. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "clickhouse",
+    "analytics",
+    "olap",
+    "sql"
+  ],
+  "dependencies": [
+    "legacies"
+  ]
+}

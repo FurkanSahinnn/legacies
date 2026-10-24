@@ -1,0 +1,43 @@
+{
+  "id": "fastapi",
+  "layer": "backend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "fastapi",
+    "pydantic",
+    "python",
+    "async",
+    "openapi",
+    "code-review"
+  ],
+  "detect": {
+    "pypi": [
+      "fastapi"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "fastapi-reviewer",
+      "from": "ecc/agents/fastapi-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "fastapi-patterns",
+      "from": "ecc/skills/fastapi-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:python/fastapi.md",
+      "reason": "legacies'te var: python; FastAPI bölümü fastapi paketine taşınabilir"
+    },
+    {
+      "id": "ecc:command:fastapi-review",
+      "reason": "ecc:agent:fastapi-reviewer ile birleşir: ajanı çağıran sarmalayıcı komut"
+    }
+  ]
+}

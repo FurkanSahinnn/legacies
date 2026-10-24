@@ -1,0 +1,35 @@
+{
+  "id": "haskell",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "haskell",
+    "ghc",
+    "cabal"
+  ],
+  "detect": {
+    "files": [
+      "*.cabal",
+      "stack.yaml",
+      "cabal.project",
+      "hie.yaml",
+      "*.hs"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "haskell-patterns",
+      "from": "original/skills/haskell-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "haskell-coding-style",
+      "from": "original/rules/haskell/coding-style.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

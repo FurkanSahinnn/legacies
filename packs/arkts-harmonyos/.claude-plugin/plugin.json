@@ -1,0 +1,22 @@
+{
+  "name": "legacies-arkts-harmonyos",
+  "version": "0.4.0",
+  "description": "legacies arkts-harmonyos pack: 1 agent, 4 rules. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "harmonyos",
+    "arkts",
+    "arkui",
+    "openharmony",
+    "style",
+    "tooling",
+    "patterns",
+    "security"
+  ],
+  "dependencies": [
+    "legacies"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "db-migrations",
+  "layer": "data",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "migrations",
+    "postgres",
+    "prisma",
+    "drizzle",
+    "django",
+    "golang-migrate"
+  ],
+  "detect": {
+    "files": [
+      "alembic.ini"
+    ],
+    "dirs": [
+      "migrations",
+      "alembic",
+      "db/migrate"
+    ],
+    "npm": [
+      "drizzle-kit",
+      "kysely",
+      "knex"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "database-migrations",
+      "from": "legacies/skills/database-migrations/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

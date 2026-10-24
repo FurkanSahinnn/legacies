@@ -1,0 +1,32 @@
+{
+  "id": "php-symfony",
+  "layer": "backend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "symfony",
+    "php",
+    "doctrine"
+  ],
+  "detect": {
+    "composer": [
+      "symfony/framework-bundle",
+      "symfony/runtime",
+      "doctrine/doctrine-bundle"
+    ],
+    "files": [
+      "symfony.lock",
+      "config/bundles.php",
+      "bin/console"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "symfony-patterns",
+      "from": "original/skills/symfony-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

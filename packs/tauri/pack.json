@@ -1,0 +1,35 @@
+{
+  "id": "tauri",
+  "layer": "desktop",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "tauri",
+    "desktop",
+    "rust"
+  ],
+  "detect": {
+    "files": [
+      "tauri.conf.json",
+      "tauri.conf.json5",
+      "Tauri.toml",
+      "src-tauri/Cargo.toml"
+    ],
+    "npm": [
+      "@tauri-apps/*"
+    ],
+    "cargo": [
+      "tauri",
+      "tauri-build"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "tauri-patterns",
+      "from": "original/skills/tauri-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

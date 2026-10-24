@@ -1,0 +1,65 @@
+{
+  "id": "containers",
+  "layer": "devops",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "docker",
+    "docker-compose",
+    "containers",
+    "container-security",
+    "kubernetes",
+    "rbac",
+    "probes",
+    "autoscaling",
+    "kubectl"
+  ],
+  "detect": {
+    "files": [
+      "Dockerfile",
+      "docker-compose.yml",
+      "compose.yaml",
+      "Chart.yaml",
+      "kustomization.yaml",
+      "docker-compose.yaml",
+      "compose.yml"
+    ],
+    "dirs": [
+      "k8s",
+      "helm"
+    ],
+    "contains": [
+      {
+        "files": "*.yaml",
+        "text": "kind: Deployment"
+      },
+      {
+        "files": "*.yml",
+        "text": "kind: Deployment"
+      },
+      {
+        "files": "*.yaml",
+        "text": "kind: Service"
+      },
+      {
+        "files": "*.yml",
+        "text": "kind: Service"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "docker-patterns",
+      "from": "ecc/skills/docker-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "kubernetes-patterns",
+      "from": "ecc/skills/kubernetes-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

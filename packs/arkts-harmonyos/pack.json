@@ -1,0 +1,62 @@
+{
+  "id": "arkts-harmonyos",
+  "layer": "mobile",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "harmonyos",
+    "arkts",
+    "arkui",
+    "openharmony",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "oh-package.json5",
+      "build-profile.json5",
+      "*.ets"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "harmonyos-app-resolver",
+      "from": "ecc/agents/harmonyos-app-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "arkts-coding-style",
+      "from": "ecc/rules/arkts/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "arkts-patterns",
+      "from": "ecc/rules/arkts/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "arkts-security",
+      "from": "ecc/rules/arkts/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "arkts-testing",
+      "from": "ecc/rules/arkts/testing.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:arkts/hooks.md",
+      "reason": "ecc:rule:arkts/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

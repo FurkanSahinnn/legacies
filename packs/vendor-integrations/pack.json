@@ -1,0 +1,58 @@
+{
+  "id": "vendor-integrations",
+  "layer": "services",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "email",
+    "mailtrap",
+    "transactional-email",
+    "nutrient",
+    "pdf",
+    "ocr",
+    "document-processing",
+    "x",
+    "twitter",
+    "oauth",
+    "rate-limits"
+  ],
+  "detect": {
+    "npm": [
+      "mailtrap",
+      "@nutrient-sdk/*",
+      "@pspdfkit/*",
+      "twitter-api-v2"
+    ],
+    "pypi": [
+      "mailtrap",
+      "tweepy"
+    ],
+    "contains": [
+      {
+        "files": ".env*",
+        "text": "NUTRIENT_API_KEY"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "mailtrap-email-integration",
+      "from": "ecc/skills/mailtrap-email-integration/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "nutrient-document-processing",
+      "from": "ecc/skills/nutrient-document-processing/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "x-api",
+      "from": "ecc/skills/x-api/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

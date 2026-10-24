@@ -1,0 +1,80 @@
+{
+  "id": "perl",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "perl",
+    "perl5",
+    "taint-mode",
+    "dbi",
+    "security",
+    "test2",
+    "devel-cover",
+    "style",
+    "tooling",
+    "patterns",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "cpanfile",
+      "Makefile.PL",
+      "Build.PL",
+      "*.pl",
+      "*.pm",
+      "dist.ini",
+      "*.t"
+    ]
+  },
+  "members": [
+    {
+      "kind": "rule",
+      "name": "perl-coding-style",
+      "from": "ecc/rules/perl/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "perl-patterns",
+      "from": "ecc/rules/perl/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "perl-security",
+      "from": "ecc/rules/perl/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "perl-testing",
+      "from": "ecc/rules/perl/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "perl-patterns",
+      "from": "ecc/skills/perl-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "perl-security",
+      "from": "ecc/skills/perl-security/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "perl-testing",
+      "from": "ecc/skills/perl-testing/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:perl/hooks.md",
+      "reason": "ecc:rule:perl/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    }
+  ]
+}

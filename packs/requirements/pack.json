@@ -1,0 +1,62 @@
+{
+  "id": "requirements",
+  "layer": "process",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "requirements",
+    "acceptance-criteria",
+    "specs",
+    "prd",
+    "srs",
+    "capability-planning",
+    "epics",
+    "user-stories",
+    "sprints",
+    "openspec",
+    "spec-driven",
+    "brownfield",
+    "planning"
+  ],
+  "detect": {
+    "dirs": [
+      "openspec"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "spec-miner",
+      "from": "ecc/agents/spec-miner.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "command",
+      "name": "plan-prd",
+      "from": "ecc/commands/plan-prd.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "intent-driven-development",
+      "from": "ecc/skills/intent-driven-development/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "story-lifecycle",
+      "from": "ecc/skills/story-lifecycle/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:skill:product-capability",
+      "reason": "merge → intent-driven-development: PRD'den uygulanabilir yetenek planına çeviri aynı alan; ECC'ye özgü çerçeve"
+    },
+    {
+      "id": "ecc:command:prp-prd",
+      "reason": "ecc:command:plan-prd ile örtüşür: etkileşimli PRD üretici"
+    }
+  ]
+}

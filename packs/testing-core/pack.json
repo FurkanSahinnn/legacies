@@ -1,0 +1,64 @@
+{
+  "id": "testing-core",
+  "layer": "testing",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "regression-testing",
+    "ai-assisted-dev",
+    "api-testing",
+    "ui-state",
+    "debugging",
+    "qa",
+    "regression",
+    "downstream-consumers",
+    "large-repos",
+    "test-inventory",
+    "test-gap-analysis",
+    "contract-testing",
+    "traceability",
+    "testing",
+    "pr-review",
+    "coverage"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "agent",
+      "name": "pr-test-analyzer",
+      "from": "ecc/agents/pr-test-analyzer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "command",
+      "name": "test-coverage",
+      "from": "ecc/commands/test-coverage.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "ai-regression-testing",
+      "from": "ecc/skills/ai-regression-testing/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "click-path-audit",
+      "from": "ecc/skills/click-path-audit/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "module-regression",
+      "from": "ecc/skills/module-regression/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "test-collaboration",
+      "from": "ecc/skills/test-collaboration/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

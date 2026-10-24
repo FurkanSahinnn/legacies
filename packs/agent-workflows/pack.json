@@ -1,0 +1,109 @@
+{
+  "id": "agent-workflows",
+  "layer": "process",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "agents",
+    "debugging",
+    "claude-code",
+    "agentic-engineering",
+    "evals",
+    "task-decomposition",
+    "model-routing",
+    "team-process",
+    "code-review",
+    "autonomous-loops",
+    "multi-agent",
+    "rfc-dag",
+    "quality-gates",
+    "decision-making",
+    "multi-perspective",
+    "personas",
+    "generator-evaluator",
+    "autonomous-build",
+    "subagents",
+    "context-retrieval"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "skill",
+      "name": "agent-introspection-debugging",
+      "from": "ecc/skills/agent-introspection-debugging/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "agentic-engineering",
+      "from": "ecc/skills/agentic-engineering/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "autonomous-loops",
+      "from": "ecc/skills/autonomous-loops/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "council",
+      "from": "ecc/skills/council/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "gan-style-harness",
+      "from": "ecc/skills/gan-style-harness/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "iterative-retrieval",
+      "from": "ecc/skills/iterative-retrieval/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "loop-design-check",
+      "from": "ecc/skills/loop-design-check/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "parallel-execution-optimizer",
+      "from": "ecc/skills/parallel-execution-optimizer/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "santa-method",
+      "from": "ecc/skills/santa-method/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "team-agent-orchestration",
+      "from": "ecc/skills/team-agent-orchestration/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:skill:ai-first-engineering",
+      "reason": "merge → agentic-engineering: aynı konu ve çok ince (53 satır); ekip süreci bölümü olarak eklenebilir"
+    },
+    {
+      "id": "ecc:skill:continuous-agent-loop",
+      "reason": "merge → autonomous-loops: aynı konu; çok ince (47 satır) ve ECC komutlarına (nanoclaw, plankton, /harness-audit) bağlı"
+    },
+    {
+      "id": "ecc:skill:dev-team",
+      "reason": "merge → council: rol personalarıyla çok perspektifli tartışma council ile aynı fikir"
+    },
+    {
+      "id": "ecc:skill:ralphinho-rfc-pipeline",
+      "reason": "merge → autonomous-loops: RFC→DAG çok ajanlı yürütme orada zaten anlatılıyor; ince (69 satır)"
+    }
+  ]
+}

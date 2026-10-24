@@ -1,0 +1,133 @@
+{
+  "id": "kotlin",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "kotlin",
+    "coroutines",
+    "flow",
+    "android",
+    "kmp",
+    "exposed",
+    "orm",
+    "hikaricp",
+    "flyway",
+    "ktor",
+    "koin",
+    "kotlinx-serialization",
+    "null-safety",
+    "dsl",
+    "kotest",
+    "mockk",
+    "kover",
+    "gradle",
+    "build",
+    "compose"
+  ],
+  "detect": {
+    "files": [
+      "*.kt"
+    ],
+    "jvm": [
+      "org.jetbrains.exposed",
+      "io.ktor"
+    ],
+    "contains": [
+      {
+        "files": "build.gradle.kts",
+        "text": "org.jetbrains.kotlin"
+      }
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "kotlin-build-resolver",
+      "from": "ecc/agents/kotlin-build-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "kotlin-reviewer",
+      "from": "ecc/agents/kotlin-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "kotlin-coding-style",
+      "from": "ecc/rules/kotlin/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "kotlin-patterns",
+      "from": "ecc/rules/kotlin/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "kotlin-security",
+      "from": "ecc/rules/kotlin/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "kotlin-testing",
+      "from": "ecc/rules/kotlin/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "kotlin-coroutines-flows",
+      "from": "ecc/skills/kotlin-coroutines-flows/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "kotlin-exposed-patterns",
+      "from": "ecc/skills/kotlin-exposed-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "kotlin-ktor-patterns",
+      "from": "ecc/skills/kotlin-ktor-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "kotlin-patterns",
+      "from": "ecc/skills/kotlin-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "kotlin-testing",
+      "from": "ecc/skills/kotlin-testing/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:kotlin/hooks.md",
+      "reason": "ecc:rule:kotlin/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    },
+    {
+      "id": "ecc:command:gradle-build",
+      "reason": "ecc:agent:kotlin-build-resolver ile birleşir: Android/KMP Gradle düzeltme adımları"
+    },
+    {
+      "id": "ecc:command:kotlin-build",
+      "reason": "ecc:agent:kotlin-build-resolver ile birleşir: ajanı çağıran sarmalayıcı komut"
+    },
+    {
+      "id": "ecc:command:kotlin-review",
+      "reason": "ecc:agent:kotlin-reviewer ile birleşir: ajanı çağıran sarmalayıcı komut"
+    },
+    {
+      "id": "ecc:command:kotlin-test",
+      "reason": "legacies'te var: tdd-workflow; Kotest/Kover kısmı kotlin paketine (kotlin/testing kuralı, ECC kotlin-testing skill)"
+    }
+  ]
+}

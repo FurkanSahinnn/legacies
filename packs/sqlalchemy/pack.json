@@ -1,0 +1,32 @@
+{
+  "id": "sqlalchemy",
+  "layer": "data",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "sqlalchemy",
+    "alembic",
+    "python",
+    "orm"
+  ],
+  "detect": {
+    "files": [
+      "alembic.ini"
+    ],
+    "pypi": [
+      "sqlalchemy",
+      "flask-sqlalchemy",
+      "sqlmodel",
+      "alembic"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "sqlalchemy-patterns",
+      "from": "original/skills/sqlalchemy-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

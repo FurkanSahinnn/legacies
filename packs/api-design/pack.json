@@ -1,0 +1,34 @@
+{
+  "id": "api-design",
+  "layer": "principles",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "rest",
+    "api-design",
+    "pagination",
+    "versioning",
+    "rate-limiting",
+    "openapi",
+    "asyncapi",
+    "protobuf",
+    "json-schema",
+    "contract-testing"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "skill",
+      "name": "api-design",
+      "from": "ecc/skills/api-design/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "contract-first",
+      "from": "ecc/skills/contract-first/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

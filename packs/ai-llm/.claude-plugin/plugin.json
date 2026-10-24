@@ -1,0 +1,22 @@
+{
+  "name": "legacies-ai-llm",
+  "version": "0.4.0",
+  "description": "legacies ai-llm pack: 5 skills, 1 agent. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "llm",
+    "cost",
+    "model-routing",
+    "prompt-caching",
+    "evals",
+    "pass-at-k",
+    "agents",
+    "mcp"
+  ],
+  "dependencies": [
+    "legacies"
+  ]
+}

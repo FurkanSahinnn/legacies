@@ -1,0 +1,93 @@
+{
+  "id": "python",
+  "layer": "language",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "python",
+    "nuitka",
+    "inno-setup",
+    "windows-installer",
+    "pep8",
+    "type-hints",
+    "pytest",
+    "fixtures",
+    "mocking",
+    "code-review",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing"
+  ],
+  "detect": {
+    "files": [
+      "pyproject.toml",
+      "requirements*.txt",
+      "setup.py",
+      "Pipfile",
+      "*.py"
+    ],
+    "pypi": [
+      "nuitka"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "python-reviewer",
+      "from": "legacies/agents/python-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "python-python",
+      "from": "legacies/rules/python/python.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "generating-python-installer",
+      "from": "ecc/skills/generating-python-installer/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "python-patterns",
+      "from": "ecc/skills/python-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "python-testing",
+      "from": "ecc/skills/python-testing/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:python/coding-style.md",
+      "reason": "legacies'te var: python"
+    },
+    {
+      "id": "ecc:rule:python/hooks.md",
+      "reason": "legacies'te var: python"
+    },
+    {
+      "id": "ecc:rule:python/patterns.md",
+      "reason": "legacies'te var: python"
+    },
+    {
+      "id": "ecc:rule:python/security.md",
+      "reason": "legacies'te var: python"
+    },
+    {
+      "id": "ecc:rule:python/testing.md",
+      "reason": "legacies'te var: python"
+    },
+    {
+      "id": "ecc:command:python-review",
+      "reason": "legacies'te var: python-reviewer"
+    }
+  ]
+}

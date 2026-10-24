@@ -1,0 +1,16 @@
+{
+  "name": "legacies",
+  "version": "0.4.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Per-project local memory plugin for Claude Code",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\"",
+    "packs:build": "node scripts/build-packs.mjs",
+    "bench:hooks": "node scripts/bench-hooks.mjs"
+  }
+}

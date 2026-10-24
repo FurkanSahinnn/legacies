@@ -1,0 +1,39 @@
+{
+  "id": "frontend-design",
+  "layer": "frontend",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "design-tokens",
+    "design-system",
+    "css",
+    "ui-design",
+    "visual-design",
+    "typography",
+    "ui-polish",
+    "motion",
+    "interaction-states"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "skill",
+      "name": "design-system",
+      "from": "ecc/skills/design-system/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "frontend-design-direction",
+      "from": "ecc/skills/frontend-design-direction/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "make-interfaces-feel-better",
+      "from": "ecc/skills/make-interfaces-feel-better/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

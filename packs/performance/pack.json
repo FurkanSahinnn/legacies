@@ -1,0 +1,67 @@
+{
+  "id": "performance",
+  "layer": "principles",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "performance",
+    "core-web-vitals",
+    "latency",
+    "benchmarks",
+    "optimization",
+    "benchmarking",
+    "caching",
+    "content-hash",
+    "sha-256",
+    "etl",
+    "backfill",
+    "throughput",
+    "data-pipelines",
+    "p99",
+    "realtime",
+    "queues",
+    "profiling",
+    "bundle-size",
+    "memory-leaks"
+  ],
+  "detect": {},
+  "members": [
+    {
+      "kind": "agent",
+      "name": "performance-optimizer",
+      "from": "ecc/agents/performance-optimizer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "benchmark",
+      "from": "ecc/skills/benchmark/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "benchmark-optimization-loop",
+      "from": "ecc/skills/benchmark-optimization-loop/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "content-hash-cache-pattern",
+      "from": "ecc/skills/content-hash-cache-pattern/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "data-throughput-accelerator",
+      "from": "ecc/skills/data-throughput-accelerator/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "latency-critical-systems",
+      "from": "ecc/skills/latency-critical-systems/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

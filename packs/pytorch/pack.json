@@ -1,0 +1,34 @@
+{
+  "id": "pytorch",
+  "layer": "ai",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "pytorch",
+    "deep-learning",
+    "training-loops",
+    "cuda",
+    "training",
+    "tensors"
+  ],
+  "detect": {
+    "pypi": [
+      "torch"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "pytorch-build-resolver",
+      "from": "ecc/agents/pytorch-build-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "pytorch-patterns",
+      "from": "ecc/skills/pytorch-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

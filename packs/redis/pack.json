@@ -1,0 +1,34 @@
+{
+  "id": "redis",
+  "layer": "data",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "redis",
+    "caching",
+    "distributed-locks",
+    "rate-limiting",
+    "pub-sub"
+  ],
+  "detect": {
+    "npm": [
+      "ioredis",
+      "redis"
+    ],
+    "pypi": [
+      "redis"
+    ],
+    "compose": [
+      "redis"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "redis-patterns",
+      "from": "ecc/skills/redis-patterns/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

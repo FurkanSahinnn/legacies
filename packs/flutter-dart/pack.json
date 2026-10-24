@@ -1,0 +1,105 @@
+{
+  "id": "flutter-dart",
+  "layer": "mobile",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "dart",
+    "flutter",
+    "bloc",
+    "riverpod",
+    "gorouter",
+    "code-review",
+    "state-management",
+    "build",
+    "pub",
+    "build_runner",
+    "widgets",
+    "style",
+    "tooling",
+    "patterns",
+    "security",
+    "testing",
+    "widget-tests",
+    "golden-tests"
+  ],
+  "detect": {
+    "files": [
+      "pubspec.yaml",
+      "*.dart"
+    ],
+    "pub": [
+      "flutter"
+    ]
+  },
+  "members": [
+    {
+      "kind": "agent",
+      "name": "dart-build-resolver",
+      "from": "ecc/agents/dart-build-resolver.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "flutter-reviewer",
+      "from": "ecc/agents/flutter-reviewer.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "command",
+      "name": "flutter-test",
+      "from": "ecc/commands/flutter-test.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "dart-coding-style",
+      "from": "ecc/rules/dart/coding-style.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "dart-patterns",
+      "from": "ecc/rules/dart/patterns.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "dart-security",
+      "from": "ecc/rules/dart/security.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "rule",
+      "name": "dart-testing",
+      "from": "ecc/rules/dart/testing.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "dart-flutter-patterns",
+      "from": "ecc/skills/dart-flutter-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "flutter-dart-code-review",
+      "from": "ecc/skills/flutter-dart-code-review/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": [
+    {
+      "id": "ecc:rule:dart/hooks.md",
+      "reason": "ecc:rule:dart/coding-style.md ile birleşir: Claude Code hook önerisi; yalnız araç/komut listesi alınmalı"
+    },
+    {
+      "id": "ecc:command:flutter-build",
+      "reason": "ecc:agent:dart-build-resolver ile birleşir: ajanı çağıran sarmalayıcı komut"
+    },
+    {
+      "id": "ecc:command:flutter-review",
+      "reason": "ecc:agent:flutter-reviewer ile birleşir: ajanı çağıran sarmalayıcı komut"
+    }
+  ]
+}

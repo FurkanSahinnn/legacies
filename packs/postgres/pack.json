@@ -1,0 +1,54 @@
+{
+  "id": "postgres",
+  "layer": "data",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "postgres",
+    "supabase",
+    "indexing",
+    "rls",
+    "sql",
+    "schema",
+    "indexes"
+  ],
+  "detect": {
+    "files": [
+      "supabase/config.toml"
+    ],
+    "dirs": [
+      "supabase"
+    ],
+    "npm": [
+      "pg",
+      "postgres",
+      "@supabase/supabase-js"
+    ],
+    "pypi": [
+      "psycopg",
+      "psycopg2",
+      "asyncpg",
+      "psycopg2-binary"
+    ],
+    "compose": [
+      "postgres",
+      "postgis/postgis",
+      "pgvector/pgvector"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "postgres-patterns",
+      "from": "legacies/skills/postgres-patterns/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "agent",
+      "name": "database-reviewer",
+      "from": "legacies/agents/database-reviewer.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}

@@ -1,0 +1,82 @@
+{
+  "id": "sector-web3",
+  "layer": "sector",
+  "status": "unmeasured",
+  "license": "MIT",
+  "topics": [
+    "x402",
+    "payments",
+    "agents",
+    "base",
+    "solana",
+    "evm",
+    "solidity",
+    "defi",
+    "amm",
+    "smart-contracts",
+    "erc20",
+    "decimals",
+    "trading-agents",
+    "wallets",
+    "prompt-injection",
+    "mev",
+    "ethereum",
+    "keccak256",
+    "nodejs",
+    "hashing"
+  ],
+  "detect": {
+    "files": [
+      "foundry.toml",
+      "hardhat.config.*",
+      "*.sol"
+    ],
+    "npm": [
+      "@x402/fetch",
+      "@x402/axios",
+      "@x402/express",
+      "x402-fetch",
+      "agentwallet-sdk",
+      "ethers",
+      "viem",
+      "web3",
+      "@solana/web3.js"
+    ],
+    "pypi": [
+      "x402"
+    ]
+  },
+  "members": [
+    {
+      "kind": "skill",
+      "name": "agent-payment-x402",
+      "from": "ecc/skills/agent-payment-x402/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "defi-amm-security",
+      "from": "ecc/skills/defi-amm-security/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "evm-token-decimals",
+      "from": "ecc/skills/evm-token-decimals/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "llm-trading-agent-security",
+      "from": "ecc/skills/llm-trading-agent-security/SKILL.md",
+      "license": "MIT"
+    },
+    {
+      "kind": "skill",
+      "name": "nodejs-keccak256",
+      "from": "ecc/skills/nodejs-keccak256/SKILL.md",
+      "license": "MIT"
+    }
+  ],
+  "merged": []
+}
