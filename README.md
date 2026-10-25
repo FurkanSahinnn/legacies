@@ -308,7 +308,7 @@ Plugin etkinken `legacies` komutu Bash aracının PATH'inde bulunur.
 | `legacies packs` | Bu projenin teknoloji paketleri: tespit, seçim ekranı, `suggest`, `list`, `add`, `remove` |
 | `legacies catalog add\|list\|remove` | Kendi skill'lerini kişisel kataloğa ekler; projelerde paket gibi açılır |
 | `legacies multiagent` | Çoklu ajan düzeni: ayar ekranı, `on`/`off`, `set`, `role`, `reset`, `status`; `default` ile bilgisayar varsayılanı |
-| `legacies doctor` | Sağlık kontrolü yapar |
+| `legacies doctor` | Sağlık kontrolü yapar: eklenti bu projede açık mı (hangi ayar dosyasından), hafıza, son hook hataları |
 
 **Arama nasıl çalışıyor:**
 - camelCase, snake_case ve yolları böler (`getUserSession` → `get user session`).

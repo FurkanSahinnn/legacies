@@ -126,7 +126,7 @@ legacies map "<ad ya da konu>"   # kodun yerini bul
 legacies graph affected "<ad>"   # bu değişirse neyi etkiler
 legacies graph status            # kod haritasının durumu
 legacies multiagent              # çoklu ajan düzeni: aç/kapat, ayar ekranı
-legacies doctor                  # kurulum ve hafıza sağlık kontrolü
+legacies doctor                  # bu projede eklenti açık mı, hafıza ve hook sağlığı
 legacies help                    # tüm komutlar
 ```
 
@@ -134,7 +134,7 @@ legacies help                    # tüm komutlar
 
 | Belirti | Çözüm |
 |---|---|
-| legacies hiç görünmüyor | Claude Code'u projenin kök klasöründe aç. Kurulu olup olmadığını o klasörde `claude plugin list` ile kontrol et; kurulu değilse `legacies setup` çalıştır |
+| legacies hiç görünmüyor | Claude Code'u projenin kök klasöründe aç. Kurulu olup olmadığını o klasörde `legacies doctor` söyler (`Eklenti (bu proje): açık / kapalı / kurulu değil`); kapalıysa ya da kurulu değilse `legacies setup` çalıştır. Düz `claude plugin list` başka projelerdeki kurulumları da gösterir |
 | Paket ya da ayar değişikliği yansımadı | Açık oturumda `/reload-plugins` çalıştır ya da Claude Code'u yeniden başlat |
 | Bir hook hata veriyor gibi | `legacies doctor` son hataları gösterir. Hook'lar hata verse bile oturumu bozmaz |
 | Hatırlatmalar ya da öneriler fazla | `.legacies/config.json` dosyasını düzenle ya da `LEGACIES_STOP_REMINDER=off` / `LEGACIES_PROMPT_CONTEXT=off` kullan (README → Ayarlar) |

@@ -16,7 +16,7 @@ import {
 } from './lib/codeindex.mjs';
 import { buildContext, TEMPLATE_MARKER } from './lib/context.mjs';
 import { memorySources, searchSources, workspaceBrief } from './lib/crossproject.mjs';
-import { claudeCommand, spawnCommand } from './lib/installer.mjs';
+import { claudeCommand, PLUGIN_ID, spawnCommand } from './lib/installer.mjs';
 import { KIND_LABEL, KINDS as MIGRATION_KINDS, migrationLines, nextItems, readPlan, refreshMigration, setStatus, startMigration, STATUSES } from './lib/migrate.mjs';
 import { parseFrontmatter, stringifyFrontmatter, toList } from './lib/frontmatter.mjs';
 import { expandTerms, glossaryIndex } from './lib/glossary.mjs';
@@ -30,7 +30,7 @@ import { commitsSince, excludePattern, findProjectRoot, git, gitHead, hasMemory,
 import { bundledRules, installedRuleName, installRules, projectRulesDir, uninstallRules, unscopedBytes } from './lib/rules.mjs';
 import { currentSessionFile, logError, pluginDataDir, record, registerProject } from './lib/runtime.mjs';
 import { listCards, writeCard } from './lib/sessions.mjs';
-import { dateStamp, ensureDir, exists, readJson, readText, samePath, slugify, toPosix, writeAtomic } from './lib/util.mjs';
+import { claudeConfigDir, dateStamp, ensureDir, exists, readJson, readText, samePath, slugify, toPosix, writeAtomic } from './lib/util.mjs';
 import { addToWorkspace, deleteWorkspace, listWorkspaces, readWorkspace, removeFromWorkspace, WORKSPACE_ENV, workspacePaths, workspacesOf } from './lib/workspace.mjs';
 
 class UsageError extends Error {}
@@ -671,12 +671,32 @@ function cmdMigrate(args) {
   } else throw new UsageError('Kullanım: legacies migrate [start|status|next|refresh|done|partial|skip|todo] ...');
 }
 
+// Whether legacies is on in this project, read from the settings files in Claude Code's order: this
+// computer's (.claude/settings.local.json), the shared one (.claude/settings.json), then the user's. The
+// first file that names the plugin decides. No `claude` call: it costs seconds and lists every project.
+function pluginLine(root) {
+  const sources = [
+    ['.claude/settings.local.json', path.join(root, '.claude', 'settings.local.json')],
+    ['.claude/settings.json', path.join(root, '.claude', 'settings.json')],
+    [null, path.join(claudeConfigDir(), 'settings.json')],
+  ];
+  for (const [label, file] of sources) {
+    const enabled = (readJson(file, {}) || {}).enabledPlugins;
+    if (!enabled || !Object.hasOwn(enabled, PLUGIN_ID)) continue;
+    const on = enabled[PLUGIN_ID] === true;
+    if (!label) return `kullanıcı genelinde ${on ? 'açık' : 'kapalı'} (${file}) ⚠ legacies proje bazlı kurulur; bu klasörde legacies setup eski kurulumu kaldırıp projeye kurar`;
+    return on ? `açık — ${label}` : `kapalı — ${label} (açmak için bu klasörde: legacies setup)`;
+  }
+  return 'kurulu değil (kurmak için bu klasörde: legacies setup)';
+}
+
 function cmdDoctor(args) {
   const [major] = process.versions.node.split('.').map(Number);
   out(`Node: ${process.versions.node}${major < 18 ? ' ⚠ en az 18 gerekli' : ''}`);
   const root = findProjectRoot(args.root || process.cwd());
   out(`Proje kökü: ${root || 'bulunamadı (.git ya da .legacies olan bir klasörde çalıştır)'}`);
   if (root) {
+    out(`Eklenti (bu proje): ${pluginLine(root)}`);
     out(`Git: ${isGitRepo(root) ? 'evet' : 'hayır'}`);
     if (hasMemory(root)) {
       const paths = memoryPaths(root);
