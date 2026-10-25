@@ -9,8 +9,14 @@ import { readJson, readText, writeAtomic } from './util.mjs';
 // live inside the code: identifiers, error codes, table names, comments, URL strings. Every tracked code
 // file, in any language, becomes a small document of its path words and its most frequent words, scored
 // against the question. Framework routes (Next.js, SvelteKit, Expo Router) also get a method/URL label.
-const CONTENT_VERSION = 1;
+const CONTENT_VERSION = 2;
 const WORDS_PER_FILE = 40;
+// Doc comments and docstrings say what the code is for, often in words used once (a vendor's name,
+// "idempotent") that the most frequent words leave out; up to this many of them are kept as well.
+const DOC_WORDS_PER_FILE = 40;
+// Block comments, Python docstrings, and line comments (//, # , -- , ;;) that follow whitespace, so a
+// URL's "//", "#include" or "i--" is not taken for one.
+const COMMENT = /\/\*[\s\S]*?\*\/|"""[\s\S]*?"""|'''[\s\S]*?'''|(?:^|[ \t])(?:\/\/+|#(?=\s)|--(?=\s)|;;+)[^\n]*/gm;
 const MAX_FILE_BYTES = 512 * 1024;
 // A minified or generated file has very long lines; its words say little about intent.
 const MAX_LINE_LENGTH = 2000;
@@ -57,12 +63,23 @@ function fileDocument(root, file, route) {
   if (!text) return null;
   const lines = text.split(/\r?\n/);
   if (lines.some((l) => l.length > MAX_LINE_LENGTH)) return null;
-  const counts = new Map();
-  for (const word of tokenize(text)) {
-    if (word.length < 3 || /^\d+$/.test(word) || CODE_WORDS.has(word)) continue;
-    counts.set(word, (counts.get(word) || 0) + 1);
-  }
-  const words = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, WORDS_PER_FILE).flat();
+  const countWords = (source) => {
+    const counts = new Map();
+    for (const word of tokenize(source)) {
+      if (word.length < 3 || /^\d+$/.test(word) || CODE_WORDS.has(word)) continue;
+      counts.set(word, (counts.get(word) || 0) + 1);
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  };
+  const ranked = countWords(text);
+  const frequent = ranked.slice(0, WORDS_PER_FILE);
+  const kept = new Set(frequent.map(([word]) => word));
+  const inFile = new Map(ranked);
+  const documented = countWords((text.match(COMMENT) || []).join('\n'))
+    .filter(([word]) => !kept.has(word))
+    .slice(0, DOC_WORDS_PER_FILE)
+    .map(([word]) => [word, inFile.get(word)]);
+  const words = [...frequent, ...documented].flat();
   const pathWords = tokenize((route ? route.key : file).replace(/\.[^./]+$/, '')).filter((w) => w.length >= 3 && !CODE_WORDS.has(w));
   if (!route) return { words, pathWords, label: null, line: null, page: false };
   const methods = [];

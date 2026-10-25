@@ -81,3 +81,31 @@ test('a Python service is found from what its handler does, without any framewor
   assert.match(text, /app\/api\/v2\/handlers\.py/);
   assert.doesNotMatch(text, /embeddings\.py/);
 });
+
+test('a docstring or doc comment points at its file even when its words appear only once', () => {
+  const root = gitRepo();
+  // Fifty names used twice each outnumber the doc comment's words, which appear once.
+  const letters = 'abcdefghijklmnopqrstuvwxyz';
+  const busy = Array.from({ length: 50 }, (_, i) => `busy${letters[i % 26]}${letters[Math.floor(i / 26)]}`);
+  write(root, 'app/db/songs_repository.py', [
+    'def upsert_song(row):',
+    '    """Writes the raw Soundcharts payload once; running it twice is idempotent."""',
+    ...busy.map((w) => `    ${w} = ${w} + 1`),
+    '',
+  ].join('\n'));
+  write(root, 'src/lib/ledger.ts', [
+    '/** Refunds are reconciled nightly against the acquirer settlement report. */',
+    'export function closeDay() {',
+    ...busy.map((w) => `  ${w} = ${w} + 1;`),
+    '}',
+    '',
+  ].join('\n'));
+  write(root, 'app/services/embeddings.py', 'def embed_lyrics(text: str) -> list[float]:\n    return model.encode(text)\n');
+  commit(root, 'documented code');
+  initMemory(root);
+  const python = cli(root, ['map', 'where is the soundcharts payload written idempotently']);
+  assert.equal(python.status, 0, python.stderr);
+  assert.match(python.stdout, /app\/db\/songs_repository\.py/);
+  const typescript = cli(root, ['map', 'where are refunds reconciled against the settlement report']);
+  assert.match(typescript.stdout, /src\/lib\/ledger\.ts/);
+});
