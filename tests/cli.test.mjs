@@ -11,6 +11,31 @@ test('help names the usage guide, which exists', () => {
   assert.ok(fs.existsSync(guide[1]), guide[1]);
 });
 
+test('-h and --help show the help and succeed, like help', () => {
+  for (const flag of ['-h', '--help']) {
+    const res = cli(gitRepo(), [flag]);
+    assert.equal(res.status, 0, `${flag}: ${res.stderr}`);
+    assert.match(res.stdout, /Kullanım rehberi:/);
+  }
+});
+
+test('a command given --help or -h shows the help instead of running', () => {
+  for (const flag of ['--help', '-h']) {
+    // init would create .legacies/: the help must leave the project untouched.
+    const root = gitRepo();
+    const res = cli(root, ['init', flag]);
+    assert.equal(res.status, 0, res.stderr);
+    assert.match(res.stdout, /Kullanım rehberi:/);
+    assert.ok(!fs.existsSync(path.join(root, '.legacies')), `init ran with ${flag}`);
+  }
+});
+
+test('an unknown command still shows the help and fails', () => {
+  const res = cli(gitRepo(), ['no-such-command']);
+  assert.equal(res.status, 2);
+  assert.match(res.stdout, /Kullanım rehberi:/);
+});
+
 test('init builds the layout, hides it from git and is idempotent', () => {
   const root = gitRepo();
   const first = cli(root, ['init']);

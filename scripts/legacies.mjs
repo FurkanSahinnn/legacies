@@ -813,6 +813,11 @@ async function main() {
     return runHook(argv[1], at !== -1 ? argv[at + 1] : null);
   }
   const args = parseArgs(argv);
+  // A help flag anywhere shows the help and runs nothing: `legacies uninstall --help` must not uninstall.
+  if (args.help !== undefined || args._.includes('-h')) {
+    out(HELP);
+    return undefined;
+  }
   const command = COMMANDS[args._[0]];
   if (!command) {
     out(HELP);
