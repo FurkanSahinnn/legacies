@@ -78,3 +78,11 @@ test('graph status ignores a graphify the user put on PATH', () => {
   assert.equal(res.status, 0, res.stderr);
   assert.match(res.stdout, /graphify: kurulu değil/);
 });
+
+test('graph build shows graphify progress but not its hint about commands legacies never runs', () => {
+  const { root, env } = project();
+  const res = cli(root, ['graph', 'build'], { env });
+  assert.equal(res.status, 0, res.stderr);
+  assert.match(res.stdout, /1 nodes/);
+  assert.doesNotMatch(res.stdout, /cluster-only/);
+});

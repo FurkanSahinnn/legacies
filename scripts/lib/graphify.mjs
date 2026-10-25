@@ -13,6 +13,8 @@ export const GRAPHIFY_SPEC = `graphifyy[sql]==${GRAPHIFY_VERSION}`;
 // AST only: without --code-only, extract would try an LLM backend on documents.
 export const BUILD_ARGS = ['extract', '.', '--code-only'];
 export const UPDATE_ARGS = ['update', '.'];
+// Lines in which graphify points at steps legacies does not take (communities, its site, LLM keys).
+export const GRAPHIFY_ADVICE = /cluster-only|graphify\.com|in your AI assistant|API_KEY/i;
 
 // legacies keeps its own graphify in the plugin data folder: a graphify the user installed is never
 // replaced or removed, the tested version is the one that runs, and it leaves with the plugin data.
@@ -43,7 +45,7 @@ export function graphifyEnv(paths) {
   };
 }
 
-export function runGraphify(paths, args, { inherit = false, timeout = 30 * 60 * 1000 } = {}) {
+export function runGraphify(paths, args, { timeout = 30 * 60 * 1000 } = {}) {
   const command = graphifyCommand();
   if (!command) return null;
   return spawnSync(command.cmd, [...command.pre, ...args], {
@@ -51,7 +53,6 @@ export function runGraphify(paths, args, { inherit = false, timeout = 30 * 60 * 
     encoding: 'utf8',
     timeout,
     windowsHide: true,
-    stdio: inherit ? 'inherit' : 'pipe',
     env: graphifyEnv(paths),
   });
 }

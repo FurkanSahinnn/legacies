@@ -18,6 +18,9 @@ if (cmd === '--version') {
     const node = { id: 'a', label: 'buildFakeGraph()', file_type: 'code', source_file: 'src/fake.ts', source_location: 'L1' };
     fs.writeFileSync(path.join(out, 'graph.json'), JSON.stringify({ nodes: [node], links: [] }));
   }
+  // What graphify 0.9.93 prints: progress, then a next step that points at a command legacies never runs.
+  process.stdout.write(`[graphify ${cmd}] wrote ${out}/graph.json: 1 nodes, 0 edges\n`);
+  process.stdout.write(`[graphify ${cmd}] next: run \`graphify cluster-only .\` to generate GRAPH_REPORT.md and name communities\n`);
 } else {
   process.exitCode = 2;
 }

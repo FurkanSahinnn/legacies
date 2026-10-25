@@ -75,3 +75,24 @@ test('graph answers stay within the output limit on a large graph', () => {
     assert.ok(out.length <= 2200, `${args[0]} printed ${out.length} characters`);
   }
 });
+
+test('graph explain leaves out TODO and FIXME comments but keeps the reasons written next to the code', () => {
+  const root = gitRepo();
+  initMemory(root);
+  const nodes = [
+    { id: 'build', label: 'build()', file_type: 'code', source_file: 'src/build.ts', source_location: 'L5' },
+    // graphify keeps the comment marker in the label, as in its graphs of Python projects.
+    { id: 'todo', label: '# TODO: drop the legacy flag', file_type: 'rationale', source_file: 'src/build.ts', source_location: 'L3' },
+    { id: 'fixme', label: '// FIXME: retry on timeout', file_type: 'rationale', source_file: 'src/build.ts', source_location: 'L2' },
+    { id: 'note', label: 'NOTE: keeps the linker order', file_type: 'rationale', source_file: 'src/build.ts', source_location: 'L4' },
+  ];
+  const links = [
+    { source: 'todo', target: 'build', relation: 'rationale_for', source_file: 'src/build.ts', source_location: 'L3' },
+    { source: 'fixme', target: 'build', relation: 'rationale_for', source_file: 'src/build.ts', source_location: 'L2' },
+    { source: 'note', target: 'build', relation: 'rationale_for', source_file: 'src/build.ts', source_location: 'L4' },
+  ];
+  write(root, '.legacies/graph/graph.json', JSON.stringify({ nodes, links }));
+  const out = ask(root, ['explain', 'build']);
+  assert.match(out, /NOTE: keeps the linker order/);
+  assert.doesNotMatch(out, /TODO|FIXME/);
+});

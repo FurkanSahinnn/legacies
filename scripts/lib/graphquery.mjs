@@ -6,7 +6,7 @@ import { clip, readJson, writeAtomic } from './util.mjs';
 // legacies answers explain, affected, path and query itself, from a compact copy of graphify's graph.
 // graphify reloads the whole graph in Python for every question (~1 s on 8.5k nodes)
 // and let its answers run past their budget.
-const EDGES_VERSION = 1;
+const EDGES_VERSION = 2;
 export const ANSWER_LIMIT = 2000;
 const NEIGHBOR_LIMIT = 12;
 const CANDIDATE_LIMIT = 6;
@@ -17,6 +17,9 @@ const QUERY_NEIGHBORS = 4;
 const DEPENDS = new Set(['calls', 'indirect_call', 'references', 'imports', 'imports_from', 're_exports', 'dynamic_import', 'inherits', 'method']);
 // What calls or uses a symbol is listed before what merely contains it.
 const RELATION_RANK = ['calls', 'indirect_call', 'references', 'inherits', 'method', 'imports', 'imports_from', 're_exports', 'dynamic_import', 'contains', 'rationale_for', 'cites'];
+// Comments graphify keeps as rationale: a NOTE or WHY explains the code, a TODO or FIXME is only a to-do.
+// The label may keep its comment marker (`# TODO: ...`, `// FIXME ...`).
+const TODO_COMMENT = /^[\s#/*;-]*(TODO|FIXME|XXX)\b/i;
 const rankOf = (relation) => (RELATION_RANK.includes(relation) ? RELATION_RANK.indexOf(relation) : RELATION_RANK.length);
 
 // nodes: [label, file, line, fileType]; edges: [source, target, relationIndex, call-site line].
@@ -42,10 +45,11 @@ export function loadGraph(paths) {
     const relations = [];
     const relationAt = new Map();
     const edges = [];
+    const isTodo = (i) => nodes[i][3] === 'rationale' && TODO_COMMENT.test(nodes[i][0]);
     for (const e of graph.links || graph.edges || []) {
       const s = at.get(e.source);
       const t = at.get(e.target);
-      if (s === undefined || t === undefined || s === t) continue;
+      if (s === undefined || t === undefined || s === t || isTodo(s) || isTodo(t)) continue;
       if (!relationAt.has(e.relation)) {
         relationAt.set(e.relation, relations.length);
         relations.push(e.relation);

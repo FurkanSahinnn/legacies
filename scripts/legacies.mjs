@@ -21,7 +21,7 @@ import { KIND_LABEL, KINDS as MIGRATION_KINDS, migrationLines, nextItems, readPl
 import { parseFrontmatter, stringifyFrontmatter, toList } from './lib/frontmatter.mjs';
 import { expandTerms, glossaryIndex } from './lib/glossary.mjs';
 import { affected, explain, loadGraph, pathBetween, querySubgraph } from './lib/graphquery.mjs';
-import { BUILD_ARGS, graphifyCommand, runGraphify, startGraphify, UPDATE_ARGS } from './lib/graphify.mjs';
+import { BUILD_ARGS, GRAPHIFY_ADVICE, graphifyCommand, runGraphify, startGraphify, UPDATE_ARGS } from './lib/graphify.mjs';
 import { contentIndex, lookupContent, projectVocabulary } from './lib/content.mjs';
 import { HANDLERS } from './lib/hooks.mjs';
 import { findStale, listMarkdown, loadNotes, NOTE_TYPES, writeIndex } from './lib/notes.mjs';
@@ -439,7 +439,10 @@ function cmdGraph(args) {
     return;
   }
   out(`Çalıştırılıyor: graphify ${graphArgs.join(' ')} (yalnız AST, LLM yok)`);
-  const res = runGraphify(paths, graphArgs, { inherit: true });
+  const res = runGraphify(paths, graphArgs);
+  // graphify ends with a next step (cluster-only, its site) that legacies never takes; only its progress is shown.
+  const shown = `${res.stdout || ''}${res.stderr || ''}`.split(/\r?\n/).filter((line) => line.trim() && !GRAPHIFY_ADVICE.test(line));
+  if (shown.length) out(shown.join('\n'));
   if (res.status !== 0) throw new Error(`graphify ${action} başarısız (çıkış kodu ${res.status ?? res.signal})`);
   const index = graphIndex(paths);
   out(index ? `Hazır: ${index.nodes} düğüm.` : 'graphify bitti ama graph.json okunamadı.');
