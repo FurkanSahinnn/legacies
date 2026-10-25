@@ -178,3 +178,23 @@ test('prompt context can be turned off', () => {
   const res = hook(root, 'user-prompt-submit', { prompt: 'Webhook imzası HMAC doğrulama' }, { env: { LEGACIES_PROMPT_CONTEXT: 'off' } });
   assert.equal(res.json, null);
 });
+
+const TEST_FIRST = /Koda dokunmadan önce hatayı yeniden üreten bir test/;
+
+test('a request to fix something asks for the failing test before the fix', () => {
+  const root = projectWithMemory();
+  const text = context(hook(root, 'user-prompt-submit', { prompt: 'splitCents(100, 3) bir kuruş kaybediyor, düzeltir misin?' }));
+  assert.match(text, TEST_FIRST);
+});
+
+test('a question about what broke gets no test-first reminder', () => {
+  const root = projectWithMemory();
+  const res = hook(root, 'user-prompt-submit', { prompt: 'the orders page test expects 20 rows and gets 19, what broke?' });
+  assert.doesNotMatch(context(res) || '', TEST_FIRST);
+});
+
+test('the test-first reminder also reaches a project without legacies memory', () => {
+  const root = gitRepo();
+  const text = context(hook(root, 'user-prompt-submit', { prompt: 'please fix the rounding bug in splitCents' }));
+  assert.match(text || '', TEST_FIRST);
+});

@@ -41,7 +41,7 @@ import {
 import { searchMemory, tokenize } from './search.mjs';
 import { archiveOldCards, findCard, writeCard } from './sessions.mjs';
 import { readTranscriptTail, summarizeTranscript } from './transcript.mjs';
-import { clip, exists, mtimeMs, readJson, readText, samePath, toPosix, writeAtomic } from './util.mjs';
+import { clip, exists, foldTurkish, mtimeMs, readJson, readText, samePath, toPosix, writeAtomic } from './util.mjs';
 import { readWorkspace, WORKSPACE_ENV, workspacePaths, workspacesOf } from './workspace.mjs';
 
 const EDIT_TOOLS = new Set(['Edit', 'Write', 'MultiEdit', 'NotebookEdit']);
@@ -289,24 +289,35 @@ function movedContext(paths, sid, events, harness) {
   return `[legacies] Oturum ${start} klasöründe başladı, şimdi bu projede: ${paths.root}.\n${text}`;
 }
 
+// Asked to fix something, models change the code first and add a test after (3 runs of 3 in a project with
+// a test suite), and no wording of the tdd-workflow description changed that. A "what broke?" question is
+// not matched: it asks for a diagnosis.
+const FIX_REQUEST = /\b(?:fix|fixes|fixing|bugfix|duzelt\w*)\b/;
+const TEST_FIRST =
+  "[legacies] Kodun davranışındaki bir hatayı düzeltiyorsan önce Skill aracıyla tdd-workflow'u aç (sebep belli değilse debugging'i). Koda dokunmadan önce hatayı yeniden üreten bir test yaz ve başarısız olduğunu gör, sonra düzelt; dosya yazamıyorsan cevapta da testi düzeltmeden önce ver. Yazım, metin ya da ayar düzeltmesinde gerekmez.";
+
 // Memory first, then where the code is: injects nothing when nothing matches well.
 export function onUserPromptSubmit(input) {
   const prompt = String(input.prompt || '').trim();
   if (!prompt || prompt.startsWith('/') || prompt.startsWith('<') || prompt.startsWith('Another Claude session')) return null;
+  if (process.env.LEGACIES_PROMPT_CONTEXT === 'off') return null;
+  const testFirst = FIX_REQUEST.test(foldTurkish(prompt).toLowerCase()) ? TEST_FIRST : '';
   const { root, paths } = locate(input);
   const sid = input.session_id;
   const others = sid ? otherSources(root, sid) : [];
-  if (!paths && !others.length) return null;
+  // The reminder is about how to work, not about this project's memory, so it comes without one too.
+  if (!paths && !others.length) return testFirst ? additional('UserPromptSubmit', testFirst) : null;
   const config = loadConfig(paths);
-  if (config.promptContext === false || process.env.LEGACIES_PROMPT_CONTEXT === 'off') return null;
+  if (config.promptContext === false) return null;
   const events = paths && sid ? readLedger(paths, sid) : [];
   const moved = paths && sid ? movedContext(paths, sid, events, input.harness) : '';
-  const wrap = (text) => additional('UserPromptSubmit', [moved, text].filter(Boolean).join('\n\n'));
-  if (tokenize(prompt).length < 2 && identifierCandidates(prompt).length === 0) return moved ? wrap('') : null;
+  const wrap = (text) => additional('UserPromptSubmit', [moved, text, testFirst].filter(Boolean).join('\n\n'));
+  const nothingFound = () => (moved || testFirst ? wrap('') : null);
+  if (tokenize(prompt).length < 2 && identifierCandidates(prompt).length === 0) return nothingFound();
 
   const local = paths ? localMatches(paths, prompt, sid ? deliveredSince(events) : new Set()) : { notes: [], symbols: [], files: [] };
   const foreign = others.flatMap((source) => foreignNotes(source, prompt, sid));
-  if (!local.notes.length && !local.symbols.length && !local.files.length && !foreign.length) return moved ? wrap('') : null;
+  if (!local.notes.length && !local.symbols.length && !local.files.length && !foreign.length) return nothingFound();
   if (paths && sid) {
     const keys = [...local.notes.map((n) => n.rel), ...local.symbols.map((s) => `code:${s.file}:${s.loc}`), ...local.files.map((f) => `file:${f}`)];
     record(paths, sid, { kind: 'delivered', keys });

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: tdd-fires-on-project-bug
+description: A bug report in a project that already has tests. tdd-workflow should fire and a test that reproduces the bug should be added.
+expected_outcome: A test that reproduces the lost cent is added before src/money.js changes, then the fix.
+context:
+  scaffold_script: setup.sh

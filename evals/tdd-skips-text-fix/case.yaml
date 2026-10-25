@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: tdd-skips-text-fix
+description: A typo fix in the README. The fix request reminder must not push tdd-workflow onto a change that has no behavior to test.
+expected_outcome: The README typo is fixed and tdd-workflow is not invoked.
+context:
+  scaffold_script: setup.sh

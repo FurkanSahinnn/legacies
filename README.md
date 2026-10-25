@@ -98,7 +98,7 @@ Onay verince hepsini kaldırır. Varsayılanları güvenli taraftadır:
 | Ne zaman | Ne olur |
 |---|---|
 | Oturum başında | Proje kartı, güncel durum, son devir kartı, not dizini ve tazelik bilgisi bütçeli olarak (≤8.000 karakter) bağlama eklenir. Bütçe dar kalırsa önce not dizini tam sığdırılır, proje kartının sonu kırpılır. |
-| Her mesajda | Mesajla ilgili notlar ve olası kod konumları (≤2.500 karakter) eklenir: kod grafından `sembol — dosya:satır`, ayrıca yol eşleşmeleri. Eşleşme zayıfsa hiçbir şey eklenmez. Aynı bilgi, bağlam yeniden başlayana kadar tekrar verilmez. Süre ~150 ms. |
+| Her mesajda | Mesajla ilgili notlar ve olası kod konumları (≤2.500 karakter) eklenir: kod grafından `sembol — dosya:satır` (adıyla, adındaki kelimelerle ya da üstündeki doc yorumu / docstring'iyle eşleşen tanımlar), ayrıca içerik ve yol eşleşmeleri. Eşleşme zayıfsa hiçbir şey eklenmez. Aynı bilgi, bağlam yeniden başlayana kadar tekrar verilmez. Süre ~150 ms. Mesaj bir düzeltme istiyorsa ("düzelt", "fix"), önce hatayı gösteren testin yazılması hatırlatılır; bu satır hafızası olmayan projelerde de gelir. |
 | Dosya düzenlenince | Değişen dosya oturum kaydına yazılır. |
 | Alt ajan başlarken | Alt ajana hafızanın kısa bir özeti eklenir (≤4.000 karakter): not dizini (başlık, özet, dosya) ve proje kartı. Claude Code'un kendi yardımcı ajanlarına (`claude-code-guide`, `statusline-setup`) eklenmez. Alt ajanların araç çağrılarında korumalar ve düzenleme kaydı da çalışır. |
 | Sıkıştırmadan önce | Bir kontrol noktası kaydedilir: kullanıcının son istekleri (birebir), yapılacaklar, değişen dosyalar, commit'ler ve git durumu. |
@@ -454,7 +454,7 @@ Ortam değişkenleri:
 |---|---|
 | `LEGACIES_DISABLED=1` | Tüm hook'ları kapatır |
 | `LEGACIES_STOP_REMINDER=off` | Devir kartı hatırlatmasını kapatır |
-| `LEGACIES_PROMPT_CONTEXT=off` | Mesaj başı not ve kod konumu önerilerini kapatır |
+| `LEGACIES_PROMPT_CONTEXT=off` | Mesaj başı not ve kod konumu önerilerini ve önce-test hatırlatmasını kapatır |
 | `LEGACIES_SUBAGENT_CONTEXT=off` | Alt ajanlara hafıza özeti eklemeyi kapatır |
 | `LEGACIES_HINT=off` | Kurulum ipucunu kapatır |
 
