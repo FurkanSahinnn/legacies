@@ -23,6 +23,7 @@ import { expandTerms, glossaryIndex } from './lib/glossary.mjs';
 import { affected, explain, loadGraph, pathBetween, querySubgraph } from './lib/graphquery.mjs';
 import { BUILD_ARGS, GRAPHIFY_ADVICE, graphifyCommand, runGraphify, startGraphify, UPDATE_ARGS } from './lib/graphify.mjs';
 import { contentIndex, lookupContent, projectVocabulary } from './lib/content.mjs';
+import { docIndex, lookupDocs } from './lib/docindex.mjs';
 import { HANDLERS } from './lib/hooks.mjs';
 import { findStale, listMarkdown, loadNotes, NOTE_TYPES, writeIndex } from './lib/notes.mjs';
 import { commitsSince, excludePattern, findProjectRoot, git, gitHead, hasMemory, isGitRepo, MEMORY_DIRNAME, memoryPaths } from './lib/project.mjs';
@@ -343,11 +344,15 @@ function codeMatches(paths, query) {
   const exact = lookupSymbols(index, query, { limit: 10, allWords: true, root: paths.root });
   const content = lookupContent(contentIndex(paths, tracked), query, { limit: 4, extraTerms });
   const routes = content.filter((c) => c.label);
-  const named = lookupSymbolWords(index, query, { limit: 6, extraTerms }).filter((s) => ![...exact, ...routes].some((e) => e.file === s.file && e.loc === s.loc));
-  // An exact name, then words inside a symbol's name, then files whose own words match (routes with their
-  // method and URL), then paths: the order measured best.
+  const sameAs = (s) => (e) => e.file === s.file && e.loc === s.loc;
+  const documented = lookupDocs(docIndex(paths), query, { limit: 4, extraTerms }).filter((s) => ![...exact, ...routes].some(sameAs(s)));
+  const strong = documented.filter((d) => d.strong);
+  const named = lookupSymbolWords(index, query, { limit: 6, extraTerms }).filter((s) => ![...exact, ...strong, ...routes].some(sameAs(s)));
+  const weak = documented.filter((d) => !d.strong && !named.some(sameAs(d)));
+  // An exact name, then documentation that covers the question, then words inside a symbol's name, then other
+  // documentation matches, then files whose own words match (routes with their method and URL), then paths.
   const files = [...new Set([...content.filter((c) => !c.label).map((c) => c.file), ...matchPaths(tracked, query, { limit: 8, extraTerms })])];
-  return { index, extraTerms, symbols: [...exact, ...named, ...routes], files };
+  return { index, extraTerms, symbols: [...exact, ...strong, ...named, ...weak, ...routes], files };
 }
 
 function cmdMap(args) {

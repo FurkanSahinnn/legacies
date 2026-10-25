@@ -32,7 +32,7 @@ const NEAR_LIMIT = 5;
 const CODE_FILE = /\.(?:[cm]?[jt]sx?|vue|svelte|astro|py|pyi|go|rb|php|java|kt|kts|scala|groovy|cs|fs|vb|swift|m|mm|rs|c|cc|cpp|cxx|h|hh|hpp|lua|dart|ex|exs|erl|hrl|clj|cljs|hs|ml|r|jl|zig|nim|cr|pl|pm|sql|sh|ps1|tf|proto|graphql|gql)$/i;
 const HANDLER = /^export\s+(?:async\s+)?(?:function\s+|const\s+)(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\b/;
 // Keywords and words every file has, across languages; they say nothing about this one.
-const CODE_WORDS = new Set([
+export const CODE_WORDS = new Set([
   'const', 'let', 'var', 'return', 'await', 'async', 'import', 'from', 'export', 'function', 'default', 'true',
   'false', 'null', 'undefined', 'new', 'else', 'try', 'catch', 'throw', 'type', 'interface', 'string', 'number',
   'boolean', 'json', 'then', 'this', 'void', 'any', 'object', 'promise', 'props', 'react', 'div', 'span', 'classname',
@@ -140,7 +140,7 @@ export function contentIndex(paths, files) {
   return index;
 }
 
-const stemMatch = (a, b) => a === b || (Math.min(a.length, b.length) >= MIN_STEM && (a.startsWith(b) || b.startsWith(a)));
+export const stemMatch = (a, b) => a === b || (Math.min(a.length, b.length) >= MIN_STEM && (a.startsWith(b) || b.startsWith(a)));
 
 function vocabulary(index) {
   if (!index.vocabulary) index.vocabulary = [...new Set([...Object.keys(index.body), ...Object.keys(index.inPath)])];

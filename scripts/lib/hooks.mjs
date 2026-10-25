@@ -17,6 +17,7 @@ import { expandTerms, glossaryIndex } from './glossary.mjs';
 import { checkFileWrite, checkShellCommand } from './guards.mjs';
 import { BUILD_ARGS, startGraphify, UPDATE_ARGS } from './graphify.mjs';
 import { contentIndex, lookupContent } from './content.mjs';
+import { docIndex, lookupDocs } from './docindex.mjs';
 import { effectiveSettings, policyText } from './multiagent.mjs';
 import { findProjectRoot, gitHead, hasMemory, isGitRepo, loadConfig, logSince, MEMORY_DIRNAME, memoryPaths, statusShort } from './project.mjs';
 import {
@@ -258,10 +259,17 @@ function localMatches(paths, prompt, delivered) {
   const index = graphIndex(paths);
   const seen = new Set();
   const content = lookupContent(contentIndex(paths, tracked), prompt, { extraTerms });
-  // An exact name, then words inside a symbol's name, then files whose own words match (routes carry their
-  // method and URL), then paths. Measured on 200 questions: content ahead of paths found 12 questions that
-  // paths-first missed, and missed 5 it found.
-  const symbols = [...lookupSymbols(index, prompt, { root: paths.root }), ...lookupSymbolWords(index, prompt, { extraTerms }), ...content.filter((c) => c.label)].filter((s) => {
+  // An exact name, then documentation that covers the question, then words inside a symbol's name, then other
+  // documentation matches, then files whose own words match (routes carry their method and URL), then paths.
+  // Measured on 200 questions: content ahead of paths found 12 questions that paths-first missed, and missed 5.
+  const documented = lookupDocs(docIndex(paths), prompt, { extraTerms });
+  const symbols = [
+    ...lookupSymbols(index, prompt, { root: paths.root }),
+    ...documented.filter((d) => d.strong),
+    ...lookupSymbolWords(index, prompt, { extraTerms }),
+    ...documented.filter((d) => !d.strong),
+    ...content.filter((c) => c.label),
+  ].filter((s) => {
     const key = `code:${s.file}:${s.loc}`;
     if (delivered.has(key) || seen.has(key)) return false;
     seen.add(key);
