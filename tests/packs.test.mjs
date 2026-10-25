@@ -55,7 +55,7 @@ test('buildGroups pre-checks a detected official plugin only when it is safe to 
   assert.equal(option(withGopls, 'commit-commands@claude-plugins-official').checked, true);
 });
 
-test('planPackChanges installs new selections and uninstalls deselected plugins at their scope', () => {
+test('planPackChanges installs new selections and turns deselected plugins off at their scope without uninstalling them', () => {
   const plugins = new Map([
     ['legacies-rust@legacies', { scope: 'local', on: true, scopes: ['local'] }],
     ['legacies-react@legacies', { scope: 'local', on: false, scopes: ['local'] }],
@@ -63,7 +63,7 @@ test('planPackChanges installs new selections and uninstalls deselected plugins 
   const options = ['legacies-go@legacies', 'legacies-rust@legacies', 'legacies-react@legacies'];
   const changes = planPackChanges({ selected: new Set(['legacies-go@legacies', 'legacies-react@legacies']), options, plugins, scope: 'local' });
   assert.deepEqual(changes.add, [{ id: 'legacies-go@legacies', action: 'install', scope: 'local' }, { id: 'legacies-react@legacies', action: 'enable', scope: 'local' }]);
-  assert.deepEqual(changes.remove, [{ id: 'legacies-rust@legacies', action: 'uninstall', scope: 'local' }]);
+  assert.deepEqual(changes.remove, [{ id: 'legacies-rust@legacies', action: 'disable', scope: 'local' }]);
 });
 
 test('planPackChanges turns a team-enabled plugin off only for this user', () => {

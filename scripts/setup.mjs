@@ -22,6 +22,8 @@ import {
   TESTED_CLAUDE,
   writeManifest,
 } from './lib/installer.mjs';
+import { effectiveSettings } from './lib/multiagent.mjs';
+import { changeFromDraft, chooseSettings } from './lib/multiagentflow.mjs';
 import { choosePacks } from './lib/packflow.mjs';
 import { findProjectRoot } from './lib/project.mjs';
 import { bundledRules, unscopedBytes } from './lib/rules.mjs';
@@ -46,6 +48,8 @@ Kurulum seçenekleri (etkileşimsiz kullanım için):
   --keep-global         eski sürümlerin global kurulumunu kaldırma (varsayılan: kaldırılır)
   --no-rules  --no-launcher  --codex  --no-codex
   --no-graphify         kod haritası motorunu (graphify) kurma; varsayılan: kurulur
+  --multiagent | --no-multiagent  çoklu ajan düzenini aç ya da kapat (plugin klasöründe: bilgisayar
+                        varsayılanı). Dengeyi sonradan: legacies multiagent on <denge>
   --disable-ecc         etkin ECC plugin'ini kapat
   --no-anim             animasyonsuz, düz çıktı
 
@@ -53,6 +57,22 @@ Kaldırma seçenekleri:
   --yes                 onay sormadan kaldır (hafızalar yine silinmez)
   --delete-memories     kayıtlı tüm projelerin .legacies/ klasörlerini de sil (kod grafı dahil)
 `;
+
+const BALANCES = [
+  { value: 'dengeli', label: 'Dengeli', hint: 'önerilen · inceleme ve tasarım senin modelinle, uygulama Sonnet, arama Haiku' },
+  { value: 'kalite', label: 'Kalite', hint: 'uygulama da senin modelinle; daha pahalı' },
+  { value: 'maliyet', label: 'Maliyet', hint: 'Sonnet ve Haiku; daha ucuz, daha az titiz' },
+  { value: 'ozel', label: 'Özel', hint: 'her rolü kendin seç' },
+];
+
+// Turning the multi-agent setup on in the installer asks for its balance; "Özel" opens the settings
+// screen. Nothing is saved here: the plan step saves it after the user approves the plan.
+async function chooseMultiagent({ on, ask, now, projectRoot }) {
+  if (!on || !ask) return { on };
+  const profile = await ui.select('Çoklu ajan düzeni: hangi denge?', BALANCES, { initial: Math.max(0, BALANCES.findIndex((b) => b.value === now.profile)) });
+  if (profile !== 'ozel') return { on: true, profile };
+  return changeFromDraft(await chooseSettings({ pluginRoot: PLUGIN_ROOT, root: projectRoot, initial: { ...now, on: true, profile } }));
+}
 
 function parseFlags(argv) {
   const flags = { _: [] };
@@ -166,23 +186,38 @@ async function install(flags) {
   }
   const rules = bundledRules(PLUGIN_ROOT);
   const codexPossible = Boolean(env.codex?.ready) && scope !== 'none';
+  // Without a project the multi-agent choice becomes this computer's default for every project.
+  const multiagentTarget = scope === 'none' ? 'default' : 'project';
+  const multiagentNow = effectiveSettings(multiagentTarget === 'project' ? projectRoot : null).settings;
   const defaults = {
     rules: flags.rules ?? true,
     launcher: flags.launcher ?? true,
     codex: flags.codex ?? codexPossible,
+    multiagent: flags.multiagent ?? multiagentNow.on,
   };
-  const askComponents = !flags.yes && ['rules', 'launcher', 'codex'].every((k) => flags[k] === undefined);
+  const askComponents = !flags.yes && ['rules', 'launcher', 'codex', 'multiagent'].every((k) => flags[k] === undefined);
   const chosen = askComponents
     ? await ui.multiselect('Ek bileşenler', [
         { value: 'rules', label: 'Kodlama kuralları', hint: `${rules.length} dosya, her oturuma ~${Math.round(unscopedBytes(rules) / 4)} token`, checked: defaults.rules },
         { value: 'launcher', label: "Her terminalde 'legacies' komutu", hint: env.launcherDir, checked: defaults.launcher },
         { value: 'codex', label: 'Codex adaptörü (bu proje)', hint: !env.codex?.ready ? 'Codex yok' : scope === 'none' ? 'proje seçilmedi' : `${PROJECT_CODEX_HOOKS}, Codex'te /hooks ile onaylanır`, checked: defaults.codex, disabled: !codexPossible },
+        { value: 'multiagent', label: 'Çoklu ajan düzeni', hint: `${multiagentTarget === 'default' ? 'bilgisayar varsayılanı' : 'bu proje'}; lider ajanlara işe göre model ve effort verir · sonradan: legacies multiagent`, checked: defaults.multiagent },
       ])
     : Object.keys(defaults).filter((k) => defaults[k] && (k !== 'codex' || codexPossible));
+  const multiagent = await chooseMultiagent({ on: chosen.includes('multiagent'), ask: askComponents, now: multiagentNow, projectRoot });
   const ecc = report.warnings.find((w) => w.ecc);
   const disableEcc = ecc ? (flags['disable-ecc'] ?? (flags.yes ? false : await ui.confirm(`${ecc.id} kapatılsın mı? Çakışmayı önler, kaldırmaz.`, { initial: false }))) : false;
   const removeGlobal = hasGlobalLeftovers(leftovers) && !flags['keep-global'] && (flags.yes || (await ui.confirm('Eski global kurulum kaldırılsın mı? Hafızalar ve plugin verisi kalır.', { initial: true })));
-  const options = { scope, projectRoot, disableEcc, removeGlobal, leftovers, ...Object.fromEntries(['rules', 'launcher', 'codex'].map((k) => [k, chosen.includes(k)])), graphify: flags.graphify !== false };
+  const options = {
+    scope,
+    projectRoot,
+    disableEcc,
+    removeGlobal,
+    leftovers,
+    ...Object.fromEntries(['rules', 'launcher', 'codex'].map((k) => [k, chosen.includes(k)])),
+    graphify: flags.graphify !== false,
+    multiagent: { target: multiagentTarget, change: multiagent },
+  };
 
   ui.section('Yapılacaklar');
   const plan = planInstall({ pluginRoot: PLUGIN_ROOT, env, report, options });

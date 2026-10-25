@@ -72,6 +72,8 @@ function header(source, projectFilled, harness) {
     // note keeps matching the code it describes.
     '- Notları ve kartları kullanıcının dilinde yaz; kod adları, dosya yolları ve komutlar olduğu gibi kalır.',
   );
+  // The multi-agent rules name Claude Code's Agent tool, so only Claude is told how to switch them.
+  if (!cli) lines.push('- Kullanıcı çoklu ajan düzenini açmak, kapatmak ya da ayarlamak isterse: `legacies multiagent` (on [denge], off, set, role, status).');
   if (!projectFilled) {
     lines.push(cli ? '- PROJECT.md henüz doldurulmamış; kullanıcı isterse koddan doldur.' : '- PROJECT.md henüz doldurulmamış; kullanıcı isterse /legacies:onboard ile proje bir kez incelenip kaydedilir.');
   }

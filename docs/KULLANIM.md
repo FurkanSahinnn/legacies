@@ -22,7 +22,7 @@ legacies dört iş yapar:
 
 1. Terminalde projenin **kök klasörüne** git ve `legacies setup` çalıştır. Kurulum yalnız bu projeye yapılır; diğer projelerine dokunulmaz.
 2. "Yalnız bu projede, yalnız bu bilgisayarda" önerilir. Projeye eklenen dosyalar git'ten gizlenir; commit'lenen hiçbir dosya değişmez.
-3. Ek bileşenler listesi gelir: kodlama kuralları, `legacies` komutu ve Codex kuruluysa Codex adaptörü. Enter ile aç ya da kapat. Bitince en alttaki **[ Onaylıyorum ]** satırına gel (en üstteyken ↑ doğrudan oraya götürür), Enter'a bas ve "Emin misiniz?" sorusuna evet de. Hayır dersen seçimlerin kalır, düzenlemeye devam edersin.
+3. Ek bileşenler listesi gelir: kodlama kuralları, `legacies` komutu, Codex kuruluysa Codex adaptörü ve çoklu ajan düzeni (açarsan denge sorulur; bkz. 7. bölüm). Enter ile aç ya da kapat. Bitince en alttaki **[ Onaylıyorum ]** satırına gel (en üstteyken ↑ doğrudan oraya götürür), Enter'a bas ve "Emin misiniz?" sorusuna evet de. Hayır dersen seçimlerin kalır, düzenlemeye devam edersin.
 4. Plan gösterilir. Onay verince sırayla şunlar kurulur:
    - çekirdek,
    - kodlama kuralları,
@@ -80,7 +80,8 @@ Bu süreç skill'leri [addyosmani/agent-skills](https://github.com/addyosmani/ag
 
 - **Değiştirmek:** Terminalde `legacies packs` seçim ekranını açar. Claude Code içinde "şu paketi ekle" demek de yeter.
   - `legacies packs suggest`: bu projede tespit edilenleri listeler.
-  - `legacies packs add react` ve `legacies packs remove react`: tek bir paketi açar ya da kapatır.
+  - `legacies packs on react` ve `legacies packs off react`: tek bir paketi açar ya da kapatır. Kapatılan paket kurulu kalır, kuralları projeden çekilir; yeniden açmak anında olur.
+  - `legacies packs remove react`: paketi tamamen siler. Önce "Emin misin?" diye sorar; sormadan silmek için `--yes`.
 - **Kendi skill'lerin:** `legacies catalog add <klasör ya da git adresi>` kişisel kataloğa ekler. Eklediğin skill'ler `legacies packs` ekranında "Kendi eklediklerin" altında görünür.
 - **Değişikliği yüklemek:** Açık oturumda `/reload-plugins` çalıştır. Yeni oturumlar kendiliğinden yükler.
 
@@ -94,7 +95,22 @@ Bu süreç skill'leri [addyosmani/agent-skills](https://github.com/addyosmani/ag
 
 Çalışma alanlarının ortak hafızası hiçbir reponun içinde değildir: `~/.claude/legacies-workspaces/<ad>/`.
 
-## 7. Codex
+## 7. Çoklu ajan düzeni
+
+Açıkken Claude işi alt ajanlara dağıtırken her birine işine uygun model ve effort'u verir: incelemeyi dikkatli, aramayı ucuz yaptırır. Varsayılan olarak kapalıdır.
+
+- **Açmak ve kapatmak:** `legacies multiagent on` ve `legacies multiagent off`. Kapatmak hiçbir şeyi silmez.
+- **Ayarlamak:** Terminalde `legacies multiagent` ayar ekranını açar. Orada şunları seçersin:
+  - denge: Dengeli, Kalite, Maliyet ya da Özel,
+  - her rolün modeli ve effort'u,
+  - aynı anda en fazla kaç ajan çalışacağı,
+  - başarısız işin yeniden denenip denenmeyeceği,
+  - hangi ajanın hangi rolde olduğu.
+- **Tüm projelerin varsayılanı:** `legacies multiagent default ...`. Kendi ayarı olan proje kendi ayarını kullanır.
+- **Claude'a söylemek de yeter:** "çoklu ajanı maliyet moduna al".
+- **Ne zaman geçerli:** Değişiklik yeni oturumda geçerli olur.
+
+## 8. Codex
 
 Codex kuruluysa `legacies setup` projeye Codex hook'larını da ekler: `.codex/hooks.json`, git'e girmez. Hook'ların çalışması için iki adım gerekir:
 1. Codex'te projeye güven.
@@ -102,18 +118,19 @@ Codex kuruluysa `legacies setup` projeye Codex hook'larını da ekler: `.codex/h
 
 Hook'u olmayan bir AI için oturum başında `legacies context` aynı bağlamı verir.
 
-## 8. Terminalde sık kullanılanlar
+## 9. Terminalde sık kullanılanlar
 
 ```sh
 legacies search "<terimler>"     # hafızada ara
 legacies map "<ad ya da konu>"   # kodun yerini bul
 legacies graph affected "<ad>"   # bu değişirse neyi etkiler
 legacies graph status            # kod haritasının durumu
+legacies multiagent              # çoklu ajan düzeni: aç/kapat, ayar ekranı
 legacies doctor                  # kurulum ve hafıza sağlık kontrolü
 legacies help                    # tüm komutlar
 ```
 
-## 9. Sorun giderme
+## 10. Sorun giderme
 
 | Belirti | Çözüm |
 |---|---|
@@ -124,7 +141,7 @@ legacies help                    # tüm komutlar
 | legacies'i geçici olarak kapatmak | Claude Code'u `LEGACIES_DISABLED=1` ile başlat |
 | Bir not yanlış | Notu düzelt ya da Claude'a söyle, sonra `legacies verify <dosya>` çalıştır |
 
-## 10. Güncelleme ve kurulumu tekrar çalıştırmak
+## 11. Güncelleme ve kurulumu tekrar çalıştırmak
 
 - **Güncellemek:** legacies klasörünü yenile (repo GitHub'a konunca `git pull`). Sonra legacies kullandığın her projede bir kez `legacies setup` çalıştır: projeye kopyalanan kurallar ve graphify sürümü böyle tazelenir. Açık oturumda `/reload-plugins`.
 - **Tekrar çalıştırmak güvenli:**
@@ -134,7 +151,7 @@ legacies help                    # tüm komutlar
   - Onay vermeden hiçbir şey değişmez. Yalnız planı görmek için: `legacies setup --dry-run`.
 - **Paket ekranında dikkat:** Açık paketler işaretli gelir. Projede tespit edilip kapalı olanlar da öneri olarak işaretli gelir; bilerek kapattığın bir paket varsa işaretini tekrar kaldır.
 
-## 11. Kaldırma
+## 12. Kaldırma
 
 `legacies uninstall` bilgisayardaki tüm legacies parçalarını bulur ve listeler; onay verince kaldırır. Şunlar varsayılan olarak korunur:
 - proje hafızaları (`.legacies/`),

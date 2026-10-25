@@ -333,14 +333,48 @@ test('packs add installs a pack at local scope and copies its rules without touc
   assert.equal(run(project, 'git', ['status', '--porcelain']), '');
 });
 
-test('packs remove uninstalls the pack and deletes the rules it copied', () => {
+test('packs off turns a pack off without uninstalling it and takes its rules away', () => {
   const s = sandbox({ marketplaces: [{ name: 'legacies', source: 'directory', path: ROOT }] });
   const project = reactProject();
-  s.cli(['packs', 'add', 'react', '--no-anim'], project);
-  const r = s.cli(['packs', 'remove', 'react', '--no-anim'], project);
+  s.cli(['packs', 'on', 'react', '--no-anim'], project);
+  const r = s.cli(['packs', 'off', 'react', '--no-anim'], project);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  const entry = s.state().plugins.find((p) => p.id === 'legacies-react@legacies');
+  assert.ok(entry, 'the pack stays installed');
+  assert.equal(entry.projectEnabled, false);
+  assert.equal(fs.existsSync(path.join(project, '.claude', 'rules', 'legacies-react-react.md')), false);
+});
+
+test('packs on turns a pack that was off back on without installing it again', () => {
+  const s = sandbox({ marketplaces: [{ name: 'legacies', source: 'directory', path: ROOT }] });
+  const project = reactProject();
+  s.cli(['packs', 'on', 'react', '--no-anim'], project);
+  s.cli(['packs', 'off', 'react', '--no-anim'], project);
+  const r = s.cli(['packs', 'on', 'react', '--no-anim'], project);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.equal(s.state().calls.filter((c) => c.startsWith('plugin install legacies-react')).length, 1);
+  assert.equal(s.state().plugins.find((p) => p.id === 'legacies-react@legacies').projectEnabled, true);
+  assert.ok(fs.existsSync(path.join(project, '.claude', 'rules', 'legacies-react-react.md')));
+});
+
+test('packs remove deletes a pack after a yes and takes its rules away', () => {
+  const s = sandbox({ marketplaces: [{ name: 'legacies', source: 'directory', path: ROOT }] });
+  const project = reactProject();
+  s.cli(['packs', 'on', 'react', '--no-anim'], project);
+  const r = s.cli(['packs', 'remove', 'react', '--yes', '--no-anim'], project);
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.equal(s.state().plugins.some((p) => p.id === 'legacies-react@legacies'), false);
   assert.equal(fs.existsSync(path.join(project, '.claude', 'rules', 'legacies-react-react.md')), false);
+});
+
+test('packs remove without an answer deletes nothing and says how to confirm', () => {
+  const s = sandbox({ marketplaces: [{ name: 'legacies', source: 'directory', path: ROOT }] });
+  const project = reactProject();
+  s.cli(['packs', 'on', 'react', '--no-anim'], project);
+  const r = s.cli(['packs', 'remove', 'react', '--no-anim'], project);
+  assert.equal(r.status, 1);
+  assert.ok(s.state().plugins.some((p) => p.id === 'legacies-react@legacies'), 'still installed');
+  assert.match(r.stdout + r.stderr, /--yes/);
 });
 
 test('packs refuses user scope, because packs are per project', () => {
@@ -372,6 +406,29 @@ test('install run from the plugin folder only prepares the machine and installs 
   assert.equal(state.calls.some((c) => c.startsWith('plugin install')), false);
   assert.ok(fs.existsSync(path.join(s.home, 'bin', 'legacies')));
   assert.match(r.stdout, /legacies setup/);
+});
+
+test('install with --multiagent turns the multi-agent setup on for this project', () => {
+  const s = sandbox();
+  const project = gitRepo();
+  const r = installLocal(s, project, ['--multiagent']);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(s.cli(['multiagent', 'status'], project).stdout, /: açık · Dengeli/);
+});
+
+test('install with --multiagent in the plugin folder turns it on as the default for every project', () => {
+  const s = sandbox();
+  const r = s.setup(['install', '--yes', '--no-codex', '--no-graphify', '--multiagent'], ROOT);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(s.cli(['multiagent', 'status'], gitRepo()).stdout, /: açık · Dengeli/);
+});
+
+test('uninstall removes the multi-agent settings', () => {
+  const s = sandbox();
+  installLocal(s, gitRepo(), ['--multiagent']);
+  const u = s.setup(['uninstall', '--yes']);
+  assert.equal(u.status, 0, u.stdout + u.stderr);
+  assert.equal(fs.existsSync(path.join(s.config, 'legacies-multiagent.json')), false);
 });
 
 test('packs add copies no rules for a pack whose install failed', () => {

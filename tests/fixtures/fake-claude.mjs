@@ -2,6 +2,24 @@
 import fs from 'node:fs';
 
 const stateFile = process.env.FAKE_CLAUDE_STATE;
+// Calls run in parallel (packflow lists plugins and marketplaces at once). A lock file keeps each
+// read-modify-write of the shared state whole, so no call reads half a file or loses another's record.
+const lockFile = `${stateFile}.lock`;
+const giveUpAt = Date.now() + 10000;
+let lock;
+for (;;) {
+  try {
+    lock = fs.openSync(lockFile, 'wx');
+    break;
+  } catch (err) {
+    if (err.code !== 'EEXIST' || Date.now() > giveUpAt) throw err;
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 5);
+  }
+}
+process.on('exit', () => {
+  fs.closeSync(lock);
+  fs.rmSync(lockFile, { force: true });
+});
 const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
 const args = process.argv.slice(2);
 state.calls.push(args.join(' '));
@@ -48,7 +66,13 @@ else if (a0 === 'plugin' && a1 === 'marketplace' && a2 === 'add') {
   const scope = opt('--scope') || 'user';
   state.plugins = state.plugins.filter((p) => !(p.id === a2 && p.scope === scope));
 } else if (a0 === 'plugin' && (a1 === 'enable' || a1 === 'disable')) {
-  for (const p of state.plugins) if (p.id === a2) p.enabled = a1 === 'enable';
+  // Like the real CLI: a local or project setting shows up as projectEnabled, a user setting as enabled.
+  const scope = opt('--scope') || 'user';
+  for (const p of state.plugins) {
+    if (p.id !== a2) continue;
+    if (scope === 'user') p.enabled = a1 === 'enable';
+    else p.projectEnabled = a1 === 'enable';
+  }
 } else {
   fs.writeFileSync(stateFile, JSON.stringify(state, null, 2));
   process.stderr.write(`fake claude: unknown command ${args.join(' ')}`);

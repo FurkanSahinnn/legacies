@@ -54,7 +54,7 @@ async function applyChanges({ pluginRoot, root, scope, info, changes }) {
 
 function showPlan(changes) {
   for (const c of changes.add) ui.item('add', c.id, c.action === 'install' ? `kurulacak (${c.scope})` : 'açılacak');
-  for (const c of changes.remove) ui.item('remove', c.id, c.action === 'uninstall' ? `kaldırılacak (${c.scope})` : 'yalnız senin için kapatılacak');
+  for (const c of changes.remove) ui.item('remove', c.id, c.action === 'uninstall' ? 'silinecek; kuralları da projeden çekilir' : 'kapatılacak; kurulu kalır, yeniden açmak anında');
 }
 
 function finish(failed) {
@@ -112,6 +112,32 @@ export async function changePacks({ pluginRoot, root, names, enable, scope = 'lo
     return;
   }
   showPlan(changes);
+  finish(await applyChanges({ pluginRoot, root, scope, info, changes }));
+}
+
+// Deleting a pack for good: it is uninstalled at its own scope and its rules leave the project. Turning
+// it off (`legacies packs off`) is the everyday way, so this one asks first.
+export async function removePacks({ pluginRoot, root, names, scope = 'local', yes = false }) {
+  const info = await inspectProject(pluginRoot, root);
+  const { ids, unknown } = resolvePluginIds(names, { catalog: info.catalog, personal: info.personal });
+  if (unknown.length) throw new Error(`Katalogda yok: ${unknown.join(', ')} (legacies packs list ile bak)`);
+  const installed = ids.filter((id) => info.plugins.has(id));
+  if (!installed.length) {
+    ui.item('ok', 'Hiçbiri bu projede kurulu değil.');
+    return;
+  }
+  const elsewhere = installed.filter((id) => info.plugins.get(id).scope !== scope);
+  if (elsewhere.length) {
+    const how = scope === 'local' ? 'ekip için açılmış (.claude/settings.json): yalnız senin için kapatmak için legacies packs off, ekipten silmek için --scope project' : 'yalnız bu bilgisayarda kurulu: --scope local ile sil';
+    throw new Error(`${elsewhere.join(', ')} ${how}`);
+  }
+  const changes = { add: [], remove: installed.map((id) => ({ id, action: 'uninstall', scope })) };
+  showPlan(changes);
+  if (!yes && !(await ui.confirm('Emin misin? Yalnız kapatmak için: legacies packs off', { initial: false }))) {
+    ui.item('info', `Vazgeçildi; hiçbir şey silinmedi.${ui.interactive ? '' : ' Sormadan silmek için --yes ekle.'}`);
+    process.exitCode = 1;
+    return;
+  }
   finish(await applyChanges({ pluginRoot, root, scope, info, changes }));
 }
 

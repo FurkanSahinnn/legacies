@@ -721,8 +721,9 @@ Kullanım:
   legacies open <çalışma-alanı>     Claude Code'u üyelerle birlikte aç (--add-dir; ortak bağlam)
   legacies migrate start <ad> --from <kaynak> --to <hedef>   projeler arası göç planı
   legacies migrate [status|next|refresh|done|partial|skip|todo] <ad> [madde...]
-  legacies packs [suggest|list|add|remove]  bu projenin teknoloji paketleri (tespit + seçim ekranı)
+  legacies packs [suggest|list|on|off|remove]  bu projenin teknoloji paketleri (tespit + seçim ekranı)
   legacies catalog [add|list|remove]  kendi skill'lerin: projelerde paket gibi açılır
+  legacies multiagent [on [denge]|off|set|role|reset]  çoklu ajan düzeni (ayar ekranı; default: bilgisayar varsayılanı)
   legacies doctor                  kurulum ve hafıza sağlık kontrolü
   legacies setup                   kurulum programını aç (bileşen ekle/çıkar, yeniden kur)
   legacies uninstall               legacies'i tamamen kaldır (hafızaları silmek isteğe bağlı)
@@ -750,6 +751,7 @@ const COMMANDS = {
   uninstall: () => runScript('setup.mjs', 'uninstall', process.argv.slice(3)),
   packs: () => runScript('packs.mjs', 'packs', process.argv.slice(3)),
   catalog: () => runScript('packs.mjs', 'catalog', process.argv.slice(3)),
+  multiagent: () => runScript('multiagent.mjs', 'multiagent', process.argv.slice(3)),
 };
 
 // Claude Code and Codex send nearly the same payload; other clients may spell the ids differently.

@@ -17,6 +17,7 @@ import { expandTerms, glossaryIndex } from './glossary.mjs';
 import { checkFileWrite, checkShellCommand } from './guards.mjs';
 import { BUILD_ARGS, startGraphify, UPDATE_ARGS } from './graphify.mjs';
 import { contentIndex, lookupContent } from './content.mjs';
+import { effectiveSettings, policyText } from './multiagent.mjs';
 import { findProjectRoot, gitHead, hasMemory, isGitRepo, loadConfig, logSince, MEMORY_DIRNAME, memoryPaths, statusShort } from './project.mjs';
 import {
   activeProjects,
@@ -148,22 +149,30 @@ function workspaceContext(root, sid) {
   return clip(parts.join('\n\n'), WORKSPACE_CONTEXT_BUDGET);
 }
 
+// The multi-agent rules go to the lead only, and only in Claude Code: they name its Agent tool's model
+// and effort. A folder outside any project follows this computer's default.
+function multiAgentRules(root, harness) {
+  if (harness && harness !== 'claude') return '';
+  const { settings } = effectiveSettings(root);
+  return settings.on ? policyText(settings) : '';
+}
+
 export function onSessionStart(input) {
   const source = input.source || 'startup';
   if (source === 'startup') ensureLauncherExecutable();
   const { root, paths } = locate(input);
   const sid = input.session_id;
   markSessionStart(sid, root || input.cwd);
-  const workspaces = workspaceContext(root, sid);
-  if (!paths) return workspaces ? additional('SessionStart', workspaces) : setupHint(root, source, input.harness);
+  const extra = [workspaceContext(root, sid), multiAgentRules(root, input.harness)].filter(Boolean).join('\n\n');
+  if (!paths) return extra ? additional('SessionStart', extra) : setupHint(root, source, input.harness);
   registerProject(root, { memory: true });
   if (sid) {
     record(paths, sid, { kind: 'start', source, harness: input.harness });
     writeCurrentSession(paths, { session: sid, source, harness: input.harness, at: new Date().toISOString() });
   }
   if (source === 'startup' && !maybeStartGraphBuild(paths, sid) && graphBehindHead(paths)) startGraphUpdate(paths, sid);
-  const own = buildContext({ paths, source, sessionId: sid, harness: input.harness, reserve: workspaces ? workspaces.length + 2 : 0 });
-  return additional('SessionStart', workspaces ? `${own}\n\n${workspaces}` : own);
+  const own = buildContext({ paths, source, sessionId: sid, harness: input.harness, reserve: extra ? extra.length + 2 : 0 });
+  return additional('SessionStart', extra ? `${own}\n\n${extra}` : own);
 }
 
 // /add-dir: the added project's memory reaches Claude on the next turn as a short brief.

@@ -49,7 +49,7 @@ Kurulum programı animasyonlu ve etkileşimli bir terminal arayüzüyle şu sır
    - Aynı adlı skill'leri, `settings.json`'daki kendi hook'larını ve bozuk JSON'u kontrol eder.
 3. **Seçenekler:**
    - **Kapsam:** yalnız bu proje (önerilen) ya da ekiple paylaşılan proje; [global kurulum yok](#kapsam-proje-bazlı). Plugin klasöründe çalışınca varsayılan "hiçbir projeye kurma"dır: yalnız hazırlık yapılır. Ok tuşlarıyla seçilir.
-   - **Ek bileşenler:** kurallar, her terminalde `legacies` komutu, bu projenin Codex adaptörü. Enter ile açılıp kapatılır; bitince listenin en altındaki **[ Onaylıyorum ]** satırında Enter'a basılır ve "Emin misiniz?" sorusuna evet denir. Hayır denirse seçimler kalır, düzenlemeye devam edilir. Kod haritası motoru graphify seçenek değildir, her kurulumda gelir (`--no-graphify` ile atlanır).
+   - **Ek bileşenler:** kurallar, her terminalde `legacies` komutu, bu projenin Codex adaptörü, [çoklu ajan düzeni](#çoklu-ajan-düzeni) (açılırsa denge sorulur). Enter ile açılıp kapatılır; bitince listenin en altındaki **[ Onaylıyorum ]** satırında Enter'a basılır ve "Emin misiniz?" sorusuna evet denir. Hayır denirse seçimler kalır, düzenlemeye devam edilir. Kod haritası motoru graphify seçenek değildir, her kurulumda gelir (`--no-graphify` ile atlanır).
    - **Eski global kurulum:** Önceki bir sürümün global kurulumu bulunursa kaldırılması önerilir.
 4. **Plan:** Yapılacakların ve **dokunulmayacakların** tam listesi. Onay vermeden hiçbir şey değişmez.
 5. **Kurulum:** Her adım ayrı bir göstergeyle çalışır. Hata olursa kurulum durur; tekrar çalıştırınca tamamlanan adımlar yeniden yapılmaz.
@@ -64,6 +64,7 @@ Etkileşimsiz kullanım:
 ./install.sh --dry-run                     # yalnızca analiz ve plan; hiçbir şey değişmez
 ./install.sh --yes                         # plugin klasöründe: yalnız hazırlık
 legacies setup --yes --scope local --packs # bir projede: çekirdek + tespit edilen paketler
+legacies setup --yes --scope local --multiagent  # çoklu ajan düzeni açık
 ./install.sh --help
 ```
 
@@ -82,7 +83,8 @@ Kaldırma programı önce bilgisayardaki tüm legacies parçalarını bulur ve l
 - `legacies` komutu,
 - projelerdeki Codex hook'ları,
 - eski sürümlerden kalan global kurallar ve Codex adaptörü,
-- veri klasörü (legacies'in graphify kopyası dahil; senin kurduğun bir graphify kalır).
+- veri klasörü (legacies'in graphify kopyası dahil; senin kurduğun bir graphify kalır),
+- çoklu ajan ayarları.
 
 Onay verince hepsini kaldırır. Varsayılanları güvenli taraftadır:
 
@@ -116,8 +118,9 @@ Her paket ayrı bir plugin'dir (`legacies-<paket>@legacies`) ve çekirdeğe bağ
 legacies packs                      # tespit + seçim ekranı (projenin klasöründe)
 legacies packs suggest              # yalnız tespit sonuçları ve kanıtları
 legacies packs list                 # tüm katalog; açık olanlar [x]
-legacies packs add go vercel        # paket ya da resmi plugin aç
-legacies packs remove go            # kapat
+legacies packs on go vercel         # paket ya da resmi plugin aç
+legacies packs off go               # kapat: kurulu kalır, yeniden açmak anında
+legacies packs remove go            # sil: kaldırır, kurallarını çeker; önce "Emin misin?" diye sorar
 legacies catalog add <klasör|git-url>   # kendi skill'lerin (tek skill, skill klasörü ya da plugin)
 ```
 
@@ -304,6 +307,7 @@ Plugin etkinken `legacies` komutu Bash aracının PATH'inde bulunur.
 | `legacies graph explain\|path\|affected "<ad>"` | Bir sembolün bağlantıları, iki sembol arası yol, neyi etkilediği. Aynı adlı semboller satırlarıyla listelenir; biri `"dosya::Ad"` ile seçilir. Çıktı ~2.000 karakterle sınırlı |
 | `legacies packs` | Bu projenin teknoloji paketleri: tespit, seçim ekranı, `suggest`, `list`, `add`, `remove` |
 | `legacies catalog add\|list\|remove` | Kendi skill'lerini kişisel kataloğa ekler; projelerde paket gibi açılır |
+| `legacies multiagent` | Çoklu ajan düzeni: ayar ekranı, `on`/`off`, `set`, `role`, `reset`, `status`; `default` ile bilgisayar varsayılanı |
 | `legacies doctor` | Sağlık kontrolü yapar |
 
 **Arama nasıl çalışıyor:**
@@ -329,6 +333,57 @@ legacies'in graphify'ın üstüne ekledikleri:
 - **İçerik eşleşmesi (her dilde):** Sorular genelde kodun ne yaptığını anlatır, örneğin "parası yetmeyince sandık açmayı reddeden yer". Bu kelimeler kodun içinde geçer: tanımlayıcılar, hata kodları, tablo adları, yorumlar. graphify yalnız sembol adlarına bakıyordu. legacies her kod dosyasını (Python, Go, Java, C#, Ruby, PHP, Rust, TS/JS ve diğerleri) yoluyla ve içindeki kelimelerle eşler. Bunun için framework'e özgü bir kural gerekmez. Next.js, SvelteKit ve Expo Router rotaları ayrıca `POST /api/chest/open` gibi bir etiket alır.
 - **Başka dilde sorular (graphify'daki gibi model çevirir):** Elle yazılmış bir sözlük yok; her dili sözlükle karşılamak mümkün değil. `legacies vocab` projenin kod kelimelerini listeler: sembol adlarındaki ve klasör/dosya adlarındaki kelimeler, en çok kullanılandan aza, en fazla 300 (graf yoksa dosyaların içindeki kelimeler). Model sorunun anlamına uyanları seçip `legacies map` ile arar. `legacies vocab chest crate` gibi kelime verilince projede hangilerinin geçtiğini gösterir; tahmin edilen çeviri böyle doğrulanır.
 - **Projenin kendi çeviri dosyaları:** Otomatik öneri, Türkçe sorularda projenin çeviri dosyalarını da kullanır: JSON/ARB, YAML, gettext (.po), Java .properties, Android `strings.xml`, iOS `.strings`, .NET `.resx`. Aynı anahtarda birlikte geçen kelimeler eşlenir; `legacies map` eklediği kelimeleri `(Sözlük: ...)` satırında gösterir.
+
+## Çoklu ajan düzeni
+
+Claude büyük bir işi parçalara bölüp alt ajanlara verebilir. Çoklu ajan düzeni açıkken legacies her oturumun başında lidere (ana oturuma) kısa bir kural verir:
+- hangi ajana hangi modeli ve effort'u vereceği,
+- küçük işlerde (tek dosya, birkaç satır, belge ya da ayar, kısa soru) ajan açmayıp işi kendisinin yapacağı,
+- aynı anda en fazla kaç ajan çalıştıracağı; bağımsız işleri paralel, bağımlı olanları sırayla vereceği,
+- yazan ajanların dosyalarını ayıracağı (gerekirse ayrı worktree), paket tanımı ve kilit dosyalarını yalnız kendisinin değiştireceği,
+- başarısız bir işi nasıl yeniden deneyeceği,
+- ajanın sonucunu kendisinin doğrulayıp sonunda hangi işi hangi ajanın yaptığını ve nasıl doğrulandığını özetleyeceği.
+
+Bu kuralların bir kısmı [ruflo](https://github.com/ruvnet/ruflo) ve ECC'nin orkestrasyon kurallarından alındı; ikisinin de her oturuma binlerce token ekleyen sabit ajan hatları ve araçları alınmadı.
+
+Effort, modelin cevap vermeden önce ne kadar düşündüğüdür (low, medium, high, xhigh, max). Lider bunları her ajanı başlatırken Agent aracına verir; ajan dosyalarına dokunulmaz.
+
+- **Varsayılan olarak kapalı.** Kapalıyken hiçbir şey eklenmez. Açıkken her oturuma ~400 token eklenir; yalnız lidere ve yalnız Claude Code'da.
+- **Açıp kapatmak:** Kurulumda "Ek bileşenler" listesinden ya da sonradan `legacies multiagent on` / `off` ile. Kapatmak hiçbir şeyi silmez; yeniden açınca son ayarlarla gelir. Değişiklik yeni oturumda geçerli olur.
+- **Üç hazır denge ve Özel:** "Özel"de her rolün modelini ve effort'unu sen seçersin.
+
+  | Rol | Dengeli | Kalite | Maliyet |
+  |---|---|---|---|
+  | İnceleme | senin modelin · high | senin modelin · high | Sonnet · high |
+  | Tasarım ve teşhis | senin modelin · high | senin modelin · high | Sonnet · high |
+  | Uygulama | Sonnet · medium | senin modelin · high | Sonnet · low |
+  | Arama | Haiku · low | Haiku · low | Haiku · low |
+
+- **Roller:**
+  - İnceleme: adı `-reviewer` ya da `-analyzer` ile bitenler ve `silent-failure-hunter`.
+  - Tasarım ve teşhis: `Plan`, adı `architect` ile bitenler, `type-design-analyzer`, `network-troubleshooter`, `spec-miner`, `performance-optimizer`.
+  - Arama: `Explore` ve adı `-lookup` ile bitenler.
+  - Uygulama: geri kalanların hepsi, `general-purpose` dahil.
+
+  Bir ajanı başka bir role alabilirsin; kendi ajanların da buna dahil.
+- **Diğer ayarlar:** aynı anda en fazla kaç ajan (1–8, varsayılan 4) ve başarısız olan işin bir üst effort'la yeniden denenmesi (varsayılan açık).
+- **Ayar ekranı:** terminalde `legacies multiagent`. Satırı Enter'la değiştir, en alttaki **[ Onaylıyorum ]** ile kaydet.
+- **Komutlar:**
+
+  ```sh
+  legacies multiagent on [dengeli|kalite|maliyet|ozel]   # aç (denge vermezsen son seçilen)
+  legacies multiagent off                                # kapat
+  legacies multiagent set uygulama opus high             # bir rolün modeli ve effort'u (denge "Özel" olur)
+  legacies multiagent set paralel 3                      # aynı anda en fazla 3 ajan
+  legacies multiagent set yukselt off                    # yeniden deneme kuralını kapat
+  legacies multiagent role architect uygulama            # ajanı başka role al (geri: ... varsayilan)
+  legacies multiagent reset                              # bu projenin ayarlarını sil, varsayılana dön
+  legacies multiagent status                             # durum
+  ```
+
+  Model değerleri `inherit` (senin modelin), `opus`, `sonnet`, `haiku`. Claude'a "çoklu ajanı maliyet moduna al" demek de yeter.
+- **Bilgisayar varsayılanı:** Komutun başına `default` eklersen (`legacies multiagent default on maliyet`) bu bilgisayardaki tüm projelerin varsayılanını değiştirirsin. Kendi ayarı olan proje kendi ayarını kullanır. Kurulum programı plugin klasöründe çalışınca seçim varsayılana yazılır. Ayarlar `~/.claude/legacies-multiagent.json` dosyasında, yalnız bu bilgisayarda durur.
+- **Ajan takımları:** Claude Code'un deneysel "agent teams" özelliğini legacies açmaz; bu Claude Code'un kendi ayarıdır (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). Açıksa aynı kurallar takım arkadaşlarını başlatırken de geçerlidir.
 
 ## Güvenlik korumaları
 

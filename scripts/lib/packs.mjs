@@ -103,9 +103,9 @@ export function planPackChanges({ selected, options, plugins, scope }) {
     const current = plugins.get(id);
     if (selected.has(id) && !current?.on) add.push({ id, action: current ? 'enable' : 'install', scope });
     if (selected.has(id) || !current?.on) continue;
-    // Turning off a plugin the team enabled in .claude/settings.json only writes `false` for this user.
-    if (current.scope === 'local' || scope === 'project') remove.push({ id, action: 'uninstall', scope: current.scope });
-    else remove.push({ id, action: 'disable', scope: 'local' });
+    // Turning a plugin off keeps it installed, so turning it on again is instant and nobody hesitates to
+    // switch one off. One the team enabled in .claude/settings.json is turned off only for this user.
+    remove.push({ id, action: 'disable', scope: current.scope === 'local' || scope === 'project' ? current.scope : 'local' });
   }
   return { add, remove };
 }
@@ -139,9 +139,11 @@ export function changeSteps({ pluginRoot, root, scope, changes, packsAfter, mark
     const args = change.action === 'install' ? ['plugin', 'install', change.id, '--scope', change.scope] : ['plugin', 'enable', change.id, '--scope', change.scope];
     steps.push({ change, title: `${change.id} açılıyor`, run: async () => (await claude(args, { cwd: root }), change.action === 'install' ? 'kuruldu' : 'açıldı') });
   }
+  // Off keeps a plugin installed; only `legacies packs remove` uninstalls one.
   for (const change of changes.remove) {
-    const args = change.action === 'uninstall' ? ['plugin', 'uninstall', change.id, '--scope', change.scope, '-y'] : ['plugin', 'disable', change.id, '--scope', change.scope];
-    steps.push({ change, title: `${change.id} kapatılıyor`, run: async () => (await claude(args, { cwd: root }), change.action === 'uninstall' ? 'kaldırıldı' : 'senin için kapatıldı') });
+    const uninstall = change.action === 'uninstall';
+    const args = uninstall ? ['plugin', 'uninstall', change.id, '--scope', change.scope, '-y'] : ['plugin', 'disable', change.id, '--scope', change.scope];
+    steps.push({ change, title: `${change.id} ${uninstall ? 'siliniyor' : 'kapatılıyor'}`, run: async () => (await claude(args, { cwd: root }), uninstall ? 'silindi' : 'kapatıldı; kurulu kalır') });
   }
   steps.push({
     title: 'Paket kuralları (.claude/rules)',

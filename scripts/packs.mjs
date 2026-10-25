@@ -2,7 +2,7 @@
 // `legacies packs` and `legacies catalog`: per-project technology packs and the user's own skills.
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { addToCatalog, changePacks, choosePacks, describeSuggestions, inspectProject, printGroups, removeFromCatalog } from './lib/packflow.mjs';
+import { addToCatalog, changePacks, choosePacks, describeSuggestions, inspectProject, printGroups, removeFromCatalog, removePacks } from './lib/packflow.mjs';
 import { PACK_SCOPES } from './lib/packs.mjs';
 import { listPersonal } from './lib/personal.mjs';
 import { findProjectRoot } from './lib/project.mjs';
@@ -18,8 +18,10 @@ Kullanım (projenin klasöründe):
   legacies packs                      tespit + seçim ekranı (önerilenler işaretli gelir)
   legacies packs suggest [--json]     bu projede tespit edilen paketler ve resmi plugin'ler
   legacies packs list [--json]        tüm katalog; bu projede açık olanlar [x]
-  legacies packs add <ad...>          paket, resmi plugin ya da kendi eklediğin plugin'i aç
-  legacies packs remove <ad...>       kapat
+  legacies packs on <ad...>           paket, resmi plugin ya da kendi eklediğin plugin'i aç (eski adı: add)
+  legacies packs off <ad...>          kapat (kurulu kalır; yeniden açmak anında)
+  legacies packs remove <ad...>       sil: kaldırır ve kurallarını çeker; önce "Emin misin?" diye sorar
+                                      (--yes ile sormadan)
     ad: paket kimliği (react), resmi plugin adı (vercel) ya da tam kimlik (prisma@claude-plugins-official)
   Seçenekler: --scope local|project (varsayılan local: yalnız bu bilgisayar; project: ekiple paylaşılır)
               --yes (önerilenleri sormadan uygula)  --dry-run  --no-anim
@@ -60,7 +62,7 @@ async function packs(flags) {
   if (!action) {
     if (!ui.interactive && !flags.yes) {
       printGroups((await inspectProject(PLUGIN_ROOT, root)).groups);
-      process.stdout.write('\nSeçmek için terminalde `legacies packs`, ya da `legacies packs add <ad>`.\n');
+      process.stdout.write('\nSeçmek için terminalde `legacies packs`, ya da `legacies packs on <ad>`.\n');
       return;
     }
     await ui.banner(`v${VERSION} · proje paketleri · ${path.basename(root)}`);
@@ -75,9 +77,16 @@ async function packs(flags) {
     else printGroups(info.groups.slice(0, 1));
     return;
   }
-  if (action === 'add' || action === 'remove') {
-    if (!names.length) throw new Error(`Kullanım: legacies packs ${action} <ad...>`);
-    await changePacks({ pluginRoot: PLUGIN_ROOT, root, names, enable: action === 'add', scope: scopeOf(flags) });
+  if (['on', 'add', 'off', 'remove'].includes(action) && !names.length) throw new Error(`Kullanım: legacies packs ${action} <ad...>`);
+  // Deleting is a separate, confirmed step; off only turns a pack off.
+  if (action === 'remove') {
+    await removePacks({ pluginRoot: PLUGIN_ROOT, root, names, scope: scopeOf(flags), yes: Boolean(flags.yes) });
+    return;
+  }
+  // on/off are the names users see; add is kept for scripts written against earlier versions.
+  const enable = { on: true, add: true, off: false }[action];
+  if (enable !== undefined) {
+    await changePacks({ pluginRoot: PLUGIN_ROOT, root, names, enable, scope: scopeOf(flags) });
     return;
   }
   process.stdout.write(HELP);
@@ -89,7 +98,7 @@ async function catalog(flags) {
   if (action === 'add' && target) {
     const imported = await addToCatalog(target, { name: flags.name });
     ui.item('ok', `${imported.name} kişisel kataloğa eklendi`, `${imported.skills.length} skill: ${imported.skills.join(', ')}`);
-    ui.detail(`Bir projede açmak için o projede: legacies packs add ${imported.name}`);
+    ui.detail(`Bir projede açmak için o projede: legacies packs on ${imported.name}`);
     return;
   }
   if (action === 'list') {

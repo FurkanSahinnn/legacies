@@ -54,7 +54,8 @@ export function gitRepo() {
   return dir;
 }
 
-// Every call gets an isolated plugin data dir and a fixed session id, never the developer's real ones.
+// Every call gets an isolated plugin data dir, Claude config folder and a fixed session id, never the
+// developer's real ones: settings such as the multi-agent setup live in the config folder.
 export function cli(cwd, args, { input, env = {}, pluginData } = {}) {
   return spawnSync(process.execPath, [CLI, ...args], {
     cwd,
@@ -62,6 +63,7 @@ export function cli(cwd, args, { input, env = {}, pluginData } = {}) {
     encoding: 'utf8',
     env: {
       ...process.env,
+      CLAUDE_CONFIG_DIR: tempDir('legacies-config-'),
       CLAUDE_PLUGIN_DATA: pluginData || tempDir('legacies-data-'),
       CLAUDE_CODE_SESSION_ID: 'test-session-0001',
       LEGACIES_DISABLED: '',

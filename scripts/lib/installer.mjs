@@ -20,6 +20,7 @@ import {
   uninstallProjectCodex,
   writeLaunchers,
 } from './codex.mjs';
+import { effectiveSettings, PROFILE_LABEL, settingsFile, updateSettings } from './multiagent.mjs';
 import { MEMORY_DIRNAME, removeExcludePattern } from './project.mjs';
 import { bundledRules, installedRules, installRules, packRuleFiles, projectRulesDir, syncPackRules, uninstallRules, unscopedBytes, userRulesDir } from './rules.mjs';
 import { pluginDataDir, registeredProjects } from './runtime.mjs';
@@ -326,6 +327,25 @@ function globalCleanupSteps(found) {
   return steps;
 }
 
+// The multi-agent setup for this project (or, without one, this computer's default). A choice that
+// matches the current settings changes nothing.
+function multiagentStep({ target, change }, projectRoot) {
+  const now = effectiveSettings(target === 'project' ? projectRoot : null).settings;
+  const after = { ...now, ...change };
+  const differs = Object.keys(change).some((k) => JSON.stringify(change[k]) !== JSON.stringify(now[k]));
+  return {
+    id: 'multiagent',
+    title: `Çoklu ajan düzeni (${target === 'default' ? 'bilgisayar varsayılanı' : 'bu proje'})`,
+    detail: after.on ? `açık · ${PROFILE_LABEL[after.profile] || after.profile}` : 'kapalı',
+    change: differs,
+    run: async () => {
+      if (!differs) return { skipped: 'zaten böyle' };
+      updateSettings({ root: projectRoot, target, change });
+      return after.on ? 'açıldı' : 'kapatıldı';
+    },
+  };
+}
+
 // Install steps in order. `change: false` steps are shown but do nothing.
 export function planInstall({ pluginRoot, env, report, options }) {
   const scriptPath = path.join(pluginRoot, 'scripts', 'legacies.mjs');
@@ -425,6 +445,8 @@ export function planInstall({ pluginRoot, env, report, options }) {
       },
     });
   }
+
+  if (options.multiagent) steps.push(multiagentStep(options.multiagent, projectRoot));
 
   // graphify is part of legacies, not an option: the pinned version goes into legacies' own folder
   // unless --no-graphify.
@@ -568,6 +590,7 @@ export function planUninstall({ pluginRoot, found, options }) {
     run: async () => {
       fs.rmSync(pluginDataDir(), { recursive: true, force: true });
       fs.rmSync(manifestFile(), { force: true });
+      fs.rmSync(settingsFile(), { force: true });
       return 'temizlendi';
     },
   });

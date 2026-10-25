@@ -67,6 +67,13 @@ test("session-start tells Claude to write notes in the user's language and keep 
   assert.match(text, /Notları ve kartları kullanıcının dilinde yaz; kod adları, dosya yolları ve komutlar olduğu gibi kalır\./);
 });
 
+test('session-start tells Claude which command turns the multi-agent setup on or off', () => {
+  const root = gitRepo();
+  initMemory(root);
+  const text = context(hook(root, 'session-start', { source: 'startup' }));
+  assert.match(text, /`legacies multiagent`/);
+});
+
 test('stop blocks once after enough edits, then respects stop_hook_active, cooldown and handoffs', () => {
   const root = gitRepo();
   initMemory(root);
