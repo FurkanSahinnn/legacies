@@ -10,7 +10,7 @@ legacies dört iş yapar:
 
 ## 1. Bilgisayarı hazırla (bir kez)
 
-1. legacies klasörünü kalıcı bir yere koy. Plugin oradan yüklendiği için klasörü sonradan taşıma ya da silme.
+1. legacies'i kalıcı bir klasöre al: `git clone https://github.com/FurkanSahinnn/legacies.git ~/legacies` (Windows PowerShell'de hedef `$HOME\legacies`). Plugin oradan yüklendiği için klasörü sonradan taşıma ya da silme.
 2. Klasörde kurulum programını çalıştır:
    - Windows: `.\install.cmd`
    - macOS / Linux: `sh install.sh`
@@ -143,7 +143,7 @@ legacies help                    # tüm komutlar
 
 ## 11. Güncelleme ve kurulumu tekrar çalıştırmak
 
-- **Güncellemek:** legacies klasörünü yenile (repo GitHub'a konunca `git pull`). Sonra legacies kullandığın her projede bir kez `legacies setup` çalıştır: projeye kopyalanan kurallar ve graphify sürümü böyle tazelenir. Açık oturumda `/reload-plugins`.
+- **Güncellemek:** legacies klasöründe `git pull` çalıştır. Sonra legacies kullandığın her projede bir kez `legacies setup` çalıştır: projeye kopyalanan kurallar ve graphify sürümü böyle tazelenir. Açık oturumda `/reload-plugins`.
 - **Tekrar çalıştırmak güvenli:**
   - Yapılmış adımlar "zaten kurulu" diye atlanır.
   - Kurallar güncel sürümle yeniden yazılır; senin kendi kural dosyalarına dokunulmaz.

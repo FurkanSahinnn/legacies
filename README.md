@@ -27,13 +27,15 @@ Claude Code'un plugin manifestinde gereksinim bildiren bir alan yok. Bu yüzden 
 
 ## Kurulum programı
 
-Plugin'i klasörüyle birlikte bilgisayara al. Bu repo GitHub'a konunca `git clone` ile, o zamana kadar klasörü kopyalayarak. Ardından plugin klasöründe bilgisayarı hazırla (marketplace kaydı ve `legacies` komutu; hiçbir projeye kurulmaz):
+Plugin'i `git clone` ile kalıcı bir klasöre al, ardından o klasörde bilgisayarı hazırla (marketplace kaydı ve `legacies` komutu; hiçbir projeye kurulmaz):
 
 ```sh
 # macOS / Linux
+git clone https://github.com/FurkanSahinnn/legacies.git ~/legacies
 cd ~/legacies && sh install.sh
 
-# Windows (PowerShell ya da cmd)
+# Windows (PowerShell)
+git clone https://github.com/FurkanSahinnn/legacies.git $HOME\legacies
 cd $HOME\legacies; .\install.cmd
 ```
 
@@ -56,7 +58,7 @@ Kurulum programı animasyonlu ve etkileşimli bir terminal arayüzüyle şu sır
 6. **Paket seçimi:** Proje bazlı kurulumda proje taranır ve [seçim ekranı](#teknoloji-paketleri) açılır.
 7. **Doğrulama ve özet:** Sıradaki adımları bir kutuda gösterir. `legacies` komutunun klasörü PATH'te değilse kabuğuna (zsh, bash, fish, PowerShell) uygun komutu kutunun altında tek satır olarak verir, böylece kopyalayıp yapıştırabilirsin.
 
-Claude Code'un ayarları **yalnızca resmi `claude plugin ...` komutlarıyla** değiştirilir; kurulum programı `settings.json` dosyasını kendisi düzenlemez. Kurulumdan sonra plugin klasörünü silme ya da taşıma, çünkü plugin oradan yüklenir. Güncellemek için klasörü yenile (repo GitHub'a konunca `git pull`), sonra legacies kullandığın her projede bir kez `legacies setup` çalıştır: projelere kopyalanan kurallar ve graphify sürümü böyle tazelenir. Açık oturumlarda `/reload-plugins`.
+Claude Code'un ayarları **yalnızca resmi `claude plugin ...` komutlarıyla** değiştirilir; kurulum programı `settings.json` dosyasını kendisi düzenlemez. Kurulumdan sonra plugin klasörünü silme ya da taşıma, çünkü plugin oradan yüklenir. Güncellemek için plugin klasöründe `git pull` çalıştır, sonra legacies kullandığın her projede bir kez `legacies setup` çalıştır: projelere kopyalanan kurallar ve graphify sürümü böyle tazelenir. Açık oturumlarda `/reload-plugins`.
 
 Etkileşimsiz kullanım:
 
@@ -146,9 +148,9 @@ Bir terminalden başka bir repoya bakmak ya da bir projeyi diğerine taşımak (
 **2. Çalışma alanı:** Birlikte çalışılan projeleri adlandırılmış bir grupta toplar.
 
 ```sh
-legacies workspace add hobigate D:\Workspace\hobigate-web D:\Workspace\hobigate-mobile
-legacies open hobigate        # Claude Code'u bir üyede açar, diğerlerini --add-dir ile ekler
-legacies add --workspace hobigate --type decision --title "Web ve mobil aynı token formatını kullanır" --text "..."
+legacies workspace add magaza D:\Projeler\magaza-web D:\Projeler\magaza-mobil
+legacies open magaza          # Claude Code'u bir üyede açar, diğerlerini --add-dir ile ekler
+legacies add --workspace magaza --type decision --title "Web ve mobil aynı token formatını kullanır" --text "..."
 ```
 
 - **Ortak hafıza:** Projeler arası kararlar (API sözleşmesi, ortak kurallar, eşleme tabloları) çalışma alanının ortak hafızasında durur: `~/.claude/legacies-workspaces/<ad>/`.
@@ -161,7 +163,7 @@ legacies add --workspace hobigate --type decision --title "Web ve mobil aynı to
 **3. Göç yardımcısı:**
 
 ```sh
-legacies migrate start web-mobil --from D:\Workspace\hobigate-web --to D:\Workspace\hobigate-mobile
+legacies migrate start web-mobil --from D:\Projeler\magaza-web --to D:\Projeler\magaza-mobil
 legacies migrate next web-mobil          # sıradaki maddeler
 legacies migrate done web-mobil route:settings/profile --note "form doğrulaması eklendi"
 legacies migrate status
@@ -215,7 +217,7 @@ Kapsamı kurulum programı sorar. Elle yapmak istersen önce marketplace'i bir k
   - Codex'in global adaptörü.
 
   Kaldırma proje kurulumundan sonra yapılır ve hafızalara dokunmaz. Bırakmak için `--keep-global` ver. legacies'i kullandığın diğer projelerde de bir kez `legacies setup` çalıştır.
-- **Ekiple paylaşım:** `--scope project` başka bilgisayarlarda çalışsın diye marketplace'in herkesin erişebileceği bir yerde olması gerekir, örneğin bu repo GitHub'a konunca `claude plugin marketplace add <kullanıcı>/<repo>`. Şu anki yerel klasör yolu yalnızca bu bilgisayarda geçerlidir.
+- **Ekiple paylaşım:** `--scope project` başka bilgisayarlarda çalışsın diye marketplace'in herkesin erişebileceği bir yerde olması gerekir, örneğin `claude plugin marketplace add https://github.com/FurkanSahinnn/legacies.git`. Şu anki yerel klasör yolu yalnızca bu bilgisayarda geçerlidir.
 - **Değişiklikleri yüklemek:** Ardından Claude Code'u yeniden başlat ya da `/reload-plugins` çalıştır. Plugin klasörden doğrudan yüklendiği için kod değişiklikleri sürüm artırmadan devreye girer.
 
 ## Bir projede kullanmak

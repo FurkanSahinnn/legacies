@@ -87,7 +87,7 @@ legacies does not bundle the process-methodology plugins it may suggest, such as
 ### Upstream sources credited inside ECC
 
 - **Vercel Labs, `react-best-practices` skill** (MIT License, Copyright (c) Vercel), https://github.com/vercel-labs/agent-skills. The `react-performance` skill is derived from it through ECC. The MIT permission notice above applies with Vercel as copyright holder.
-- **Supabase Agent Skills / postgres-best-practices** (credit: Supabase team; MIT as stated in ECC). The `postgres-patterns` skill and the `database-reviewer` agent incorporate its patterns through ECC. The upstream license was not independently verified.
+- **Supabase Agent Skills, `supabase-postgres-best-practices` skill** (MIT License, Copyright (c) 2026 Supabase), https://github.com/supabase/agent-skills. The license was checked in the repository's `LICENSE` and the skill's frontmatter at commit c9be0e931b7930f7d02126d04774d904c381e7d7. The `postgres-patterns` skill and the `database-reviewer` agent incorporate its patterns through ECC. The MIT permission notice above applies with Supabase as copyright holder.
 
 ## agent-skills
 
