@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Test double for graphify: logs every call and writes a one-node graph for extract and update.
 // FAKE_GRAPHIFY_LOG: file that receives one JSON line per call. FAKE_GRAPHIFY_NO_GRAPH=1: build writes nothing.
-// FAKE_GRAPHIFY_VERSION: what --version reports.
+// FAKE_GRAPHIFY_VERSION: what --version reports. FAKE_GRAPHIFY_HOLD: a file; extract and update keep running
+// until it exists (at most 30 s), like a slow real run.
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -13,6 +14,9 @@ if (process.env.FAKE_GRAPHIFY_LOG) {
 if (cmd === '--version') {
   process.stdout.write(`graphify ${process.env.FAKE_GRAPHIFY_VERSION || '0.0.0'}\n`);
 } else if (cmd === 'extract' || cmd === 'update') {
+  const hold = process.env.FAKE_GRAPHIFY_HOLD;
+  const until = Date.now() + 30000;
+  while (hold && !fs.existsSync(hold) && Date.now() < until) await new Promise((resolve) => setTimeout(resolve, 50));
   if (process.env.FAKE_GRAPHIFY_NO_GRAPH !== '1') {
     fs.mkdirSync(out, { recursive: true });
     const node = { id: 'a', label: 'buildFakeGraph()', file_type: 'code', source_file: 'src/fake.ts', source_location: 'L1' };

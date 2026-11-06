@@ -15,7 +15,7 @@ import { buildContext, buildSubagentContext, renderAutoCard, renderCheckpoint, s
 import { projectBrief, workspaceBrief } from './crossproject.mjs';
 import { expandTerms, glossaryIndex } from './glossary.mjs';
 import { checkFileWrite, checkShellCommand } from './guards.mjs';
-import { BUILD_ARGS, startGraphify, UPDATE_ARGS } from './graphify.mjs';
+import { BUILD_ARGS, startGraphify, startGraphUpdate as startGraphifyUpdate } from './graphify.mjs';
 import { contentIndex, lookupContent } from './content.mjs';
 import { docIndex, lookupDocs } from './docindex.mjs';
 import { effectiveSettings, policyText } from './multiagent.mjs';
@@ -107,9 +107,10 @@ function setupHint(root, source, harness) {
   );
 }
 
-// Starts `graphify update` detached, so the graph catches up without ever delaying the session.
+// Starts `graphify update` detached, so the graph catches up without ever delaying the session. While
+// another session's update runs, nothing starts and nothing is recorded, so the next turn tries again.
 function startGraphUpdate(paths, sid) {
-  if (!startGraphify(paths, UPDATE_ARGS)) return false;
+  if (!startGraphifyUpdate(paths)) return false;
   if (sid) record(paths, sid, { kind: 'graph-update' });
   return true;
 }

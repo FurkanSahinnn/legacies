@@ -53,6 +53,35 @@ test('a second session does not start another build while one is under way', asy
   assert.equal(calls(log).filter((c) => c.cmd === 'extract').length, 1);
 });
 
+test('a session does not start a graph update while another session is still running one', async () => {
+  const { root, log, env } = project();
+  fs.mkdirSync(path.dirname(graphFile(root)), { recursive: true });
+  fs.writeFileSync(graphFile(root), JSON.stringify({ nodes: [], links: [] }));
+  const release = path.join(tempDir('graphify-hold-'), 'release');
+  const held = { ...env, FAKE_GRAPHIFY_HOLD: release };
+  const editAndStop = (sid) => {
+    hook(root, 'post-tool-use', { session_id: sid, tool_name: 'Edit', tool_input: { file_path: path.join(root, 'src', 'a.ts') } }, { env: held });
+    hook(root, 'stop', { session_id: sid }, { env: held });
+  };
+  const ledger = (sid) => path.join(root, '.legacies', 'state', 'sessions', `${sid}.jsonl`);
+  const startedUpdate = (sid) => fs.existsSync(ledger(sid)) && fs.readFileSync(ledger(sid), 'utf8').includes('"graph-update"');
+  const updates = () => calls(log).filter((c) => c.cmd === 'update').length;
+
+  editAndStop('session-a');
+  assert.ok(startedUpdate('session-a'));
+  await waitFor(() => updates() === 1);
+
+  editAndStop('session-b');
+  assert.equal(startedUpdate('session-b'), false, 'the second session leaves the running update alone');
+
+  fs.writeFileSync(release, '');
+  await waitFor(() => {
+    editAndStop('session-c');
+    return startedUpdate('session-c');
+  });
+  await waitFor(() => updates() === 2);
+});
+
 test('graph status says how to install graphify when it is missing', () => {
   const { root } = project();
   const res = cli(root, ['graph', 'status'], { env: { LEGACIES_GRAPHIFY_BIN: '__none__' } });

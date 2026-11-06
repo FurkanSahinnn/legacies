@@ -326,7 +326,7 @@ Plugin etkinken `legacies` komutu Bash aracının PATH'inde bulunur.
 - **graphify'ın kendi kurulumu çalışmaz:** CLAUDE.md'ye blok, araç çağrılarına hook ya da ajan klasörlerine skill eklenmez. legacies yalnız `extract . --code-only` ve `update .` komutlarını çalıştırır; LLM, ipuçları, reklam ve sorgu günlüğü kapalıdır.
 - **Graf ne zaman oluşur:** Hafızası olan bir projede graf yoksa oturum başında arka planda kurulur. Onboard da kurulumu hemen başlatır.
 - **Nereye yazılır:** `.legacies/graph/` klasörüne; projede `graphify-out/` oluşmaz. Bu klasör zaten git'ten gizli.
-- **Nasıl güncel kalır:** Dosya düzenlenen turların sonunda ve graf HEAD'in gerisinde kaldığında legacies `graphify update .` komutunu arka planda başlatır. Oturum hiç beklemez.
+- **Nasıl güncel kalır:** Dosya düzenlenen turların sonunda ve graf HEAD'in gerisinde kaldığında legacies `graphify update .` komutunu arka planda başlatır. Oturum hiç beklemez. Aynı projede başka bir oturumun güncellemesi sürüyorsa ikincisi başlatılmaz (`.legacies/graph/.update-running` kilidi); bir sonraki turda yeniden denenir.
 - **Kurulu değilse:** Yalnız yol ve içerik eşleşmesi çalışır.
 
 legacies'in graphify'ın üstüne ekledikleri:

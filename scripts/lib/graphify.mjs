@@ -3,7 +3,7 @@ import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
 import { graphDir } from './codeindex.mjs';
 import { pluginDataDir } from './runtime.mjs';
-import { exists } from './util.mjs';
+import { exists, mtimeMs, readJson } from './util.mjs';
 
 // The code graph comes from graphify (https://github.com/Graphify-Labs/graphify), pinned and installed by
 // legacies' setup with uv. legacies runs only its graph-building commands and answers questions itself;
@@ -71,5 +71,58 @@ export function startGraphify(paths, args) {
   });
   child.on('error', () => {});
   child.unref();
+  return child.pid || true;
+}
+
+// One automatic update per project at a time: sessions working side by side in one folder would
+// otherwise run graphify over the same graph files at once. The lock names the running process, so it
+// stops counting as soon as that process ends; a lock older than any real run never counts.
+const UPDATE_LOCK_MAX_AGE = 30 * 60 * 1000;
+// A lock that cannot be read is one being written right now, unless it stays that way.
+const UNREADABLE_LOCK_GRACE = 10 * 1000;
+export const updateLockFile = (paths) => path.join(graphDir(paths), '.update-running');
+
+function processAlive(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (err) {
+    return err.code === 'EPERM';
+  }
+}
+
+function lockHeld(file) {
+  const lock = readJson(file, null);
+  if (!lock) return Date.now() - mtimeMs(file) < UNREADABLE_LOCK_GRACE;
+  return Date.now() - lock.at < UPDATE_LOCK_MAX_AGE && processAlive(lock.pid);
+}
+
+// Created with 'wx', so of two sessions taking the lock at once only one gets it.
+function takeLock(file) {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      fs.writeFileSync(file, JSON.stringify({ pid: process.pid, at: Date.now() }), { flag: 'wx' });
+      return true;
+    } catch (err) {
+      if (err.code !== 'EEXIST' || lockHeld(file)) return false;
+      fs.rmSync(file, { force: true });
+    }
+  }
+  return false;
+}
+
+// Starts `graphify update` in the background unless another session's update is still running.
+export function startGraphUpdate(paths) {
+  if (!graphifyCommand()) return false;
+  fs.mkdirSync(graphDir(paths), { recursive: true });
+  const lock = updateLockFile(paths);
+  if (!takeLock(lock)) return false;
+  const started = startGraphify(paths, UPDATE_ARGS);
+  if (!started) {
+    fs.rmSync(lock, { force: true });
+    return false;
+  }
+  fs.writeFileSync(lock, JSON.stringify({ pid: started === true ? null : started, at: Date.now() }));
   return true;
 }
