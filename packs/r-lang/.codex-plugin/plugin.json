@@ -1,0 +1,16 @@
+{
+  "name": "legacies-r-lang",
+  "version": "0.4.0",
+  "description": "legacies r-lang pack: 1 skill, 1 rule. Written for legacies; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "r",
+    "tidyverse",
+    "shiny",
+    "quarto"
+  ],
+  "skills": "./skills/"
+}

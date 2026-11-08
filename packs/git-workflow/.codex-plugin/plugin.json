@@ -1,0 +1,19 @@
+{
+  "name": "legacies-git-workflow",
+  "version": "0.4.0",
+  "description": "legacies git-workflow pack: 2 skills, 1 agent, 1 command. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "conventional-commits",
+    "branching",
+    "rebase",
+    "commit",
+    "pull-request",
+    "github"
+  ],
+  "skills": "./skills/"
+}

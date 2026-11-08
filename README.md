@@ -1,6 +1,6 @@
 # legacies
 
-legacies, Claude Code için projeye özel ve yalnızca bu bilgisayarda duran bir hafıza plugin'i. Üç sorunu çözüyor:
+legacies, Claude Code ve Codex CLI için projeye özel ve yalnızca bu bilgisayarda duran bir hafıza ve iş akışı plugin'i. Üç sorunu çözüyor:
 
 - Her yeni oturumda "önce projeyi incele" adımını tekrarlamak.
 - Uzun oturumlarda sıkıştırmadan (compaction) sonra bilginin kaybolması.
@@ -413,7 +413,28 @@ Kuralların neredeyse tamamı **dosya türüne bağlıdır**: TypeScript kuralla
 
 ## Codex ve diğer AI'lar
 
-Hafıza düz Markdown olduğu için her AI okuyabilir. Codex adaptörü de proje başınadır. `legacies setup` Codex'i bulursa adaptörü kendisi kurar. Elle, projenin klasöründe:
+Hafıza düz Markdown olduğu için her AI okuyabilir. Codex desteği iki ayrı parçadır:
+
+1. **Plugin skill'leri:** Çekirdekteki 14 skill ve 72 skill taşıyan paketteki 195 skill, toplam 209 skill aynı kaynak dosyalarından Codex'e sunulur. Claude manifestleri ve hook'ları değiştirilmez.
+2. **Proje hook'ları:** Hafızayı oturum başında yükleyen adaptör proje başınadır. `legacies setup` Codex'i bulursa adaptörü kendisi kurar.
+
+Marketplace'i ve çekirdeği Codex'e eklemek için:
+
+```sh
+codex plugin marketplace add <legacies klasörü>
+codex plugin add legacies@legacies
+```
+
+Paketler ayrı plugin kalır; yalnız kullandıklarını kur. Örneğin:
+
+```sh
+codex plugin add legacies-react@legacies
+codex plugin add legacies-rust@legacies
+```
+
+Codex'te Claude'a ait `/legacies:*` slash komutları kullanılmaz. Skill'i `/skills` ekranından seç veya `$legacies:recall`, `$legacies:plan`, `$legacies-react:react-patterns` biçiminde çağır. `spec`, `plan` ve `review-pr` iki tarafta da yalnız açıkça çağrılır. Yeni plugin/skill'lerin görünmesi için yeni bir Codex oturumu aç.
+
+Hook adaptörünü elle kurmak için projenin klasöründe:
 
 ```sh
 legacies codex install
@@ -425,6 +446,7 @@ legacies codex uninstall
 - Oturum başı bağlamı, hafıza komutlarının nasıl kullanılacağını da anlatır.
 - Dosyadaki diğer hook'lar korunur ve dosya git'ten gizlenir.
 - Git'te takip edilen bir `hooks.json` hiç değiştirilmez.
+- Plugin'in Codex manifesti Claude'a özel kök hook dosyasının otomatik keşfini kapatır; böylece aynı hafıza hook'ları iki kez çalışmaz.
 
 Codex proje hook'larını yalnızca güvendiği projelerde yükler. Projeye güvendikten sonra her hook'u `/hooks` ekranında onaylaman gerekir. Codex'in hafıza komutlarını (`legacies search`, `legacies handoff` …) çalıştırabilmesi için `legacies` komutunun PATH'te olması gerekir; kurulum programı onu `~/.local/bin` altına koyar.
 
@@ -478,6 +500,7 @@ claude plugin validate .
 npm run packs:build           # packs/ klasörünü catalog/registry.json, catalog/own/ ve yanındaki ECC
                               # kopyasından yeniden üretir ve marketplace.json'a yazar; bir yama tam bir
                               # kez eşleşmezse ya da kopuk atıf kalırsa durur
+npm run codex:build           # 209 skill için Codex uyumluluk manifestlerini ve ayrı marketplace'i üretir
 ```
 
 Tasarımın gerekçeleri ve aşama planı: `../ANALIZ-VE-PLAN.md` (yalnızca geliştirme klasöründe, repoda yok).

@@ -80,7 +80,7 @@ that are relevant to the task and project in front of you.
 
 Before writing a utility or adding functionality, mentally run through:
 
-0. Does this already exist in the repo? → If the project has `.legacies/`, run `legacies map "<identifier or feature>"` and `legacies search "<terms>"` first (`/legacies:code-map`, `/legacies:recall`); then search the relevant modules and tests
+0. Does this already exist in the repo? → If the project has `.legacies/`, run `legacies map "<identifier or feature>"` and `legacies search "<terms>"` first (or use the code-map and recall skills); then search the relevant modules and tests
 1. Is this a common problem? → Search npm/PyPI
 2. Is there an MCP for this? → Check the configured servers (`claude mcp list`, `.mcp.json`) and search
 3. Is there a skill for this? → Check the available-skills list and `~/.claude/skills/`
@@ -159,7 +159,7 @@ For a fuzzy need, search in cycles:
 
 ## Reporting the Decision
 
-Report the outcome in the shape of the examples below (need, search, found, action, result). Write it in the user's language. If the decision will matter later ("we use X, not Y, because Z"), save it with `/legacies:remember` so a later session does not repeat the research.
+Report the outcome in the shape of the examples below (need, search, found, action, result). Write it in the user's language. If the decision will matter later ("we use X, not Y, because Z"), save it with the Legacies remember skill (`/legacies:remember` in Claude Code, `$legacies:remember` in Codex) so a later session does not repeat the research.
 
 ## Examples
 

@@ -95,7 +95,7 @@ Error messages, stack traces, logs and CI output can contain text written to loo
 ## Record what you learned
 
 - In the reply, state the root cause, the fix, the regression test and the commands you ran.
-- A cause that can bite again, such as a library trap, an environment quirk or a misleading error, belongs in memory: save it with `/legacies:remember` as a gotcha, with the paths it concerns.
+- A cause that can bite again, such as a library trap, an environment quirk or a misleading error, belongs in memory: save it with the Legacies remember skill (`/legacies:remember` in Claude Code, `$legacies:remember` in Codex) as a gotcha, with the paths it concerns.
 
 ## Rationalizations
 

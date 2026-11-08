@@ -1,0 +1,20 @@
+{
+  "name": "legacies-ai-agents",
+  "version": "0.4.0",
+  "description": "legacies ai-agents pack: 7 skills. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "llm-apps",
+    "agents",
+    "audit",
+    "tool-design",
+    "action-space",
+    "prompt-injection",
+    "tool-security",
+    "multi-tenant"
+  ],
+  "skills": "./skills/"
+}

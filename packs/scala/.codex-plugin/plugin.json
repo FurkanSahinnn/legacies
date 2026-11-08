@@ -1,0 +1,15 @@
+{
+  "name": "legacies-scala",
+  "version": "0.4.0",
+  "description": "legacies scala pack: 1 skill, 1 rule. Written for legacies; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "scala",
+    "sbt",
+    "jvm"
+  ],
+  "skills": "./skills/"
+}

@@ -32,6 +32,6 @@ EOF
 
 - **Size.** Keep the card under ~3000 characters. Write facts and evidence, not narrative.
 - **STATE.md.** If the project's focus changed, update `.legacies/STATE.md` too.
-- **Durable lessons.** A lesson that will matter after this task belongs in a note: use `/legacies:remember`.
+- **Durable lessons.** A lesson that will matter after this task belongs in a note: use the Legacies remember skill (`/legacies:remember` in Claude Code, `$legacies:remember` in Codex).
 - **Nothing worth keeping.** If the session produced nothing worth a card, such as a trivial change, run `legacies handoff --skip "<reason>"` instead.
 - **Language.** Write in the user's language.

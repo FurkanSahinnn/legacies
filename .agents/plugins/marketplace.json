@@ -1,0 +1,1103 @@
+{
+  "name": "legacies",
+  "interface": {
+    "displayName": "Legacies"
+  },
+  "plugins": [
+    {
+      "name": "legacies",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies"
+      }
+    },
+    {
+      "name": "legacies-agent-workflows",
+      "source": {
+        "source": "local",
+        "path": "./packs/agent-workflows"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: agent-workflows"
+      }
+    },
+    {
+      "name": "legacies-ai-agents",
+      "source": {
+        "source": "local",
+        "path": "./packs/ai-agents"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: ai-agents"
+      }
+    },
+    {
+      "name": "legacies-ai-llm",
+      "source": {
+        "source": "local",
+        "path": "./packs/ai-llm"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: ai-llm"
+      }
+    },
+    {
+      "name": "legacies-android",
+      "source": {
+        "source": "local",
+        "path": "./packs/android"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: android"
+      }
+    },
+    {
+      "name": "legacies-angular",
+      "source": {
+        "source": "local",
+        "path": "./packs/angular"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: angular"
+      }
+    },
+    {
+      "name": "legacies-api-design",
+      "source": {
+        "source": "local",
+        "path": "./packs/api-design"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: api-design"
+      }
+    },
+    {
+      "name": "legacies-architecture",
+      "source": {
+        "source": "local",
+        "path": "./packs/architecture"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: architecture"
+      }
+    },
+    {
+      "name": "legacies-astro",
+      "source": {
+        "source": "local",
+        "path": "./packs/astro"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: astro"
+      }
+    },
+    {
+      "name": "legacies-clickhouse",
+      "source": {
+        "source": "local",
+        "path": "./packs/clickhouse"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: clickhouse"
+      }
+    },
+    {
+      "name": "legacies-coding-standards",
+      "source": {
+        "source": "local",
+        "path": "./packs/coding-standards"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: coding-standards"
+      }
+    },
+    {
+      "name": "legacies-containers",
+      "source": {
+        "source": "local",
+        "path": "./packs/containers"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: containers"
+      }
+    },
+    {
+      "name": "legacies-cpp",
+      "source": {
+        "source": "local",
+        "path": "./packs/cpp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: cpp"
+      }
+    },
+    {
+      "name": "legacies-csharp-dotnet",
+      "source": {
+        "source": "local",
+        "path": "./packs/csharp-dotnet"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: csharp-dotnet"
+      }
+    },
+    {
+      "name": "legacies-cypress",
+      "source": {
+        "source": "local",
+        "path": "./packs/cypress"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: cypress"
+      }
+    },
+    {
+      "name": "legacies-db-migrations",
+      "source": {
+        "source": "local",
+        "path": "./packs/db-migrations"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: db-migrations"
+      }
+    },
+    {
+      "name": "legacies-deployment",
+      "source": {
+        "source": "local",
+        "path": "./packs/deployment"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: deployment"
+      }
+    },
+    {
+      "name": "legacies-dev-tools",
+      "source": {
+        "source": "local",
+        "path": "./packs/dev-tools"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: dev-tools"
+      }
+    },
+    {
+      "name": "legacies-django",
+      "source": {
+        "source": "local",
+        "path": "./packs/django"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: django"
+      }
+    },
+    {
+      "name": "legacies-docs-governance",
+      "source": {
+        "source": "local",
+        "path": "./packs/docs-governance"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: docs-governance"
+      }
+    },
+    {
+      "name": "legacies-electron",
+      "source": {
+        "source": "local",
+        "path": "./packs/electron"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: electron"
+      }
+    },
+    {
+      "name": "legacies-elixir",
+      "source": {
+        "source": "local",
+        "path": "./packs/elixir"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: elixir"
+      }
+    },
+    {
+      "name": "legacies-fastapi",
+      "source": {
+        "source": "local",
+        "path": "./packs/fastapi"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: fastapi"
+      }
+    },
+    {
+      "name": "legacies-flask",
+      "source": {
+        "source": "local",
+        "path": "./packs/flask"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: flask"
+      }
+    },
+    {
+      "name": "legacies-flutter-dart",
+      "source": {
+        "source": "local",
+        "path": "./packs/flutter-dart"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: flutter-dart"
+      }
+    },
+    {
+      "name": "legacies-frontend-design",
+      "source": {
+        "source": "local",
+        "path": "./packs/frontend-design"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: frontend-design"
+      }
+    },
+    {
+      "name": "legacies-fsharp",
+      "source": {
+        "source": "local",
+        "path": "./packs/fsharp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: fsharp"
+      }
+    },
+    {
+      "name": "legacies-git-workflow",
+      "source": {
+        "source": "local",
+        "path": "./packs/git-workflow"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: git-workflow"
+      }
+    },
+    {
+      "name": "legacies-go",
+      "source": {
+        "source": "local",
+        "path": "./packs/go"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: go"
+      }
+    },
+    {
+      "name": "legacies-godot",
+      "source": {
+        "source": "local",
+        "path": "./packs/godot"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: godot"
+      }
+    },
+    {
+      "name": "legacies-haskell",
+      "source": {
+        "source": "local",
+        "path": "./packs/haskell"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: haskell"
+      }
+    },
+    {
+      "name": "legacies-java",
+      "source": {
+        "source": "local",
+        "path": "./packs/java"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: java"
+      }
+    },
+    {
+      "name": "legacies-javascript-node",
+      "source": {
+        "source": "local",
+        "path": "./packs/javascript-node"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: javascript-node"
+      }
+    },
+    {
+      "name": "legacies-kotlin",
+      "source": {
+        "source": "local",
+        "path": "./packs/kotlin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: kotlin"
+      }
+    },
+    {
+      "name": "legacies-ml-engineering",
+      "source": {
+        "source": "local",
+        "path": "./packs/ml-engineering"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: ml-engineering"
+      }
+    },
+    {
+      "name": "legacies-motion",
+      "source": {
+        "source": "local",
+        "path": "./packs/motion"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: motion"
+      }
+    },
+    {
+      "name": "legacies-mysql",
+      "source": {
+        "source": "local",
+        "path": "./packs/mysql"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: mysql"
+      }
+    },
+    {
+      "name": "legacies-nuxt",
+      "source": {
+        "source": "local",
+        "path": "./packs/nuxt"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: nuxt"
+      }
+    },
+    {
+      "name": "legacies-oss-release",
+      "source": {
+        "source": "local",
+        "path": "./packs/oss-release"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: oss-release"
+      }
+    },
+    {
+      "name": "legacies-performance",
+      "source": {
+        "source": "local",
+        "path": "./packs/performance"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: performance"
+      }
+    },
+    {
+      "name": "legacies-perl",
+      "source": {
+        "source": "local",
+        "path": "./packs/perl"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: perl"
+      }
+    },
+    {
+      "name": "legacies-php-laravel",
+      "source": {
+        "source": "local",
+        "path": "./packs/php-laravel"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: php-laravel"
+      }
+    },
+    {
+      "name": "legacies-php-symfony",
+      "source": {
+        "source": "local",
+        "path": "./packs/php-symfony"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: php-symfony"
+      }
+    },
+    {
+      "name": "legacies-postgres",
+      "source": {
+        "source": "local",
+        "path": "./packs/postgres"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: postgres"
+      }
+    },
+    {
+      "name": "legacies-prisma",
+      "source": {
+        "source": "local",
+        "path": "./packs/prisma"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: prisma"
+      }
+    },
+    {
+      "name": "legacies-python",
+      "source": {
+        "source": "local",
+        "path": "./packs/python"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: python"
+      }
+    },
+    {
+      "name": "legacies-pytorch",
+      "source": {
+        "source": "local",
+        "path": "./packs/pytorch"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: pytorch"
+      }
+    },
+    {
+      "name": "legacies-quarkus",
+      "source": {
+        "source": "local",
+        "path": "./packs/quarkus"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: quarkus"
+      }
+    },
+    {
+      "name": "legacies-r-lang",
+      "source": {
+        "source": "local",
+        "path": "./packs/r-lang"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: r-lang"
+      }
+    },
+    {
+      "name": "legacies-react",
+      "source": {
+        "source": "local",
+        "path": "./packs/react"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: react"
+      }
+    },
+    {
+      "name": "legacies-react-native",
+      "source": {
+        "source": "local",
+        "path": "./packs/react-native"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: react-native"
+      }
+    },
+    {
+      "name": "legacies-redis",
+      "source": {
+        "source": "local",
+        "path": "./packs/redis"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: redis"
+      }
+    },
+    {
+      "name": "legacies-remix",
+      "source": {
+        "source": "local",
+        "path": "./packs/remix"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: remix"
+      }
+    },
+    {
+      "name": "legacies-requirements",
+      "source": {
+        "source": "local",
+        "path": "./packs/requirements"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: requirements"
+      }
+    },
+    {
+      "name": "legacies-ruby-rails",
+      "source": {
+        "source": "local",
+        "path": "./packs/ruby-rails"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: ruby-rails"
+      }
+    },
+    {
+      "name": "legacies-rust",
+      "source": {
+        "source": "local",
+        "path": "./packs/rust"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: rust"
+      }
+    },
+    {
+      "name": "legacies-scala",
+      "source": {
+        "source": "local",
+        "path": "./packs/scala"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: scala"
+      }
+    },
+    {
+      "name": "legacies-sector-healthcare",
+      "source": {
+        "source": "local",
+        "path": "./packs/sector-healthcare"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: sector-healthcare"
+      }
+    },
+    {
+      "name": "legacies-sector-supply-chain",
+      "source": {
+        "source": "local",
+        "path": "./packs/sector-supply-chain"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: sector-supply-chain"
+      }
+    },
+    {
+      "name": "legacies-sector-web3",
+      "source": {
+        "source": "local",
+        "path": "./packs/sector-web3"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: sector-web3"
+      }
+    },
+    {
+      "name": "legacies-security",
+      "source": {
+        "source": "local",
+        "path": "./packs/security"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: security"
+      }
+    },
+    {
+      "name": "legacies-shell",
+      "source": {
+        "source": "local",
+        "path": "./packs/shell"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: shell"
+      }
+    },
+    {
+      "name": "legacies-spring-boot",
+      "source": {
+        "source": "local",
+        "path": "./packs/spring-boot"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: spring-boot"
+      }
+    },
+    {
+      "name": "legacies-sqlalchemy",
+      "source": {
+        "source": "local",
+        "path": "./packs/sqlalchemy"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: sqlalchemy"
+      }
+    },
+    {
+      "name": "legacies-sqlite",
+      "source": {
+        "source": "local",
+        "path": "./packs/sqlite"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: sqlite"
+      }
+    },
+    {
+      "name": "legacies-svelte",
+      "source": {
+        "source": "local",
+        "path": "./packs/svelte"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: svelte"
+      }
+    },
+    {
+      "name": "legacies-swift-ios",
+      "source": {
+        "source": "local",
+        "path": "./packs/swift-ios"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: swift-ios"
+      }
+    },
+    {
+      "name": "legacies-tauri",
+      "source": {
+        "source": "local",
+        "path": "./packs/tauri"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: tauri"
+      }
+    },
+    {
+      "name": "legacies-testing-core",
+      "source": {
+        "source": "local",
+        "path": "./packs/testing-core"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: testing-core"
+      }
+    },
+    {
+      "name": "legacies-testing-e2e",
+      "source": {
+        "source": "local",
+        "path": "./packs/testing-e2e"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: testing-e2e"
+      }
+    },
+    {
+      "name": "legacies-vendor-integrations",
+      "source": {
+        "source": "local",
+        "path": "./packs/vendor-integrations"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: vendor-integrations"
+      }
+    },
+    {
+      "name": "legacies-vue",
+      "source": {
+        "source": "local",
+        "path": "./packs/vue"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: vue"
+      }
+    },
+    {
+      "name": "legacies-web-quality",
+      "source": {
+        "source": "local",
+        "path": "./packs/web-quality"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity",
+      "interface": {
+        "displayName": "Legacies: web-quality"
+      }
+    }
+  ]
+}

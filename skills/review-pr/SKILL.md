@@ -39,7 +39,7 @@ gh pr diff <pr>
 
 ## 3. Route files to reviewers
 
-Run only the reviewers whose lane has changed files, or the ones `--focus` names. The three `legacies:` reviewers are always installed. The specialist reviewers come with the technology packs enabled in this project (`legacies packs`), so use one only when its subagent type is available in this session; when it isn't, `code-reviewer` covers that lane and the report says which specialist was missing.
+Run only the reviewers whose lane has changed files, or the ones `--focus` names. Claude Code installs the three core `legacies:` reviewers and technology packs may add specialists. Codex compatibility currently packages skills, not the specialist agent definitions: use an available generic reviewer for the same lane and say which specialist type was unavailable.
 
 | Agent | Focus key | Run when the change includes |
 |---|---|---|
@@ -102,4 +102,4 @@ Verdict: BLOCK
 ```
 
 - **Verdict**: BLOCK with any Critical finding, WARNING with Important findings only, APPROVE otherwise. A review with zero findings is a valid result.
-- If a finding reveals a durable convention or gotcha, suggest saving it with `/legacies:remember`.
+- If a finding reveals a durable convention or gotcha, suggest saving it with the Legacies remember skill (`/legacies:remember` in Claude Code, `$legacies:remember` in Codex).

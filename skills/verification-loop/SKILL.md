@@ -34,7 +34,7 @@ npm run build 2>&1 | tee "$LOG_DIR/build.log"
 pnpm build 2>&1 | tee "$LOG_DIR/build.log"
 ```
 
-If build fails, STOP and fix before continuing. For a stubborn build or type error, the project's build resolver subagent can make the minimal fix when a language pack provides one (`legacies-typescript:build-error-resolver`, `legacies-go:go-build-resolver` and the like).
+If build fails, STOP and fix before continuing. For a stubborn build or type error, the project's build resolver subagent can make the minimal fix when the active host and a language pack provide one (`legacies-typescript:build-error-resolver`, `legacies-go:go-build-resolver` and the like).
 
 ### Phase 2: Type Check
 ```bash
@@ -104,7 +104,7 @@ Review each changed file for:
 - Missing error handling
 - Potential edge cases
 
-For a deeper review, hand the diff to the `legacies:code-reviewer` subagent, and to `legacies-security:security-reviewer` (security pack) when auth, input handling or secrets changed.
+For a deeper review, hand the diff to an available reviewer subagent. Claude Code installations may provide `legacies:code-reviewer` and `legacies-security:security-reviewer`; Codex currently receives the review skills, so use its available reviewer agents with the same lanes.
 
 ## Output Format
 
@@ -136,10 +136,10 @@ For long sessions, run verification every 15 minutes or after major changes. Set
 - After finishing a component
 - Before moving to the next task
 
-Then run this skill again (`/legacies:verification-loop`). Between full runs, the cheap phases (type check, lint, the affected tests) are enough; run all six before a PR.
+Then run this skill again (`/legacies:verification-loop` in Claude Code, `$legacies:verification-loop` in Codex). Between full runs, the cheap phases (type check, lint, the affected tests) are enough; run all six before a PR.
 
 ## Integration with Hooks
 
 This skill complements edit-time hooks (formatters, linters) but provides deeper verification. Hooks catch issues immediately; this skill provides a comprehensive review.
 
-When the session ends or reaches a milestone, put the report's one-line result in the handoff card (`/legacies:handoff`) so the next session knows what was verified.
+When the session ends or reaches a milestone, put the report's one-line result in the handoff card (`/legacies:handoff` in Claude Code, `$legacies:handoff` in Codex) so the next session knows what was verified.

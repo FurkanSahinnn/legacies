@@ -19,13 +19,13 @@ Plan in this session. In a large repo you may hand the code sweep to an Explore 
 
 | Request | Mode | What to do |
 |---|---|---|
-| Path to a `.md` spec or PRD (for example one written by `/legacies:spec` under `.legacies/specs/`) | Spec mode | Read it and plan the next pending milestone or module. Don't edit the spec; record the chosen part in the plan. |
+| Path to a `.md` spec or PRD (for example one written by the Legacies spec skill under `.legacies/specs/`) | Spec mode | Read it and plan the next pending milestone or module. Don't edit the spec; record the chosen part in the plan. |
 | Any other text | Conversational mode | Plan what it describes. |
 | Empty | Clarification mode | Ask what should be planned, in one question, and stop. |
 
 ## Steps
 
-1. **Restate requirements.** What will be built and for whom, what "done" means (acceptance criteria), and what is out of scope. List the assumptions you are making. If an ambiguity would change the plan, ask (at most three questions) before planning. When there is no spec and the goal itself is unclear, suggest `/legacies:spec` first.
+1. **Restate requirements.** What will be built and for whom, what "done" means (acceptance criteria), and what is out of scope. List the assumptions you are making. If an ambiguity would change the plan, ask (at most three questions) before planning. When there is no spec and the goal itself is unclear, suggest the Legacies spec skill first (`/legacies:spec` in Claude Code, `$legacies:spec` in Codex).
 2. **Check memory first.** If the project has `.legacies/`:
    - `legacies search "<feature terms, identifiers>"` finds earlier decisions, gotchas and conventions. Reuse decided answers instead of reopening them.
    - `legacies map "<identifier or feature>"` locates the code involved (`file:line`) before you grep.
@@ -137,15 +137,16 @@ Show the plan in chat (requirements, phases with tasks and checkpoints, dependen
 
 ## After confirmation
 
-- Build task by task in thin slices, test-first, with `/legacies:tdd-workflow`. Tick tasks off in the plan file as they pass, and stop at each checkpoint for the user.
-- When something breaks, find the cause with `/legacies:debugging` before fixing it. If the build breaks, use the project's build resolver agent when one is installed (`build-error-resolver` from the typescript pack, `go-build-resolver` and the like from other language packs).
-- Run `/legacies:verification-loop` before calling the work done, and review the result with `/legacies:review-pr`.
-- Save decisions made while planning with `/legacies:remember`, and leave a card with `/legacies:handoff` at milestones.
+- Build task by task in thin slices, test-first, with the Legacies tdd-workflow skill. Tick tasks off in the plan file as they pass, and stop at each checkpoint for the user.
+- When something breaks, find the cause with the Legacies debugging skill before fixing it. If the build breaks, use the project's build resolver agent when one is installed (`build-error-resolver` from the typescript pack, `go-build-resolver` and the like from other language packs).
+- Run the Legacies verification-loop skill before calling the work done, and review the result with the review-pr skill.
+- Save decisions with the Legacies remember skill, and leave a card with the handoff skill at milestones. In Claude Code these are `/legacies:<skill>` commands; in Codex they are `$legacies:<skill>` references.
 
 ## Example
 
 ```
 User: /legacies:plan add per-user rate limiting to the AI summary endpoint
+Codex equivalent: $legacies:plan add per-user rate limiting to the AI summary endpoint
 
 Assistant:
 # Plan: Rate-limit the AI summary endpoint

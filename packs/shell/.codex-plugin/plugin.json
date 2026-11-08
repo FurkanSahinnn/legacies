@@ -1,0 +1,15 @@
+{
+  "name": "legacies-shell",
+  "version": "0.4.0",
+  "description": "legacies shell pack: 1 skill, 1 rule. Written for legacies; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "bash",
+    "shell",
+    "posix-sh"
+  ],
+  "skills": "./skills/"
+}

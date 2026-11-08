@@ -1,0 +1,15 @@
+{
+  "name": "legacies-cypress",
+  "version": "0.4.0",
+  "description": "legacies cypress pack: 1 skill. Written for legacies; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "cypress",
+    "e2e",
+    "component-testing"
+  ],
+  "skills": "./skills/"
+}

@@ -1,0 +1,20 @@
+{
+  "name": "legacies-oss-release",
+  "version": "0.4.0",
+  "description": "legacies oss-release pack: 1 skill, 3 agents. Adapted from ECC; not yet evaluated.",
+  "author": {
+    "name": "Furkan Şahin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "open-source",
+    "sanitization",
+    "secrets",
+    "licensing",
+    "release",
+    "readme",
+    "license",
+    "contributing"
+  ],
+  "skills": "./skills/"
+}

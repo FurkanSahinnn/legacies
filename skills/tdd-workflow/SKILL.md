@@ -129,6 +129,6 @@ TypeScript is shown; the shape is the same in any language.
 - [ ] Every bug fix has a reproduction test that failed before the fix
 - [ ] The full suite passes with the repo's own command, run in this session
 - [ ] No test was skipped or disabled
-- [ ] The reply lists the tests added and their RED → GREEN results; at a milestone, the one-line result goes into the handoff card (`/legacies:handoff`)
+- [ ] The reply lists the tests added and their RED → GREEN results; at a milestone, the one-line result goes into the handoff card (`/legacies:handoff` in Claude Code, `$legacies:handoff` in Codex)
 
 Before a PR, run the full check with `verification-loop`: build, types, lint, tests, secret scan and diff.

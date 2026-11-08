@@ -1,6 +1,6 @@
 ---
 name: spec
-description: Write a short spec before building something new or unclear, covering objective, scope, success criteria, boundaries and open questions, by asking the user one question at a time. Saves it under .legacies/specs/ and stops for approval; plan it next with /legacies:plan.
+description: Write a short spec before building something new or unclear, covering objective, scope, success criteria, boundaries and open questions, by asking the user one question at a time. Saves it under .legacies/specs/ and stops for approval; plan it next with the Legacies plan skill.
 disable-model-invocation: true
 argument-hint: "[what to build]"
 ---
@@ -77,8 +77,8 @@ A spec is the shared answer to "what are we building, why, and how will we know 
 Summarize the spec with its path and open questions, ask the user to approve or change it, and **end your turn**. Don't plan or write code in the same turn.
 
 - **Changes:** update the same file, show what changed and stop again.
-- **Approval:** set `**Status**: approved`. The next step is `/legacies:plan .legacies/specs/<file>.md`.
-- **Later changes:** when a decision or the scope changes during the work, update the spec first, then the code. Save durable decisions with `/legacies:remember`.
+- **Approval:** set `**Status**: approved`. The next step is `/legacies:plan .legacies/specs/<file>.md` in Claude Code or `$legacies:plan .legacies/specs/<file>.md` in Codex.
+- **Later changes:** when a decision or the scope changes during the work, update the spec first, then the code. Save durable decisions with `/legacies:remember` in Claude Code or `$legacies:remember` in Codex.
 
 ## Red flags
 
