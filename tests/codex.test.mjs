@@ -126,6 +126,25 @@ test('codex harness: apply_patch edits are recorded and the context names CLI co
   assert.doesNotMatch(text, /\/legacies:remember/);
 });
 
+test('codex harness: stop keeps the native continuation decision', () => {
+  const root = gitRepo();
+  initMemory(root);
+  for (const file of ['src/a.ts', 'src/b.ts', 'src/c.ts']) {
+    const edit = cli(root, ['hook', 'post-tool-use', '--harness', 'codex'], {
+      input: JSON.stringify({ cwd: root, session_id: 'codex-stop', tool_name: 'Edit', tool_input: { file_path: path.join(root, file) } }),
+    });
+    assert.equal(edit.status, 0, edit.stderr);
+  }
+
+  const stop = cli(root, ['hook', 'stop', '--harness', 'codex'], {
+    input: JSON.stringify({ cwd: root, session_id: 'codex-stop', stop_hook_active: false }),
+  });
+  assert.equal(stop.status, 0, stop.stderr);
+  const result = JSON.parse(stop.stdout);
+  assert.equal(result.decision, 'block');
+  assert.match(result.reason, /3 dosya/);
+});
+
 test('rules install writes into the project but keeps git status clean', () => {
   const root = gitRepo();
   const install = cli(root, ['rules', 'install']);

@@ -451,8 +451,9 @@ function maybeUpdateGraph(paths, sid) {
 
 const otherMemories = (root, sid) => activeProjects(sid).filter((p) => !samePath(p.root, root) && hasMemory(p.root)).map((p) => memoryPaths(p.root));
 
-// Blocks a Stop once per edit window, and only when enough changed; never twice in a row. Every
-// project the session edited is checked, and each one's card goes to its own memory.
+// Continues once per edit window, and only when enough changed; never twice in a row. Claude can
+// continue from non-error feedback, while Codex and OpenCode use their native continuation path.
+// Every project the session edited is checked, and each one's card goes to its own memory.
 export function onStop(input) {
   if (input.stop_hook_active || !input.session_id) return null;
   const { root, paths } = locate(input);
@@ -468,7 +469,8 @@ export function onStop(input) {
   if (!mine && !theirs.length) return null;
   for (const due of [mine, ...theirs].filter(Boolean)) record(due.paths, sid, { kind: 'reminder' });
   const parts = [mine && reminderText(mine.count, mine.hasCard), theirs.length && otherReminder(theirs)].filter(Boolean);
-  return { decision: 'block', reason: parts.join('\n') };
+  const reason = parts.join('\n');
+  return input.harness === 'claude' ? additional('Stop', reason) : { decision: 'block', reason };
 }
 
 function autoCard(root, paths, sid, summary, { minPrompts }) {

@@ -74,15 +74,16 @@ test('session-start tells Claude which command turns the multi-agent setup on or
   assert.match(text, /`legacies multiagent`/);
 });
 
-test('stop blocks once after enough edits, then respects stop_hook_active, cooldown and handoffs', () => {
+test('Claude stop continues once with non-error feedback, then respects stop_hook_active, cooldown and handoffs', () => {
   const root = gitRepo();
   initMemory(root);
   for (const f of ['src/a.ts', 'src/b.ts', 'src/c.ts']) hook(root, 'post-tool-use', { tool_name: 'Edit', tool_input: { file_path: path.join(root, f) } });
   hook(root, 'post-tool-use', { tool_name: 'Write', tool_input: { file_path: path.join(root, '.legacies', 'memory', 'x.md') } });
 
-  const blocked = hook(root, 'stop', {});
-  assert.equal(blocked.json.decision, 'block');
-  assert.match(blocked.json.reason, /3 dosya/);
+  const feedback = hook(root, 'stop', {});
+  assert.equal(feedback.json.decision, undefined);
+  assert.equal(feedback.json.hookSpecificOutput.hookEventName, 'Stop');
+  assert.match(feedback.json.hookSpecificOutput.additionalContext, /3 dosya/);
   assert.equal(hook(root, 'stop', { stop_hook_active: true }).json, null);
   assert.equal(hook(root, 'stop', {}).json, null, 'cooldown');
 

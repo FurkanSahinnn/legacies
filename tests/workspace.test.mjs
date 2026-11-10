@@ -90,12 +90,13 @@ test('post-tool-use lists an edit in a folder without memory as outside this pro
   assert.deepEqual(ledger(p.a).filter((e) => e.kind === 'edit-outside').map((e) => path.basename(e.file)), ['notes.txt']);
 });
 
-test('stop asks for a card in the other project the session edited, with the command for it', () => {
+test('Claude stop gives non-error feedback for the other project the session edited', () => {
   const p = twoProjects();
   for (const f of ['a.ts', 'b.ts', 'c.ts']) p.hook(p.a, 'post-tool-use', { tool_name: 'Write', tool_input: { file_path: path.join(p.b, 'src', f) } });
   const res = p.hook(p.a, 'stop', {});
-  assert.equal(res.json.decision, 'block');
-  assert.match(res.json.reason, /3 dosya → `legacies handoff --project/);
+  assert.equal(res.json.decision, undefined);
+  assert.equal(res.json.hookSpecificOutput.hookEventName, 'Stop');
+  assert.match(res.json.hookSpecificOutput.additionalContext, /3 dosya → `legacies handoff --project/);
 });
 
 test('handoff --project writes the card into the other project and satisfies its reminder', () => {
