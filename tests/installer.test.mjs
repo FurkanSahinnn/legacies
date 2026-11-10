@@ -12,6 +12,7 @@ const SETUP = path.join(ROOT, 'scripts', 'setup.mjs');
 const CLI = path.join(ROOT, 'scripts', 'legacies.mjs');
 const FAKE = path.join(ROOT, 'tests', 'fixtures', 'fake-claude.mjs');
 const FAKE_CODEX = path.join(ROOT, 'tests', 'fixtures', 'fake-codex.mjs');
+const FAKE_OPENCODE = path.join(ROOT, 'tests', 'fixtures', 'fake-opencode.mjs');
 const FAKE_UV = path.join(ROOT, 'tests', 'fixtures', 'fake-uv.mjs');
 const FAKE_GRAPHIFY = path.join(ROOT, 'tests', 'fixtures', 'fake-graphify.mjs');
 
@@ -30,6 +31,7 @@ function sandbox(initial = {}) {
     LEGACIES_BIN_DIR: path.join(home, 'bin'),
     LEGACIES_CLAUDE_BIN: FAKE,
     LEGACIES_CODEX_BIN: '__none__',
+    LEGACIES_OPENCODE_BIN: '__none__',
     LEGACIES_UV_BIN: FAKE_UV,
     LEGACIES_GRAPHIFY_BIN: '__none__',
     FAKE_UV_LOG: path.join(home, 'uv-calls.jsonl'),
@@ -86,6 +88,48 @@ test("a project install puts the Codex hooks into the project and leaves Codex's
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(fs.readFileSync(path.join(project, '.codex', 'hooks.json'), 'utf8'), /hook session-start --harness codex/);
   assert.deepEqual(fs.readdirSync(s.env.CODEX_HOME), []);
+});
+
+test('a project install adds the OpenCode adapter when OpenCode is available', () => {
+  const s = sandbox();
+  s.env.LEGACIES_OPENCODE_BIN = FAKE_OPENCODE;
+  const project = gitRepo();
+  const r = s.setup(['install', '--yes', '--scope', 'local', '--opencode', '--no-codex', '--no-graphify'], project);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(fs.readFileSync(path.join(project, '.opencode', 'plugins', 'legacies.js'), 'utf8'), /opencode\/index\.mjs/);
+  assert.equal(run(project, 'git', ['status', '--porcelain']), '');
+  assert.ok(s.state().plugins.some((p) => p.id === 'legacies@legacies'), 'Claude install is unchanged when both hosts exist');
+});
+
+test('--no-opencode leaves the project without an OpenCode adapter', () => {
+  const s = sandbox();
+  s.env.LEGACIES_OPENCODE_BIN = FAKE_OPENCODE;
+  const project = gitRepo();
+  const r = s.setup(['install', '--yes', '--scope', 'local', '--no-opencode', '--no-codex', '--no-graphify'], project);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.equal(fs.existsSync(path.join(project, '.opencode', 'plugins', 'legacies.js')), false);
+});
+
+test('OpenCode-only setup works without Claude and does not write Claude project files', () => {
+  const s = sandbox();
+  Object.assign(s.env, { LEGACIES_CLAUDE_BIN: '__none__', LEGACIES_OPENCODE_BIN: FAKE_OPENCODE });
+  const project = gitRepo();
+  const r = s.setup(['install', '--yes', '--scope', 'local', '--opencode', '--no-codex', '--no-graphify'], project);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.ok(fs.existsSync(path.join(project, '.opencode', 'plugins', 'legacies.js')));
+  assert.equal(fs.existsSync(path.join(project, '.claude')), false);
+});
+
+test('uninstall removes the OpenCode adapter and keeps other OpenCode plugins', () => {
+  const s = sandbox();
+  s.env.LEGACIES_OPENCODE_BIN = FAKE_OPENCODE;
+  const project = gitRepo();
+  write(project, '.opencode/plugins/mine.js', 'export default {}\n');
+  s.setup(['install', '--yes', '--scope', 'local', '--opencode', '--no-codex', '--no-graphify'], project);
+  const r = s.setup(['uninstall', '--yes']);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.equal(fs.existsSync(path.join(project, '.opencode', 'plugins', 'legacies.js')), false);
+  assert.ok(fs.existsSync(path.join(project, '.opencode', 'plugins', 'mine.js')));
 });
 
 const earlierGlobalInstall = () => sandbox({ plugins: [{ id: 'legacies@legacies', scope: 'user', enabled: true, installPath: 'cache' }] });
@@ -302,6 +346,7 @@ test('a missing Claude Code CLI stops the install before anything changes', () =
   assert.equal(r.status, 1);
   assert.match(r.stdout, /Claude Code CLI/);
   assert.match(r.stdout, /claude\.ai\/install/);
+  assert.match(r.stdout, /@opencode\/cli/);
   assert.deepEqual(fs.readdirSync(s.config), []);
 });
 

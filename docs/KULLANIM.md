@@ -14,21 +14,22 @@ legacies dört iş yapar:
 2. Klasörde kurulum programını çalıştır:
    - Windows: `.\install.cmd`
    - macOS / Linux: `sh install.sh`
-3. Kurulum önce gereken programları denetler: Node 18+, git ve Claude Code. Eksik varsa nasıl kurulacağını gösterir ve hiçbir şeyi değiştirmeden durur.
-4. "Şimdilik hiçbir projeye kurma" seçili gelir. Bu adım marketplace kaydını, terminaldeki `legacies` komutunu ve kod haritası motoru graphify'ı hazırlar (bir kez, ~140 MB, internetten indirilir). Hiçbir projeye kurulum yapılmaz.
+3. Kurulum önce gereken programları denetler: Node 18+, git ve Claude Code veya OpenCode'dan en az biri. Eksik varsa nasıl kurulacağını gösterir ve hiçbir şeyi değiştirmeden durur.
+4. "Şimdilik hiçbir projeye kurma" seçili gelir. Bu adım Claude varsa marketplace kaydını, terminaldeki `legacies` komutunu ve kod haritası motoru graphify'ı hazırlar (bir kez, ~140 MB, internetten indirilir). Hiçbir projeye kurulum yapılmaz.
 5. Kutunun altında bir PATH komutu çıkarsa onu çalıştır ve yeni bir terminal aç.
 
 ## 2. Bir projeye kur (her proje için bir kez)
 
 1. Terminalde projenin **kök klasörüne** git ve `legacies setup` çalıştır. Kurulum yalnız bu projeye yapılır; diğer projelerine dokunulmaz.
 2. "Yalnız bu projede, yalnız bu bilgisayarda" önerilir. Projeye eklenen dosyalar git'ten gizlenir; commit'lenen hiçbir dosya değişmez.
-3. Ek bileşenler listesi gelir: kodlama kuralları, `legacies` komutu, Codex kuruluysa Codex adaptörü ve çoklu ajan düzeni (açarsan denge sorulur; bkz. 7. bölüm). Enter ile aç ya da kapat. Bitince en alttaki **[ Onaylıyorum ]** satırına gel (en üstteyken ↑ doğrudan oraya götürür), Enter'a bas ve "Emin misiniz?" sorusuna evet de. Hayır dersen seçimlerin kalır, düzenlemeye devam edersin.
+3. Ek bileşenler listesi gelir: kodlama kuralları, `legacies` komutu, kuruluysa Codex ve OpenCode adaptörleri ve çoklu ajan düzeni (açarsan denge sorulur; bkz. 7. bölüm). Enter ile aç ya da kapat. Bitince en alttaki **[ Onaylıyorum ]** satırına gel (en üstteyken ↑ doğrudan oraya götürür), Enter'a bas ve "Emin misiniz?" sorusuna evet de. Hayır dersen seçimlerin kalır, düzenlemeye devam edersin.
 4. Plan gösterilir. Onay verince sırayla şunlar kurulur:
    - çekirdek,
    - kodlama kuralları,
-   - Codex kuruluysa projenin Codex hook'ları.
+   - Codex kuruluysa projenin Codex hook'ları,
+   - OpenCode kuruluysa projenin OpenCode adaptörü.
 5. Paket ekranı açılır; projede tespit edilen teknolojiler işaretli gelir. Tuşlar aynı: Enter aç ya da kapat, bitince en alttaki **[ Onaylıyorum ]**. Ayrıca `a` bir grubun hepsini açıp kapatır.
-6. Claude Code'u **aynı klasörde** aç. İlk oturumda `/legacies:onboard` yaz ya da "projeyi tanı" de. Proje bir kez incelenir ve hafızası kurulur.
+6. Kullandığın ajanı **aynı klasörde** aç. Claude Code'da `/legacies:onboard`, OpenCode'da `onboard` skill'i ya da ikisinde de "projeyi tanı" diyebilirsin. Proje bir kez incelenir ve hafızası kurulur.
 
 > Claude Code'u projenin kök klasöründe açman gerekir. Üst ya da alt bir klasörde açılan oturum legacies'i görmez.
 
@@ -110,13 +111,15 @@ Açıkken Claude işi alt ajanlara dağıtırken her birine işine uygun model v
 - **Claude'a söylemek de yeter:** "çoklu ajanı maliyet moduna al".
 - **Ne zaman geçerli:** Değişiklik yeni oturumda geçerli olur.
 
-## 8. Codex
+## 8. Codex ve OpenCode
 
 Codex kuruluysa `legacies setup` projeye Codex hook'larını da ekler: `.codex/hooks.json`, git'e girmez. Hook'ların çalışması için iki adım gerekir:
 1. Codex'te projeye güven.
 2. `/hooks` ekranında legacies hook'larını onayla.
 
 Hook'u olmayan bir AI için oturum başında `legacies context` aynı bağlamı verir.
+
+OpenCode kuruluysa `legacies setup` projeye `.opencode/plugins/legacies.js` ekler ve git'ten gizler. OpenCode'u proje klasöründe yeniden başlatınca 14 çekirdek skill, hafıza bağlamı, düzenleme kaydı, korumalar ve devir kartı hatırlatıcısı etkinleşir. Elle yönetmek için `legacies opencode install|status|uninstall` kullan. Diğer OpenCode plugin'leri ve ayarları korunur.
 
 ## 9. Terminalde sık kullanılanlar
 
@@ -134,7 +137,7 @@ legacies help                    # tüm komutlar
 
 | Belirti | Çözüm |
 |---|---|
-| legacies hiç görünmüyor | Claude Code'u projenin kök klasöründe aç. Kurulu olup olmadığını o klasörde `legacies doctor` söyler (`Eklenti (bu proje): açık / kapalı / kurulu değil`); kapalıysa ya da kurulu değilse `legacies setup` çalıştır. Düz `claude plugin list` başka projelerdeki kurulumları da gösterir |
+| legacies hiç görünmüyor | Ajanı projenin kök klasöründe aç. Kurulu olup olmadığını o klasörde `legacies doctor` söyler; Claude için `Eklenti (bu proje)`, OpenCode için `OpenCode adaptörü` satırına bak. Yoksa `legacies setup` çalıştır |
 | Paket ya da ayar değişikliği yansımadı | Açık oturumda `/reload-plugins` çalıştır ya da Claude Code'u yeniden başlat |
 | Bir hook hata veriyor gibi | `legacies doctor` son hataları gösterir. Hook'lar hata verse bile oturumu bozmaz |
 | Hatırlatmalar ya da öneriler fazla | `.legacies/config.json` dosyasını düzenle ya da `LEGACIES_STOP_REMINDER=off` / `LEGACIES_PROMPT_CONTEXT=off` kullan (README → Ayarlar) |

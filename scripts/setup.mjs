@@ -20,10 +20,12 @@ import {
   readManifest,
   SCOPE_LABEL,
   TESTED_CLAUDE,
+  TESTED_OPENCODE,
   writeManifest,
 } from './lib/installer.mjs';
 import { effectiveSettings } from './lib/multiagent.mjs';
 import { changeFromDraft, chooseSettings } from './lib/multiagentflow.mjs';
+import { PROJECT_OPENCODE_LOADER } from './lib/opencode.mjs';
 import { choosePacks } from './lib/packflow.mjs';
 import { findProjectRoot } from './lib/project.mjs';
 import { bundledRules, unscopedBytes } from './lib/rules.mjs';
@@ -46,7 +48,7 @@ Kurulum seçenekleri (etkileşimsiz kullanım için):
                         hiçbir proje (yalnız hazırlık). Global kurulum yok: legacies proje başına kurulur
   --packs | --no-packs  kurulumdan sonra bu projenin teknoloji paketlerini seç (etkileşimli kurulumda varsayılan)
   --keep-global         eski sürümlerin global kurulumunu kaldırma (varsayılan: kaldırılır)
-  --no-rules  --no-launcher  --codex  --no-codex
+  --no-rules  --no-launcher  --codex  --no-codex  --opencode  --no-opencode
   --no-graphify         kod haritası motorunu (graphify) kurma; varsayılan: kurulur
   --multiagent | --no-multiagent  çoklu ajan düzenini aç ya da kapat (plugin klasöründe: bilgisayar
                         varsayılanı). Dengeyi sonradan: legacies multiagent on <denge>
@@ -90,8 +92,9 @@ function printEnvironment(env) {
   ui.item(env.node.ok ? 'ok' : 'fail', `Node ${env.node.version}`, env.node.ok ? 'en az 18' : 'en az 18 gerekli');
   ui.item(env.git ? 'ok' : 'fail', env.git ? `git ${env.git}` : 'git bulunamadı');
   if (env.claude) ui.item(env.claude.tested ? 'ok' : 'warn', `Claude Code ${env.claude.version}`, env.claude.tested ? '' : `${TESTED_CLAUDE} ve sonrasıyla test edildi`);
-  else ui.item('fail', 'Claude Code CLI bulunamadı');
+  else ui.item(env.opencode?.ready ? 'skip' : 'fail', 'Claude Code CLI bulunamadı', env.opencode?.ready ? 'OpenCode ile devam edilebilir' : 'Claude Code veya OpenCode 2 gerekli');
   ui.item(env.codex ? 'ok' : 'skip', env.codex ? `Codex CLI ${env.codex.version}` : 'Codex CLI yok', 'isteğe bağlı');
+  ui.item(env.opencode?.ready ? (env.opencode.tested ? 'ok' : 'warn') : env.opencode ? 'fail' : 'skip', env.opencode ? `OpenCode CLI ${env.opencode.version}` : 'OpenCode CLI yok', env.opencode?.ready ? (env.opencode.tested ? 'isteğe bağlı' : `${TESTED_OPENCODE} ve sonrasıyla test edildi`) : env.opencode ? 'V2 gerekli' : 'isteğe bağlı');
   if (env.graphify?.version === GRAPHIFY_VERSION) ui.item('ok', `graphify ${GRAPHIFY_VERSION}`, 'kod haritası');
   else ui.item('info', `graphify ${GRAPHIFY_VERSION} kurulacak`, env.uv ? 'kod haritası; uv ile' : 'kod haritası; önce uv kurulacak');
 }
@@ -149,20 +152,23 @@ async function install(flags) {
   const projectRoot = findProjectRoot(process.cwd());
   // install.sh runs in the plugin's own folder: there it only prepares the machine, unless asked otherwise.
   const inPluginFolder = samePath(projectRoot, PLUGIN_ROOT);
-  ui.section('Mevcut Claude Code kurulumu');
-  const analysis = await ui.task('Plugin\'ler, hook\'lar ve skill\'ler inceleniyor', () => analyzeClaude({ pluginRoot: PLUGIN_ROOT, cwd: projectRoot || os.homedir() }), { minMs: 700 });
-  if (!analysis.ok) {
-    ui.box('Analiz başarısız', [String(analysis.error.message)], { tone: 'fail' });
-    process.exitCode = 1;
-    return;
+  let report = { settings: { ok: true }, plugins: [], legacies: [], marketplace: null, userHooks: [], warnings: [], notes: [] };
+  if (env.claude) {
+    ui.section('Mevcut Claude Code kurulumu');
+    const analysis = await ui.task('Plugin\'ler, hook\'lar ve skill\'ler inceleniyor', () => analyzeClaude({ pluginRoot: PLUGIN_ROOT, cwd: projectRoot || os.homedir() }), { minMs: 700 });
+    if (!analysis.ok) {
+      ui.box('Analiz başarısız', [String(analysis.error.message)], { tone: 'fail' });
+      process.exitCode = 1;
+      return;
+    }
+    report = analysis.result;
+    if (!report.settings.ok) {
+      ui.item('fail', report.settings.error);
+      process.exitCode = 1;
+      return;
+    }
+    printReport(report);
   }
-  const report = analysis.result;
-  if (!report.settings.ok) {
-    ui.item('fail', report.settings.error);
-    process.exitCode = 1;
-    return;
-  }
-  printReport(report);
   const leftovers = globalLeftovers(report);
   if (hasGlobalLeftovers(leftovers)) {
     const parts = [leftovers.plugin && 'plugin (her projede yüklenir)', leftovers.rules.length && `${leftovers.rules.length} kural (~/.claude/rules)`, leftovers.codex && 'Codex adaptörü (~/.codex)'];
@@ -185,25 +191,29 @@ async function install(flags) {
     return;
   }
   const rules = bundledRules(PLUGIN_ROOT);
+  const rulesPossible = Boolean(env.claude) && scope !== 'none';
   const codexPossible = Boolean(env.codex?.ready) && scope !== 'none';
+  const openCodePossible = Boolean(env.opencode?.ready) && scope !== 'none';
   // Without a project the multi-agent choice becomes this computer's default for every project.
   const multiagentTarget = scope === 'none' ? 'default' : 'project';
   const multiagentNow = effectiveSettings(multiagentTarget === 'project' ? projectRoot : null).settings;
   const defaults = {
-    rules: flags.rules ?? true,
+    rules: flags.rules ?? rulesPossible,
     launcher: flags.launcher ?? true,
     codex: flags.codex ?? codexPossible,
+    opencode: flags.opencode ?? openCodePossible,
     multiagent: flags.multiagent ?? multiagentNow.on,
   };
-  const askComponents = !flags.yes && ['rules', 'launcher', 'codex', 'multiagent'].every((k) => flags[k] === undefined);
+  const askComponents = !flags.yes && ['rules', 'launcher', 'codex', 'opencode', 'multiagent'].every((k) => flags[k] === undefined);
   const chosen = askComponents
     ? await ui.multiselect('Ek bileşenler', [
-        { value: 'rules', label: 'Kodlama kuralları', hint: `${rules.length} dosya, her oturuma ~${Math.round(unscopedBytes(rules) / 4)} token`, checked: defaults.rules },
+        { value: 'rules', label: 'Kodlama kuralları', hint: env.claude ? `${rules.length} dosya, her oturuma ~${Math.round(unscopedBytes(rules) / 4)} token` : 'Claude Code yok', checked: defaults.rules, disabled: !rulesPossible },
         { value: 'launcher', label: "Her terminalde 'legacies' komutu", hint: env.launcherDir, checked: defaults.launcher },
         { value: 'codex', label: 'Codex adaptörü (bu proje)', hint: !env.codex?.ready ? 'Codex yok' : scope === 'none' ? 'proje seçilmedi' : `${PROJECT_CODEX_HOOKS}, Codex'te /hooks ile onaylanır`, checked: defaults.codex, disabled: !codexPossible },
+        { value: 'opencode', label: 'OpenCode adaptörü (bu proje)', hint: !env.opencode ? 'OpenCode yok' : scope === 'none' ? 'proje seçilmedi' : `${PROJECT_OPENCODE_LOADER}, git'e girmez`, checked: defaults.opencode, disabled: !openCodePossible },
         { value: 'multiagent', label: 'Çoklu ajan düzeni', hint: `${multiagentTarget === 'default' ? 'bilgisayar varsayılanı' : 'bu proje'}; lider ajanlara işe göre model ve effort verir · sonradan: legacies multiagent`, checked: defaults.multiagent },
       ])
-    : Object.keys(defaults).filter((k) => defaults[k] && (k !== 'codex' || codexPossible));
+    : Object.keys(defaults).filter((k) => defaults[k] && (k !== 'rules' || rulesPossible) && (k !== 'codex' || codexPossible) && (k !== 'opencode' || openCodePossible));
   const multiagent = await chooseMultiagent({ on: chosen.includes('multiagent'), ask: askComponents, now: multiagentNow, projectRoot });
   const ecc = report.warnings.find((w) => w.ecc);
   const disableEcc = ecc ? (flags['disable-ecc'] ?? (flags.yes ? false : await ui.confirm(`${ecc.id} kapatılsın mı? Çakışmayı önler, kaldırmaz.`, { initial: false }))) : false;
@@ -214,7 +224,7 @@ async function install(flags) {
     disableEcc,
     removeGlobal,
     leftovers,
-    ...Object.fromEntries(['rules', 'launcher', 'codex'].map((k) => [k, chosen.includes(k)])),
+    ...Object.fromEntries(['rules', 'launcher', 'codex', 'opencode'].map((k) => [k, chosen.includes(k)])),
     graphify: flags.graphify !== false,
     multiagent: { target: multiagentTarget, change: multiagent },
   };
@@ -257,18 +267,22 @@ async function install(flags) {
 
   // The project's stack decides its packs; interactive installs go straight to the checklist,
   // a scripted one only with --packs.
-  const packsHere = !failed && projectRoot && (scope === 'local' || scope === 'project') && flags.packs !== false && (flags.packs || (!flags.yes && ui.interactive));
+  const packsHere = env.claude && !failed && projectRoot && (scope === 'local' || scope === 'project') && flags.packs !== false && (flags.packs || (!flags.yes && ui.interactive));
   if (packsHere) await choosePacks({ pluginRoot: PLUGIN_ROOT, root: projectRoot, scope, yes: Boolean(flags.yes) });
 
   const pathCommands = done.includes('launcher') && !env.launcherOnPath ? pathAdvice(env.launcherDir) : [];
-  const steps =
-    scope === 'none'
-      ? ['Her projenin klasöründe: legacies setup (çekirdek + o projenin paketleri).', "Sonra Claude Code'u o klasörde aç ve /legacies:onboard çalıştır."]
-      : [
-          "Claude Code'u bu projenin klasöründe aç (alt ya da üst klasörde legacies yüklenmez); açık bir oturumda /reload-plugins.",
-          'İlk oturumda /legacies:onboard: proje bir kez incelenip hafızası kurulur.',
-          'Paketleri sonradan değiştirmek için: legacies packs',
-        ];
+  const steps = [];
+  if (scope === 'none') {
+    steps.push('Her projenin klasöründe: legacies setup (çekirdek + o projenin paketleri).');
+    if (env.claude) steps.push("Sonra Claude Code'u o klasörde aç ve /legacies:onboard çalıştır.");
+  } else {
+    if (env.claude) {
+      steps.push("Claude Code'u bu projenin klasöründe aç (alt ya da üst klasörde legacies yüklenmez); açık bir oturumda /reload-plugins.");
+      steps.push('İlk oturumda /legacies:onboard: proje bir kez incelenip hafızası kurulur.');
+      steps.push('Paketleri sonradan değiştirmek için: legacies packs');
+    }
+    if (done.includes('opencode')) steps.push("OpenCode'u bu projede yeniden aç; legacies skill'leri ve proje hafızası otomatik yüklenir.");
+  }
   if (done.includes('global-plugin')) steps.push("legacies'i kullandığın diğer projelerde bir kez: legacies setup");
   if (pathCommands.length) steps.push("'legacies' komutu için PATH'e ekle; komut kutunun altında.");
   if (done.includes('codex')) steps.push("Codex'te bu projeyi aç, güven ve /hooks ekranında legacies hook'larını onayla.");
@@ -309,7 +323,7 @@ async function uninstall(flags) {
   if (found.userRules.length) ui.item('info', `Global kurallar: ${found.userRules.length} dosya`);
   if (found.launchers.length) ui.item('info', "'legacies' komutu", found.launchers.join(', '));
   if (found.codex) ui.item('info', "Codex'in eski global adaptörü", found.codex.home);
-  for (const p of found.projects) ui.item('info', `Proje: ${p.root}`, [p.memory && 'hafıza', p.rules && 'kurallar', p.codex && "Codex hook'ları"].filter(Boolean).join(' + '));
+  for (const p of found.projects) ui.item('info', `Proje: ${p.root}`, [p.memory && 'hafıza', p.rules && 'kurallar', p.codex && "Codex hook'ları", p.opencode && 'OpenCode adaptörü'].filter(Boolean).join(' + '));
   if (found.graphify) ui.item('info', "legacies'in graphify kopyası", found.graphify);
 
   ui.section('Seçenekler');
@@ -338,7 +352,7 @@ async function uninstall(flags) {
   if (failures) ui.box('Kaldırma kısmen tamamlandı', [`${failures} adım başarısız oldu; yukarıdaki hataları kontrol et.`], { tone: 'warn' });
   else {
     ui.box('legacies kaldırıldı', [
-      "Claude Code'u yeniden başlat; legacies'in hook'ları ve skill'leri artık yüklenmez.",
+      "Claude Code/OpenCode'u yeniden başlat; legacies'in hook'ları ve skill'leri artık yüklenmez.",
       memories.length ? `${memories.length} projenin hafızası silindi.` : 'Proje hafızaları korundu (.legacies/ klasörleri).',
       'Çalışma alanlarının ortak hafızası (~/.claude/legacies-workspaces) ve kişisel katalog (~/.claude/legacies-catalog) da korundu.',
       '',

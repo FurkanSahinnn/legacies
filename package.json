@@ -1,9 +1,9 @@
 {
   "name": "legacies",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "license": "MIT",
-  "description": "Per-project local memory and workflow skills for Claude Code and Codex",
+  "description": "Per-project local memory and workflow skills for Claude Code, Codex, and OpenCode",
   "type": "module",
   "engines": {
     "node": ">=18"

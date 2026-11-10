@@ -21,6 +21,7 @@ import {
   writeLaunchers,
 } from './codex.mjs';
 import { effectiveSettings, PROFILE_LABEL, settingsFile, updateSettings } from './multiagent.mjs';
+import { hasProjectOpenCode, installProjectOpenCode, PROJECT_OPENCODE_LOADER, uninstallProjectOpenCode } from './opencode.mjs';
 import { MEMORY_DIRNAME, removeExcludePattern } from './project.mjs';
 import { bundledRules, installedRules, installRules, packRuleFiles, projectRulesDir, syncPackRules, uninstallRules, unscopedBytes, userRulesDir } from './rules.mjs';
 import { pluginDataDir, registeredProjects } from './runtime.mjs';
@@ -32,6 +33,7 @@ export const MARKETPLACE = 'legacies';
 export const UV_VERSION = '0.11.28';
 export const MIN_NODE = 18;
 export const TESTED_CLAUDE = '2.1.308';
+export const TESTED_OPENCODE = '2.2.5';
 const CONTEXT_EVENTS = ['SessionStart', 'UserPromptSubmit', 'PreCompact', 'PostCompact'];
 
 export const SCOPE_LABEL = { user: 'global', local: 'bu proje, yalnız bu bilgisayar', project: 'bu proje, ekiple paylaşılan', none: 'hiçbir proje (yalnız hazırlık)' };
@@ -53,6 +55,7 @@ function resolveCommand(name, override) {
 }
 
 export const claudeCommand = () => resolveCommand('claude', process.env.LEGACIES_CLAUDE_BIN);
+export const openCodeCommand = () => resolveCommand('opencode', process.env.LEGACIES_OPENCODE_BIN);
 
 // uv's installer puts it in ~/.local/bin (or XDG_BIN_HOME); a shell started before the install may not
 // have that folder on PATH yet.
@@ -164,16 +167,19 @@ export function detectEnvironment() {
   const nodeMajor = Number(process.versions.node.split('.')[0]);
   const claudeCmd = claudeCommand();
   const codexCmd = resolveCommand('codex', process.env.LEGACIES_CODEX_BIN);
+  const openCodeCmd = openCodeCommand();
   const codex = codexStatus();
   // A command that is on PATH but does not run (WSL sees Windows' npm shims) counts as missing.
   const claudeVersion = versionOf(claudeCmd);
   const codexVersion = versionOf(codexCmd);
+  const openCodeVersion = versionOf(openCodeCmd);
   return {
     platform: process.platform,
     node: { version: process.versions.node, ok: nodeMajor >= MIN_NODE },
     git: versionOf(resolveCommand('git')),
     claude: claudeVersion ? { version: claudeVersion, tested: newer(claudeVersion, TESTED_CLAUDE) } : null,
     codex: codexVersion ? { version: codexVersion, home: codex.home, ready: codex.exists } : null,
+    opencode: openCodeVersion ? { version: openCodeVersion, ready: Number(openCodeVersion.split('.')[0]) >= 2, tested: newer(openCodeVersion, TESTED_OPENCODE) } : null,
     uv: uvCommand() ? (process.env.LEGACIES_UV_BIN || findExecutable('uv') || toolBinExecutable('uv')) : null,
     graphify: installedGraphify(),
     launcherDir: launcherDir(),
@@ -205,10 +211,13 @@ function uvInstallStep(platform) {
 export function installHint(what, platform = process.platform) {
   const mac = platform === 'darwin';
   const win = platform === 'win32';
+  const claude = win ? 'irm https://claude.ai/install.ps1 | iex' : 'curl -fsSL https://claude.ai/install.sh | bash';
+  const opencode = win ? 'npm install -g @opencode/cli' : 'curl -fsSL https://opencode.ai/v2/install | bash';
   const hints = {
     node: win ? 'winget install OpenJS.NodeJS.LTS' : mac ? 'brew install node  (ya da https://nodejs.org)' : 'nvm ile kur: https://github.com/nvm-sh/nvm  (dağıtım paketi eski olabilir)',
     git: win ? 'winget install Git.Git' : mac ? 'xcode-select --install  (ya da brew install git)' : 'sudo apt install git  (Fedora: sudo dnf install git)',
-    claude: win ? 'irm https://claude.ai/install.ps1 | iex' : 'curl -fsSL https://claude.ai/install.sh | bash',
+    claude,
+    host: `Claude Code: ${claude}  ·  OpenCode: ${opencode}`,
     uv: win ? 'winget install astral-sh.uv' : 'curl -LsSf https://astral.sh/uv/install.sh | sh',
   };
   return hints[what];
@@ -218,7 +227,7 @@ export function missingRequirements(env) {
   const missing = [];
   if (!env.node.ok) missing.push({ what: 'node', text: `Node ${MIN_NODE}+ (bulunan: ${env.node.version})` });
   if (!env.git) missing.push({ what: 'git', text: 'git' });
-  if (!env.claude) missing.push({ what: 'claude', text: 'Claude Code CLI (claude)' });
+  if (!env.claude && !env.opencode?.ready) missing.push({ what: 'host', text: 'Claude Code CLI (claude) veya OpenCode 2 CLI (opencode)' });
   return missing;
 }
 
@@ -357,10 +366,10 @@ export function planInstall({ pluginRoot, env, report, options }) {
   const registeredHere = Boolean(market) && samePath(marketPath, pluginRoot);
   const steps = [];
 
-  if (inCache || (market && !registeredHere)) {
+  if (env.claude && (inCache || (market && !registeredHere))) {
     const where = market ? marketPath || market.repo || market.url : 'plugin önbelleği';
     steps.push({ id: 'marketplace', title: 'Marketplace kaydı', detail: `zaten kayıtlı: ${where}`, change: false, run: async () => ({ skipped: 'zaten kayıtlı' }) });
-  } else {
+  } else if (env.claude) {
     steps.push({
       id: 'marketplace',
       title: 'Marketplace kaydı',
@@ -374,10 +383,10 @@ export function planInstall({ pluginRoot, env, report, options }) {
     });
   }
 
-  const existing = report.legacies.find((e) => e.scope === scope && samePath(e.projectPath, projectRoot));
+  const existing = env.claude && report.legacies.find((e) => e.scope === scope && samePath(e.projectPath, projectRoot));
   const active = Boolean(existing && (existing.enabled || existing.projectEnabled));
   // `none` only prepares the machine (marketplace, launcher, adapters); each project is set up later.
-  if (scope !== 'none') steps.push({
+  if (env.claude && scope !== 'none') steps.push({
     id: 'plugin',
     title: `legacies plugin'i (${SCOPE_LABEL[scope]})`,
     detail: active ? 'zaten kurulu ve etkin' : existing ? 'kurulu ama kapalı: etkinleştirilecek' : `claude plugin install ${PLUGIN_ID} --scope ${scope}`,
@@ -394,7 +403,7 @@ export function planInstall({ pluginRoot, env, report, options }) {
     },
   });
 
-  for (const w of options.disableEcc ? report.warnings.filter((x) => x.ecc) : []) {
+  for (const w of env.claude && options.disableEcc ? report.warnings.filter((x) => x.ecc) : []) {
     steps.push({
       id: 'ecc',
       title: `${w.id} devre dışı`,
@@ -407,7 +416,7 @@ export function planInstall({ pluginRoot, env, report, options }) {
     });
   }
 
-  if (options.rules && scope !== 'none') {
+  if (env.claude && options.rules && scope !== 'none') {
     const dir = projectRulesDir(projectRoot);
     const rules = bundledRules(pluginRoot);
     steps.push({
@@ -446,6 +455,19 @@ export function planInstall({ pluginRoot, env, report, options }) {
     });
   }
 
+  if (options.opencode && scope !== 'none') {
+    steps.push({
+      id: 'opencode',
+      title: 'OpenCode adaptörü (bu proje)',
+      detail: `${PROJECT_OPENCODE_LOADER} (git'e girmez; diğer OpenCode plugin'lerine dokunulmaz)`,
+      change: true,
+      run: async () => {
+        installProjectOpenCode(path.join(pluginRoot, 'opencode', 'index.mjs'), projectRoot);
+        return 'kuruldu';
+      },
+    });
+  }
+
   if (options.multiagent) steps.push(multiagentStep(options.multiagent, projectRoot));
 
   // graphify is part of legacies, not an option: the pinned version goes into legacies' own folder
@@ -472,7 +494,7 @@ export function planInstall({ pluginRoot, env, report, options }) {
   // After the project install, so a failed install never leaves the machine without legacies.
   if (options.removeGlobal) steps.push(...globalCleanupSteps(options.leftovers));
 
-  if (scope !== 'none') steps.push({
+  if (env.claude && scope !== 'none') steps.push({
     id: 'verify',
     title: 'Doğrulama',
     detail: 'Claude Code legacies\'i etkin görüyor mu?',
@@ -486,13 +508,16 @@ export function planInstall({ pluginRoot, env, report, options }) {
   });
 
   const disabled = steps.filter((s) => s.id === 'ecc').length ? report.warnings.filter((w) => w.ecc).map((w) => w.id) : [];
-  const untouched = [
-    `Diğer plugin'ler ve ayarları${disabled.length ? ` (${disabled.join(', ')} yalnız kapatılır, silinmez)` : ''}`,
-    'settings.json\'daki kendi hook\'ların, izinlerin ve env değişkenlerin (Claude Code yalnız legacies kaydını ekler)',
-    'Projelerindeki dosyalar ve CLAUDE.md\'ler (hafıza yalnızca /legacies:onboard ile, .legacies/ içine kurulur)',
-    `Kendi kuralların (legacies yalnız legacies-*.md yazar)`,
-  ];
+  const untouched = env.claude
+    ? [
+        `Diğer plugin'ler ve ayarları${disabled.length ? ` (${disabled.join(', ')} yalnız kapatılır, silinmez)` : ''}`,
+        'settings.json\'daki kendi hook\'ların, izinlerin ve env değişkenlerin (Claude Code yalnız legacies kaydını ekler)',
+        'Projelerindeki dosyalar ve CLAUDE.md\'ler (hafıza yalnızca /legacies:onboard ile, .legacies/ içine kurulur)',
+        `Kendi kuralların (legacies yalnız legacies-*.md yazar)`,
+      ]
+    : ['Projelerindeki kaynak dosyalar (.legacies/ hafızası yalnız onboard sırasında oluşturulur)'];
   if (options.codex && scope !== 'none') untouched.push("Codex ayarların ve projedeki diğer Codex hook'ları (yalnız legacies girdileri eklenir)");
+  if (options.opencode && scope !== 'none') untouched.push("OpenCode ayarların ve projedeki diğer OpenCode plugin'leri (yalnız legacies.js eklenir)");
   if (options.graphify) untouched.push('Kendi kurduğun bir graphify varsa o (legacies kendi kopyasını kendi klasöründe tutar)');
   return { steps, untouched };
 }
@@ -516,8 +541,9 @@ export async function detectInstalled({ pluginRoot }) {
       rules: installedRules(projectRulesDir(root)).length > 0,
       packRules: packRuleFiles(root).length > 0,
       codex: hasProjectCodex(root),
+      opencode: hasProjectOpenCode(root),
     }))
-    .filter((p) => p.memory || p.rules || p.packRules || p.codex);
+    .filter((p) => p.memory || p.rules || p.packRules || p.codex || p.opencode);
   const codex = codexStatus();
   return {
     manifest,
@@ -568,6 +594,9 @@ export function planUninstall({ pluginRoot, found, options }) {
   }
   for (const p of found.projects.filter((x) => x.codex)) {
     steps.push({ title: `Codex hook'ları: ${p.root}`, run: async () => (uninstallProjectCodex(p.root), 'diğer hook\'lar korundu') });
+  }
+  for (const p of found.projects.filter((x) => x.opencode)) {
+    steps.push({ title: `OpenCode adaptörü: ${p.root}`, run: async () => (uninstallProjectOpenCode(p.root), 'diğer OpenCode plugin\'leri korundu') });
   }
   if (found.launchers.length) steps.push({ title: "'legacies' komutu", run: async () => (removeLaunchers(scriptPath), launcherDir()) });
   if (found.codex) steps.push({ title: "Codex'in eski global adaptörü", run: async () => (removeGlobalCodex(), 'diğer Codex ayarları korundu') });

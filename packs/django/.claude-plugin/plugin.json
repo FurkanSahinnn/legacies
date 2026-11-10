@@ -1,6 +1,6 @@
 {
   "name": "legacies-django",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "legacies django pack: 5 skills, 2 agents. Adapted from ECC; not yet evaluated.",
   "author": {
     "name": "Furkan Şahin"

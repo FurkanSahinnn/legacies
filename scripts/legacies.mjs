@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-// legacies: per-project local memory for Claude Code (and any AI CLI that can run a shell command).
+// legacies: per-project local memory for Claude Code, Codex, OpenCode, and any AI CLI that can run a shell command.
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { codexHome, codexHooksEnabled, codexStatus, hasProjectCodex, installProjectCodex, launcherDir, onPath, PROJECT_CODEX_HOOKS, uninstallProjectCodex } from './lib/codex.mjs';
+import { hasProjectOpenCode, installProjectOpenCode, PROJECT_OPENCODE_LOADER, uninstallProjectOpenCode } from './lib/opencode.mjs';
 import {
   GRAPH_FILE,
   graphIndex,
@@ -481,6 +482,28 @@ function cmdCodex(args) {
   out("Sıradaki adım: Codex'i bu projede aç, projeye güven ve /hooks ekranında legacies hook'larını onayla.");
 }
 
+// The OpenCode adapter is one project-local loader that points at this checkout's V2 server plugin.
+function cmdOpenCode(args) {
+  const action = args._[1] || 'status';
+  const root = findProjectRoot(args.root || process.cwd());
+  if (action === 'status') {
+    out(root ? `Bu projede legacies OpenCode plugin'i (${PROJECT_OPENCODE_LOADER}): ${hasProjectOpenCode(root) ? 'var' : 'yok; kurmak için legacies opencode install'}` : 'Proje kökü bulunamadı (.git ya da .legacies olan bir klasörde çalıştır).');
+    return;
+  }
+  if (action !== 'install' && action !== 'uninstall') throw new UsageError('Kullanım: legacies opencode [status|install|uninstall]');
+  if (!root) throw new UsageError('OpenCode adaptörü proje başına kurulur; bir proje klasöründe (.git ya da .legacies olan) çalıştır.');
+  if (action === 'uninstall') {
+    out(uninstallProjectOpenCode(root) ? `OpenCode adaptörü kaldırıldı (${PROJECT_OPENCODE_LOADER}); diğer plugin'lere dokunulmadı.` : "Bu projede legacies'in OpenCode adaptörü yok.");
+    return;
+  }
+  const entry = path.join(PLUGIN_ROOT, 'opencode', 'index.mjs');
+  const result = installProjectOpenCode(entry, root);
+  registerProject(root, { opencode: true });
+  out(`OpenCode adaptörü yazıldı: ${result.file}`);
+  if (result.git) out(`Git: ${result.git}`);
+  out("Sıradaki adım: OpenCode'u bu proje klasöründe yeniden başlat.");
+}
+
 // Rules go to <repo>/.claude/rules/ and stay out of git; legacies installs no rules for every project.
 function rulesTarget(args) {
   const root = findProjectRoot(args.root || process.cwd());
@@ -697,6 +720,7 @@ function cmdDoctor(args) {
   out(`Proje kökü: ${root || 'bulunamadı (.git ya da .legacies olan bir klasörde çalıştır)'}`);
   if (root) {
     out(`Eklenti (bu proje): ${pluginLine(root)}`);
+    out(`OpenCode adaptörü: ${hasProjectOpenCode(root) ? `var (${PROJECT_OPENCODE_LOADER})` : 'yok'}`);
     out(`Git: ${isGitRepo(root) ? 'evet' : 'hayır'}`);
     if (hasMemory(root)) {
       const paths = memoryPaths(root);
@@ -741,6 +765,7 @@ Kullanım:
   legacies rules [status|install|uninstall]  kodlama kurallarını bu projenin .claude/rules/ klasörüne
                                    git'e girmeden kur
   legacies codex [status|install|uninstall]  bu projenin Codex hook'ları (.codex/hooks.json, git'e girmez)
+  legacies opencode [status|install|uninstall]  bu projenin OpenCode plugin'i (.opencode/plugins/legacies.js)
   legacies search "<terimler>" --all  oturumun diğer projeleri ve çalışma alanları dahil ara
                                    (--project <klasör> ya da --workspace <ad> ile tek bir hafıza)
   legacies add --workspace <ad> ...   projeler arası bir notu çalışma alanının ortak hafızasına yaz
@@ -771,6 +796,7 @@ const COMMANDS = {
   graph: cmdGraph,
   rules: cmdRules,
   codex: cmdCodex,
+  opencode: cmdOpenCode,
   workspace: cmdWorkspace,
   open: cmdOpen,
   migrate: cmdMigrate,

@@ -70,7 +70,7 @@ export function deliveredSince(events) {
 
 // Claude Code names the data folder <plugin>-<marketplace>; the CLI outside a hook has no CLAUDE_PLUGIN_DATA.
 export function pluginDataDir() {
-  return process.env.CLAUDE_PLUGIN_DATA || path.join(claudeConfigDir(), 'plugins', 'data', 'legacies-legacies');
+  return process.env.LEGACIES_PLUGIN_DATA || process.env.CLAUDE_PLUGIN_DATA || path.join(claudeConfigDir(), 'plugins', 'data', 'legacies-legacies');
 }
 
 const registryFile = () => path.join(pluginDataDir(), 'projects.json');

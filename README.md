@@ -1,6 +1,6 @@
 # legacies
 
-legacies, Claude Code ve Codex CLI için projeye özel ve yalnızca bu bilgisayarda duran bir hafıza ve iş akışı plugin'i. Üç sorunu çözüyor:
+legacies, Claude Code, Codex CLI ve OpenCode için projeye özel ve yalnızca bu bilgisayarda duran bir hafıza ve iş akışı plugin'i. Üç sorunu çözüyor:
 
 - Her yeni oturumda "önce projeyi incele" adımını tekrarlamak.
 - Uzun oturumlarda sıkıştırmadan (compaction) sonra bilginin kaybolması.
@@ -18,12 +18,13 @@ Model çağırmıyor, kullanırken ağa bağlanmıyor (yalnız kurulum uv ve gra
 |---|---|---|---|
 | **Node.js 18+** | Zorunlu | Hook'lar, CLI ve kurulum programı | macOS: `brew install node` · Linux: [nvm](https://github.com/nvm-sh/nvm) · Windows: `winget install OpenJS.NodeJS.LTS` |
 | **git** | Zorunlu | Bayatlık tespiti, `.git/info/exclude` | macOS: `xcode-select --install` · Linux: `sudo apt install git` · Windows: `winget install Git.Git` |
-| **Claude Code** | Zorunlu | Plugin'in çalıştığı yer. 2.1.308 ve sonrasıyla test edildi | macOS/Linux: `curl -fsSL https://claude.ai/install.sh \| bash` · Windows: `irm https://claude.ai/install.ps1 \| iex` |
+| **Claude Code** | Claude kullanacaksan | Ana plugin, teknoloji paketleri ve Claude hook'ları. 2.1.308 ve sonrasıyla test edildi | macOS/Linux: `curl -fsSL https://claude.ai/install.sh \| bash` · Windows: `irm https://claude.ai/install.ps1 \| iex` |
+| **OpenCode 2** | OpenCode kullanacaksan | V2 server plugin adaptörü ve 14 çekirdek skill. 2.2.5 ve sonrasıyla test edildi | [opencode.ai/docs](https://opencode.ai/docs/) |
 | **uv** | Kurulum programı kurar | graphify'ı (kod haritası) ve gerekirse onun Python'unu kurar | Elle gerekmez; yoksa kurulum programı sabit sürümünü (0.11.28) resmi kurucusuyla kurar |
 | **graphify** | Kurulum programı kurar | Kod haritası motoru | Elle gerekmez; sabit sürümü (0.9.93) bilgisayara bir kez, legacies'in veri klasörüne kurulur (~140 MB). Senin kurduğun bir graphify'a dokunulmaz |
 | **Codex CLI** | İsteğe bağlı | Codex adaptörü | Codex kuruluysa kurulum programı adaptörü önerir |
 
-Claude Code'un plugin manifestinde gereksinim bildiren bir alan yok. Bu yüzden gereksinimleri **kurulum programı** denetler: eksik bir şey varsa hiçbir şeyi değiştirmeden durur ve bulunduğun platform için kurulum komutunu gösterir. Kurulumdan sonra da `legacies doctor` aynı kontrolleri yapar.
+Claude Code veya OpenCode'dan en az biri gerekir; ikisi birlikte de kullanılabilir. Kurulum programı gereksinimleri denetler: eksik bir şey varsa hiçbir şeyi değiştirmeden durur ve bulunduğun platform için kurulum komutunu gösterir. Kurulumdan sonra `legacies doctor` proje adaptörlerini de gösterir.
 
 ## Kurulum programı
 
@@ -45,13 +46,13 @@ Sonra her projenin klasöründe `legacies setup`: çekirdek o projeye kurulur, p
 
 Kurulum programı animasyonlu ve etkileşimli bir terminal arayüzüyle şu sırayla ilerler:
 
-1. **Sistem kontrolü:** Node, git, Claude Code; isteğe bağlı olarak Codex. graphify ve uv'nin durumunu da gösterir.
+1. **Sistem kontrolü:** Node, git, Claude Code, OpenCode ve isteğe bağlı Codex. graphify ve uv'nin durumunu da gösterir.
 2. **Mevcut kurulumun analizi:**
    - Etkin plugin'lerin hangi hook'ları kullandığına bakar. Oturum başında bağlam ekleyen ikinci bir hafıza sistemi (örneğin ECC) varsa çakışmayı ve önerilen komutu gösterir.
    - Aynı adlı skill'leri, `settings.json`'daki kendi hook'larını ve bozuk JSON'u kontrol eder.
 3. **Seçenekler:**
    - **Kapsam:** yalnız bu proje (önerilen) ya da ekiple paylaşılan proje; [global kurulum yok](#kapsam-proje-bazlı). Plugin klasöründe çalışınca varsayılan "hiçbir projeye kurma"dır: yalnız hazırlık yapılır. Ok tuşlarıyla seçilir.
-   - **Ek bileşenler:** kurallar, her terminalde `legacies` komutu, bu projenin Codex adaptörü, [çoklu ajan düzeni](#çoklu-ajan-düzeni) (açılırsa denge sorulur). Enter ile açılıp kapatılır; bitince listenin en altındaki **[ Onaylıyorum ]** satırında Enter'a basılır ve "Emin misiniz?" sorusuna evet denir. Hayır denirse seçimler kalır, düzenlemeye devam edilir. Kod haritası motoru graphify seçenek değildir, her kurulumda gelir (`--no-graphify` ile atlanır).
+   - **Ek bileşenler:** kurallar, her terminalde `legacies` komutu, bu projenin Codex ve OpenCode adaptörleri, [çoklu ajan düzeni](#çoklu-ajan-düzeni) (açılırsa denge sorulur). Enter ile açılıp kapatılır; bitince listenin en altındaki **[ Onaylıyorum ]** satırında Enter'a basılır ve "Emin misiniz?" sorusuna evet denir. Hayır denirse seçimler kalır, düzenlemeye devam edilir. Kod haritası motoru graphify seçenek değildir, her kurulumda gelir (`--no-graphify` ile atlanır).
    - **Eski global kurulum:** Önceki bir sürümün global kurulumu bulunursa kaldırılması önerilir.
 4. **Plan:** Yapılacakların ve **dokunulmayacakların** tam listesi. Onay vermeden hiçbir şey değişmez.
 5. **Kurulum:** Her adım ayrı bir göstergeyle çalışır. Hata olursa kurulum durur; tekrar çalıştırınca tamamlanan adımlar yeniden yapılmaz.
@@ -84,6 +85,7 @@ Kaldırma programı önce bilgisayardaki tüm legacies parçalarını bulur ve l
 - proje kuralları,
 - `legacies` komutu,
 - projelerdeki Codex hook'ları,
+- projelerdeki OpenCode adaptörleri,
 - eski sürümlerden kalan global kurallar ve Codex adaptörü,
 - veri klasörü (legacies'in graphify kopyası dahil; senin kurduğun bir graphify kalır),
 - çoklu ajan ayarları.
@@ -411,7 +413,25 @@ legacies rules uninstall   # yalnız legacies'in kurduklarını kaldırır
 
 Kuralların neredeyse tamamı **dosya türüne bağlıdır**: TypeScript kuralları yalnızca `.ts`/`.tsx` dosyası okunduğunda yüklenir. Her oturuma eklenen kapsamsız kısım birkaç KB ile sınırlıdır.
 
-## Codex ve diğer AI'lar
+## Codex, OpenCode ve diğer AI'lar
+
+### OpenCode
+
+`legacies setup`, OpenCode'u bulursa bu projeye `.opencode/plugins/legacies.js` yükleyicisini ekler. Dosya doğrudan bu checkout'taki V2 server plugin'ine işaret eder ve `.git/info/exclude` ile git'ten gizlenir. OpenCode ayar dosyaları ve diğer plugin'ler değiştirilmez.
+
+OpenCode adaptörü 14 çekirdek skill'i kaydeder; oturum başı hafızayı ve mesajla ilgili notları bağlama ekler, dosya değişikliklerini kaydeder, ortak güvenlik korumalarını uygular ve gerekli olduğunda bir kez devir kartı ister. Kullanıcının prompt metnini değiştirmez. Teknoloji paketleri ile Claude'a özel kural/ajan yönetimi şimdilik Claude/Codex yolunda kalır.
+
+Elle yönetmek için projenin klasöründe:
+
+```sh
+legacies opencode install
+legacies opencode status
+legacies opencode uninstall
+```
+
+Kurulumdan sonra OpenCode'u proje klasöründe yeniden başlat. `onboard`, `recall`, `remember` ve `handoff` gibi skill'leri doğal dille veya OpenCode'un skill seçimi üzerinden kullanabilirsin. OpenCode tek başına da desteklenir; Claude Code kurulu değilse kurulum `.claude/` dosyası oluşturmaz.
+
+### Codex
 
 Hafıza düz Markdown olduğu için her AI okuyabilir. Codex desteği iki ayrı parçadır:
 
