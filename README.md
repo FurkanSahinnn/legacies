@@ -147,7 +147,11 @@ Bir terminalden başka bir repoya bakmak ya da bir projeyi diğerine taşımak (
 - **`/cd` ile geçmek:** Oturum `/cd` ile başka bir projeye geçerse, o projenin başlangıç bağlamı ilk mesajda bir kez verilir.
 - **Ortak arama:** `legacies search "<terimler>" --all`, oturumun bütün projelerinde ve çalışma alanlarında arar.
 
-**2. Çalışma alanı:** Birlikte çalışılan projeleri adlandırılmış bir grupta toplar.
+**2. Çalışma alanı:** Birlikte çalışılan projeleri adlandırılmış bir grupta toplar. Projeleri bir kez gruba eklersin; sonra `legacies open <ad>` hepsini tek bir Claude Code oturumunda açar. Her seferinde hangi klasörlere bakılacağını ve aralarındaki kuralları yeniden anlatman gerekmez.
+
+<p align="center">
+  <img src="docs/images/calisma-alani-sema.png" width="760" alt="İki proje ve ortak hafıza, legacies open ile tek bir Claude Code oturumunda birleşiyor">
+</p>
 
 ```sh
 legacies workspace add magaza D:\Projeler\magaza-web D:\Projeler\magaza-mobil
@@ -161,6 +165,19 @@ legacies add --workspace magaza --type decision --title "Web ve mobil aynı toke
   - Projelerin `.legacies/` klasörleri gibi yalnız bu bilgisayarda durur.
   - `legacies uninstall` ona dokunmaz.
 - **Oturum başı:** Çalışma alanındaki bir projede açılan oturuma üyelerin listesi, ortak not dizini ve göçlerin durumu eklenir.
+- **Hangi projede açılır:** Komutu bir üyenin klasöründe çalıştırırsan o projede, değilse listedeki ilk projede açılır; `--from <klasör>` ile seçebilirsin. Seçim önemli: projenin kuralları (CLAUDE.md), Claude'un kendi hafıza klasörü ve kod grafı oturumun açıldığı projeden gelir. `--dry-run` çalıştırılacak komutu yalnız yazdırır.
+
+Örnek: web ve mobil iki ayrı repo, ortak bir oturum biçimi kararı var.
+
+<p align="center">
+  <img src="docs/images/calisma-alani-kurulum.png" width="760" alt="legacies workspace add, legacies add --workspace ve legacies open --dry-run komutlarının çıktısı">
+</p>
+
+Sonraki her `legacies open magaza` oturumunda Claude başlangıçta bunu görür, ek bir açıklama gerekmez:
+
+<p align="center">
+  <img src="docs/images/calisma-alani-oturum-basi.png" width="760" alt="legacies workspace show çıktısı: üyeler, çalışma alanı kartı ve ortak hafıza dizini">
+</p>
 
 **3. Göç yardımcısı:**
 
