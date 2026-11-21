@@ -8,6 +8,12 @@ legacies, Claude Code, Codex CLI ve OpenCode için projeye özel ve yalnızca bu
 
 Hafızanın yanında **proje başına teknoloji paketleri** gelir. Kurulum projenin dillerini, framework'lerini ve veri katmanını dosyalarından tespit eder ve uygun paketleri işaretli önerir. Katalogdaki diğer paketler, uygun resmi plugin'ler ve kendi eklediğin skill'ler de aynı listede durur; hepsi sonradan açılıp kapatılabilir (bkz. [Teknoloji paketleri](#teknoloji-paketleri)).
 
+Birbirine bağlı projeler (örneğin web ve mobil) bir **çalışma alanında** toplanır: `legacies open <ad>` hepsini tek bir oturumda, ortak hafızalarıyla açar (bkz. [Birden çok proje](#birden-çok-proje)).
+
+<p align="center">
+  <img src="docs/images/calisma-alani-sema.png" width="760" alt="İki proje ve ortak hafıza, legacies open ile tek bir Claude Code oturumunda birleşiyor">
+</p>
+
 Model çağırmıyor, kullanırken ağa bağlanmıyor (yalnız kurulum uv ve graphify'ı indirir), npm bağımlılığı yok. Windows, macOS ve Linux'ta çalışır. MIT lisanslıdır.
 
 **Nasıl kullanılır:** Kurulumdan günlük kullanıma ve sorun gidermeye kadar adım adım anlatım için [Kullanım rehberi](docs/KULLANIM.md). Bu README başvuru belgesidir.
