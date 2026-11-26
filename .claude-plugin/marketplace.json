@@ -11,7 +11,7 @@
       "name": "legacies",
       "source": "./",
       "description": "Per-project local memory and the core of the legacies packs: session-start and post-compaction context, pre-compaction checkpoints, handoff cards, pack selection.",
-      "version": "0.5.0"
+      "version": "0.5.1"
     },
     {
       "name": "legacies-ai-agents",

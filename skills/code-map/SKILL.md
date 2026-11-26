@@ -12,8 +12,10 @@ description: Find where something lives in the code before grepping or reading f
    - Files are also matched by the words inside them (identifiers, error codes, comments), in any language, so describing what the code does works.
    - When the question is in another language than the code, translate it yourself before mapping. Run `legacies vocab` once per session: it lists the project's code words, the most used first. Pick the ones that match the question's meaning and run `legacies map` with them. `legacies vocab <word>...` shows which candidate words the project uses.
    - Turkish questions also use the project's own translation files (JSON, YAML, .po, .properties, Android XML, .strings, .resx). The `(Sözlük: ...)` line shows the code words they added.
-   - This is cheap. Read only the lines it points to.
-2. When you need relationships rather than locations, ask the graph. The graph is built by graphify, legacies' code-graph engine. Each command runs from the project root and its output is capped at about 2k characters:
+   - Use the matches as starting points. Open the relevant definitions and read enough surrounding code to answer the question.
+2. For questions about how something works, why it happens, or what it affects, trace the relevant path in the source.
+   - Use the graph to find callers and callees, then read their code. Check configuration, alternate branches, and tests where they can change the answer.
+   - The graph is built by graphify. Run these commands from the project root. Each returns up to about 2k characters.
 
    | Command | Answers |
    |---|---|
@@ -23,7 +25,8 @@ description: Find where something lives in the code before grepping or reading f
    | `legacies map "<question>" --deep` | the matches above plus their nearest callers and callees |
 
    - When several symbols share the name, the answer lists all of them with their lines and explains the best connected one. To pick another, ask again with `"path/to/file.ts::Name"`.
-   - When nothing matches, fall back to normal search.
+   - Use normal repository search when the graph is unavailable, stale, or missing part of the path you need.
+   - Cite the files and lines that support your answer. Say which part of the behavior you could not verify, if any.
 3. Graph status:
    - `legacies graph status` shows whether a graph exists and how far behind HEAD it is.
    - legacies builds the graph by itself when a project with memory has none. It refreshes the graph in the background after edits.
@@ -31,6 +34,6 @@ description: Find where something lives in the code before grepping or reading f
 
 ## Limits
 
-- **Fallback:** Without a graph, only path matching works. Grep is still the fallback for string literals and config values.
+- Without a graph, `legacies map` can still match file contents and paths. If the command cannot run, start with normal repository search. Use that search for exact string literals and config values as well.
 - **Routing:** Routes and pages are known for the Next.js app and pages routers, SvelteKit and Expo Router. `'use client'` and server actions are not marked; grep for them.
 - **Stale graph:** A graph that is several commits behind can point to moved code. When it matters, confirm the location by reading the file.
