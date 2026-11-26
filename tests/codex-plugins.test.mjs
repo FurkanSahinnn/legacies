@@ -30,7 +30,7 @@ function pluginRoots() {
 test('Codex manifests expose every core and pack skill without copying skill content', () => {
   const roots = pluginRoots();
   assert.equal(roots.length, 73, 'core plus 72 skill-bearing packs');
-  assert.equal(roots.reduce((total, pluginRoot) => total + skillCount(pluginRoot), 0), 209);
+  assert.equal(roots.reduce((total, pluginRoot) => total + skillCount(pluginRoot), 0), 210);
 
   for (const pluginRoot of roots) {
     const claude = readJson(path.join(pluginRoot, '.claude-plugin', 'plugin.json'));
@@ -62,9 +62,12 @@ test('the Codex marketplace lists exactly the plugins that contain skills', () =
   }
 });
 
-test('explicit-only workflows stay explicit-only in Codex', () => {
-  for (const name of ['spec', 'plan', 'review-pr']) {
-    const config = fs.readFileSync(path.join(ROOT, 'skills', name, 'agents', 'openai.yaml'), 'utf8');
+test('explicit-only workflows require invocation in Claude Code and Codex', () => {
+  for (const name of ['spec', 'plan', 'review-pr', 'memory-update']) {
+    const skillDir = path.join(ROOT, 'skills', name);
+    const skill = fs.readFileSync(path.join(skillDir, 'SKILL.md'), 'utf8');
+    const config = fs.readFileSync(path.join(skillDir, 'agents', 'openai.yaml'), 'utf8');
+    assert.match(skill, /^disable-model-invocation:\s*true$/m);
     assert.match(config, /allow_implicit_invocation:\s*false/);
   }
 });
@@ -77,6 +80,6 @@ test('Codex generation is idempotent and does not rewrite Claude manifests', () 
   const before = new Map(claudeFiles.map((file) => [file, fs.readFileSync(file, 'utf8')]));
   const result = spawnSync(process.execPath, ['scripts/build-codex-plugins.mjs'], { cwd: ROOT, encoding: 'utf8', windowsHide: true });
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /73 Codex plugins covering 209 skills \(0 files changed\)/);
+  assert.match(result.stdout, /73 Codex plugins covering 210 skills \(0 files changed\)/);
   for (const file of claudeFiles) assert.equal(fs.readFileSync(file, 'utf8'), before.get(file), file);
 });

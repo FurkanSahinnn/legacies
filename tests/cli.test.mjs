@@ -88,6 +88,26 @@ test('stale flags a note after its code changes and verify clears it', () => {
   assert.match(cli(root, ['stale']).stdout, /Bayat not yok/);
 });
 
+test('stale and index check notes from every verification commit', () => {
+  const root = gitRepo();
+  initMemory(root);
+  for (let i = 1; i <= 9; i += 1) {
+    run(root, 'git', ['commit', '--allow-empty', '-qm', `baseline ${i}`]);
+    const note = cli(root, ['add', '--type', 'convention', '--title', `Auth note ${i}`, '--paths', 'src/auth/**', '--text', 'x']);
+    assert.equal(note.status, 0, note.stderr);
+  }
+
+  write(root, 'src/auth/session.ts', 'export function getUserSession() { return 1; }\n');
+  commit(root, 'change auth');
+
+  const stale = cli(root, ['stale']);
+  const index = cli(root, ['index']);
+  assert.equal(stale.status, 0, stale.stderr);
+  assert.equal(index.status, 0, index.stderr);
+  assert.equal(stale.stdout.match(/^\- Auth note \d+/gm)?.length, 9);
+  assert.match(index.stdout, /9 tanesi doğrulanmalı/);
+});
+
 test('handoff writes one card per session and --skip records the choice', () => {
   const root = gitRepo();
   initMemory(root);

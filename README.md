@@ -25,7 +25,7 @@ Model çağırmıyor, kullanırken ağa bağlanmıyor (yalnız kurulum uv ve gra
 | **Node.js 18+** | Zorunlu | Hook'lar, CLI ve kurulum programı | macOS: `brew install node` · Linux: [nvm](https://github.com/nvm-sh/nvm) · Windows: `winget install OpenJS.NodeJS.LTS` |
 | **git** | Zorunlu | Bayatlık tespiti, `.git/info/exclude` | macOS: `xcode-select --install` · Linux: `sudo apt install git` · Windows: `winget install Git.Git` |
 | **Claude Code** | Claude kullanacaksan | Ana plugin, teknoloji paketleri ve Claude hook'ları. 2.1.308 ve sonrasıyla test edildi | macOS/Linux: `curl -fsSL https://claude.ai/install.sh \| bash` · Windows: `irm https://claude.ai/install.ps1 \| iex` |
-| **OpenCode 2** | OpenCode kullanacaksan | V2 server plugin adaptörü ve 14 çekirdek skill. 2.2.5 ve sonrasıyla test edildi | [opencode.ai/docs](https://opencode.ai/docs/) |
+| **OpenCode 2** | OpenCode kullanacaksan | V2 server plugin adaptörü ve 15 çekirdek skill. 2.2.5 ve sonrasıyla test edildi | [opencode.ai/docs](https://opencode.ai/docs/) |
 | **uv** | Kurulum programı kurar | graphify'ı (kod haritası) ve gerekirse onun Python'unu kurar | Elle gerekmez; yoksa kurulum programı sabit sürümünü (0.11.28) resmi kurucusuyla kurar |
 | **graphify** | Kurulum programı kurar | Kod haritası motoru | Elle gerekmez; sabit sürümü (0.9.93) bilgisayara bir kez, legacies'in veri klasörüne kurulur (~140 MB). Senin kurduğun bir graphify'a dokunulmaz |
 | **Codex CLI** | İsteğe bağlı | Codex adaptörü | Codex kuruluysa kurulum programı adaptörü önerir |
@@ -442,7 +442,7 @@ Kuralların neredeyse tamamı **dosya türüne bağlıdır**: TypeScript kuralla
 
 `legacies setup`, OpenCode'u bulursa bu projeye `.opencode/plugins/legacies.js` yükleyicisini ekler. Dosya doğrudan bu checkout'taki V2 server plugin'ine işaret eder ve `.git/info/exclude` ile git'ten gizlenir. OpenCode ayar dosyaları ve diğer plugin'ler değiştirilmez.
 
-OpenCode adaptörü 14 çekirdek skill'i kaydeder; oturum başı hafızayı ve mesajla ilgili notları bağlama ekler, dosya değişikliklerini kaydeder, ortak güvenlik korumalarını uygular ve gerekli olduğunda bir kez devir kartı ister. Kullanıcının prompt metnini değiştirmez. Teknoloji paketleri ile Claude'a özel kural/ajan yönetimi şimdilik Claude/Codex yolunda kalır.
+OpenCode adaptörü 15 çekirdek skill'i kaydeder; oturum başı hafızayı ve mesajla ilgili notları bağlama ekler, dosya değişikliklerini kaydeder, ortak güvenlik korumalarını uygular ve gerekli olduğunda bir kez devir kartı ister. Kullanıcının prompt metnini değiştirmez. Teknoloji paketleri ile Claude'a özel kural/ajan yönetimi şimdilik Claude/Codex yolunda kalır.
 
 Elle yönetmek için projenin klasöründe:
 
@@ -458,7 +458,7 @@ Kurulumdan sonra OpenCode'u proje klasöründe yeniden başlat. `onboard`, `reca
 
 Hafıza düz Markdown olduğu için her AI okuyabilir. Codex desteği iki ayrı parçadır:
 
-1. **Plugin skill'leri:** Çekirdekteki 14 skill ve 72 skill taşıyan paketteki 195 skill, toplam 209 skill aynı kaynak dosyalarından Codex'e sunulur. Claude manifestleri ve hook'ları değiştirilmez.
+1. **Plugin skill'leri:** Çekirdekteki 15 skill ve 72 skill taşıyan paketteki 195 skill, toplam 210 skill aynı kaynak dosyalarından Codex'e sunulur. Claude manifestleri ve hook'ları değiştirilmez.
 2. **Proje hook'ları:** Hafızayı oturum başında yükleyen adaptör proje başınadır. `legacies setup` Codex'i bulursa adaptörü kendisi kurar.
 
 Marketplace'i ve çekirdeği Codex'e eklemek için:
@@ -475,7 +475,7 @@ codex plugin add legacies-react@legacies
 codex plugin add legacies-rust@legacies
 ```
 
-Codex'te Claude'a ait `/legacies:*` slash komutları kullanılmaz. Skill'i `/skills` ekranından seç veya `$legacies:recall`, `$legacies:plan`, `$legacies-react:react-patterns` biçiminde çağır. `spec`, `plan` ve `review-pr` iki tarafta da yalnız açıkça çağrılır. Yeni plugin/skill'lerin görünmesi için yeni bir Codex oturumu aç.
+Codex'te Claude'a ait `/legacies:*` slash komutları kullanılmaz. Skill'i `/skills` ekranından seç veya `$legacies:recall`, `$legacies:plan`, `$legacies-react:react-patterns` biçiminde çağır. `spec`, `plan`, `review-pr` ve `memory-update` iki tarafta da yalnız açıkça çağrılır. Yeni plugin/skill'lerin görünmesi için yeni bir Codex oturumu aç.
 
 Hook adaptörünü elle kurmak için projenin klasöründe:
 
@@ -543,7 +543,7 @@ claude plugin validate .
 npm run packs:build           # packs/ klasörünü catalog/registry.json, catalog/own/ ve yanındaki ECC
                               # kopyasından yeniden üretir ve marketplace.json'a yazar; bir yama tam bir
                               # kez eşleşmezse ya da kopuk atıf kalırsa durur
-npm run codex:build           # 209 skill için Codex uyumluluk manifestlerini ve ayrı marketplace'i üretir
+npm run codex:build           # 210 skill için Codex uyumluluk manifestlerini ve ayrı marketplace'i üretir
 ```
 
 Tasarımın gerekçeleri ve aşama planı: `../ANALIZ-VE-PLAN.md` (yalnızca geliştirme klasöründe, repoda yok).

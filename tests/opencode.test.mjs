@@ -126,8 +126,9 @@ test('OpenCode plugin registers core skills and injects project memory without c
 
   await createOpenCodePlugin({ pluginRoot: ROOT, dataDir: path.join(root, '.test-runtime') }).setup(ctx);
 
-  assert.equal(registered.skills.length, 14);
+  assert.equal(registered.skills.length, 15);
   assert.ok(registered.skills.some((skill) => skill.id === 'recall' && /Search/.test(skill.description)));
+  assert.ok(registered.skills.some((skill) => skill.id === 'memory-update' && !skill.autoinvoke));
   const prompt = { sessionID: 'open-1', prompt: { text: 'Webhook imzasını nerede doğruluyoruz?' }, delivery: 'steer' };
   await registered.session.prompt(prompt);
   assert.equal(prompt.prompt.text, 'Webhook imzasını nerede doğruluyoruz?');

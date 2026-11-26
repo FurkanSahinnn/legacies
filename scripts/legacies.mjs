@@ -290,7 +290,7 @@ async function cmdHandoff(args) {
 function cmdIndex(args) {
   const paths = requireMemory(args);
   const notes = loadNotes(paths);
-  const stale = isGitRepo(paths.root) ? findStale(paths.root, notes) : new Map();
+  const stale = isGitRepo(paths.root) ? findStale(paths.root, notes, { maxCommits: Infinity }) : new Map();
   writeIndex(paths, notes, stale);
   out(`Dizin güncellendi: ${notes.length} not${stale.size ? `, ${stale.size} tanesi doğrulanmalı` : ''}.`);
 }
@@ -302,7 +302,7 @@ function cmdStale(args) {
     return;
   }
   const notes = loadNotes(paths);
-  const stale = findStale(paths.root, notes);
+  const stale = findStale(paths.root, notes, { maxCommits: Infinity });
   if (stale.size === 0) {
     out('Bayat not yok: notların işaret ettiği dosyalar doğrulandıklarından beri değişmedi.');
     return;

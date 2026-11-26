@@ -56,6 +56,7 @@ Komut yazman gerekmez: Claude aşağıdaki cümlelerde ilgili skill'i kendisi a�
 | İstek | Örnek cümle | Komut |
 |---|---|---|
 | Bir şeyi kalıcı not et | "bunu hatırla", "not al", "unutma" | `/legacies:remember` |
+| Mevcut proje hafızasını topluca güncelle | — | `/legacies:memory-update` |
 | Önceki kararları bul | "daha önce ne karar vermiştik", "bunu konuşmuştuk" | `/legacies:recall` |
 | Kodun yerini bul | "bu nerede", "hangi dosyada", "neyi etkiler" | `/legacies:code-map` |
 | Nerede kaldığını kaydet | "devir kartı yaz", "nerede kaldık yaz" | `/legacies:handoff` |
@@ -67,7 +68,9 @@ Komut yazman gerekmez: Claude aşağıdaki cümlelerde ilgili skill'i kendisi a�
 | Kod yazmadan önce plan | — | `/legacies:plan` |
 | PR ya da değişiklik incelemesi | — | `/legacies:review-pr` |
 
-`/legacies:spec`, `/legacies:plan` ve `/legacies:review-pr` yalnızca sen yazınca çalışır. Büyük bir iş için sıra: önce `spec` (ne yapılacak), sonra `plan` (nasıl ve hangi sırayla).
+`/legacies:spec`, `/legacies:plan`, `/legacies:review-pr` ve `/legacies:memory-update` yalnızca sen yazınca çalışır. Büyük bir iş için önce `spec` ile kapsamı belirle, ardından `plan` ile adımları sırala.
+
+Toplu hafıza güncellemesi için proje kökünde Claude Code'da `/legacies:memory-update`, Codex'te `$legacies:memory-update` çalıştır. Beceri, değişen kodla ilişkili notları kaynakla karşılaştırır, proje kartını ve güncel durumu gerektiğinde yeniler, ardından not dizinini yeniden oluşturur. Mevcut `.legacies/` hafızasını kullanır.
 
 Süreç skill'leri işe göre kendiliğinden devreye girer:
 - `tdd-workflow`: bir davranışı değiştirirken ya da bilinen bir hatayı düzeltirken; "TDD ile yap" ya da "önce test" dediğinde de. İşi ince dilimlerle yapar, her dilimde önce başarısız olan bir test yazar.
@@ -119,7 +122,7 @@ Codex kuruluysa `legacies setup` projeye Codex hook'larını da ekler: `.codex/h
 
 Hook'u olmayan bir AI için oturum başında `legacies context` aynı bağlamı verir.
 
-OpenCode kuruluysa `legacies setup` projeye `.opencode/plugins/legacies.js` ekler ve git'ten gizler. OpenCode'u proje klasöründe yeniden başlatınca 14 çekirdek skill, hafıza bağlamı, düzenleme kaydı, korumalar ve devir kartı hatırlatıcısı etkinleşir. Elle yönetmek için `legacies opencode install|status|uninstall` kullan. Diğer OpenCode plugin'leri ve ayarları korunur.
+OpenCode kuruluysa `legacies setup` projeye `.opencode/plugins/legacies.js` ekler ve git'ten gizler. OpenCode'u proje klasöründe yeniden başlatınca 15 çekirdek skill, hafıza bağlamı, düzenleme kaydı, korumalar ve devir kartı hatırlatıcısı etkinleşir. Elle yönetmek için `legacies opencode install|status|uninstall` kullan. Diğer OpenCode plugin'leri ve ayarları korunur.
 
 ## 9. Terminalde sık kullanılanlar
 
