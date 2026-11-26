@@ -108,7 +108,7 @@ Onay verince hepsini kaldırır. Varsayılanları güvenli taraftadır:
 | Ne zaman | Ne olur |
 |---|---|
 | Oturum başında | Proje kartı, güncel durum, son devir kartı, not dizini ve tazelik bilgisi bütçeli olarak (≤8.000 karakter) bağlama eklenir. Bütçe dar kalırsa önce not dizini tam sığdırılır, proje kartının sonu kırpılır. |
-| Her mesajda | Mesajla ilgili notlar ve olası kod konumları (≤2.500 karakter) eklenir: kod grafından `sembol — dosya:satır` (adıyla, adındaki kelimelerle ya da üstündeki doc yorumu / docstring'iyle eşleşen tanımlar), ayrıca içerik ve yol eşleşmeleri. Eşleşme zayıfsa hiçbir şey eklenmez. Aynı bilgi, bağlam yeniden başlayana kadar tekrar verilmez. Süre ~150 ms. Mesaj bir düzeltme istiyorsa ("düzelt", "fix"), önce hatayı gösteren testin yazılması hatırlatılır; bu satır hafızası olmayan projelerde de gelir. |
+| Her mesajda | Mesajla ilgili kod konumları ve notlar bütçeye sığdığı kadar eklenir (varsayılan 2.500 karakter). Kod konumları önce gelir. Bayat notlar doğrulanmalı olarak işaretlenir. Yalnızca gösterilen konumlar ve notlar oturum kaydına işlenir. Kod davranışında bir hata düzeltiliyorsa önce hatayı gösteren testin yazılması hatırlatılır. |
 | Dosya düzenlenince | Değişen dosya oturum kaydına yazılır. |
 | Alt ajan başlarken | Alt ajana hafızanın kısa bir özeti eklenir (≤4.000 karakter): not dizini (başlık, özet, dosya) ve proje kartı. Claude Code'un kendi yardımcı ajanlarına (`claude-code-guide`, `statusline-setup`) eklenmez. Alt ajanların araç çağrılarında korumalar ve düzenleme kaydı da çalışır. |
 | Sıkıştırmadan önce | Bir kontrol noktası kaydedilir: kullanıcının son istekleri (birebir), yapılacaklar, değişen dosyalar, commit'ler ve git durumu. |
@@ -363,19 +363,17 @@ legacies'in graphify'ın üstüne ekledikleri:
 
 ## Çoklu ajan düzeni
 
-Claude büyük bir işi parçalara bölüp alt ajanlara verebilir. Çoklu ajan düzeni açıkken legacies her oturumun başında lidere (ana oturuma) kısa bir kural verir:
-- hangi ajana hangi modeli ve effort'u vereceği,
-- küçük işlerde (tek dosya, birkaç satır, belge ya da ayar, kısa soru) ajan açmayıp işi kendisinin yapacağı,
-- aynı anda en fazla kaç ajan çalıştıracağı; bağımsız işleri paralel, bağımlı olanları sırayla vereceği,
-- yazan ajanların dosyalarını ayıracağı (gerekirse ayrı worktree), paket tanımı ve kilit dosyalarını yalnız kendisinin değiştireceği,
-- başarısız bir işi nasıl yeniden deneyeceği,
-- ajanın sonucunu kendisinin doğrulayıp sonunda hangi işi hangi ajanın yaptığını ve nasıl doğrulandığını özetleyeceği.
+Çoklu ajan düzeni açıkken Claude Code ve Codex, iş dağıtımı için oturum başında aynı kuralları alır.
+
+- Ana ajan kısa soruları ve küçük işleri kendisi ele alır. Alt ajanlara ayrı ve bağımsız sorular verir, birbirine bağlı adımları sıraya koyar.
+- Her görevde bakılacak alanı, yazma yetkisini ve beklenen çıktıyı belirtir. İnceleme yapan ajanlar bulgularını dosya ve satırla destekler, doğrulayamadıkları noktaları bildirir.
+- Ana ajan, dosya düzenleyen ajanlara ayrı dosyalar veya çalışma kopyaları verir. Çelişen bulguları kaynaktan kontrol eder ve kullanıcıya tek bir sonuç sunar.
 
 Bu kuralların bir kısmı [ruflo](https://github.com/ruvnet/ruflo) ve ECC'nin orkestrasyon kurallarından alındı; ikisinin de her oturuma binlerce token ekleyen sabit ajan hatları ve araçları alınmadı.
 
 Effort, modelin cevap vermeden önce ne kadar düşündüğüdür (low, medium, high, xhigh, max). Lider bunları her ajanı başlatırken Agent aracına verir; ajan dosyalarına dokunulmaz.
 
-- **Varsayılan olarak kapalı.** Kapalıyken hiçbir şey eklenmez. Açıkken her oturuma ~400 token eklenir; yalnız lidere ve yalnız Claude Code'da.
+- **Varsayılan olarak kapalı.** Açıldığında kurallar ana oturuma eklenir. Aşağıdaki model ve effort tablosu Claude Code içindir. Codex kendi alt ajan rollerini ve model ayarlarını kullanır.
 - **Açıp kapatmak:** Kurulumda "Ek bileşenler" listesinden ya da sonradan `legacies multiagent on` / `off` ile. Kapatmak hiçbir şeyi silmez; yeniden açınca son ayarlarla gelir. Değişiklik yeni oturumda geçerli olur.
 - **Üç hazır denge ve Özel:** "Özel"de her rolün modelini ve effort'unu sen seçersin.
 
@@ -393,7 +391,7 @@ Effort, modelin cevap vermeden önce ne kadar düşündüğüdür (low, medium, 
   - Uygulama: geri kalanların hepsi, `general-purpose` dahil.
 
   Bir ajanı başka bir role alabilirsin; kendi ajanların da buna dahil.
-- **Diğer ayarlar:** aynı anda en fazla kaç ajan (1–8, varsayılan 4) ve başarısız olan işin bir üst effort'la yeniden denenmesi (varsayılan açık).
+- **Diğer ayarlar:** ana ajana verilen eşzamanlı ajan üst sınırı (1–8, varsayılan 4) ve sorun muhakeme derinliğiyse bir üst effort ile yeniden deneme (varsayılan açık). İstemcinin kendi sınırları ayrıca geçerlidir.
 - **Ayar ekranı:** terminalde `legacies multiagent`. Satırı Enter'la değiştir, en alttaki **[ Onaylıyorum ]** ile kaydet.
 - **Komutlar:**
 
@@ -485,7 +483,7 @@ legacies codex status
 legacies codex uninstall
 ```
 
-`install`, projenin `.codex/hooks.json` dosyasına aynı motoru çağıran hook'ları ekler: oturum başı bağlamı, mesaj başı getirme, düzenleme kaydı, sıkıştırma öncesi kontrol noktası ve devir kartı hatırlatması.
+`install`, projenin `.codex/hooks.json` dosyasına oturum ve alt ajan başlangıcı, mesaj başı bağlam, düzenleme kaydı, sıkıştırma öncesi kontrol noktası ve devir kartı hatırlatması için hook ekler. Daha önce kurulmuş bir projede `SubagentStart` hook'unu eklemek için güncel kopyadan `legacies codex install` çalıştır.
 - Oturum başı bağlamı, hafıza komutlarının nasıl kullanılacağını da anlatır.
 - Dosyadaki diğer hook'lar korunur ve dosya git'ten gizlenir.
 - Git'te takip edilen bir `hooks.json` hiç değiştirilmez.
@@ -505,6 +503,7 @@ Proje bazında isteğe bağlı bir `.legacies/config.json` dosyası:
   "compactBudget": 9000,
   "promptContext": true,
   "promptBudget": 2500,
+  "answerStyle": "default",
   "subagentContext": true,
   "subagentBudget": 4000,
   "stopReminder": true,
@@ -514,6 +513,8 @@ Proje bazında isteğe bağlı bir `.legacies/config.json` dosyası:
   "keepSessionCards": 30
 }
 ```
+
+Claude Code ve Codex'te sade anlatımı açmak için `answerStyle` değerini `"plain"` yap. Ayar, modelden sonucu başta vermesini, gerekli bağlamı sade ve anlaşılır cümlelerle anlatmasını ve açıklama metninde noktalı virgül kullanmamasını ister.
 
 Ortam değişkenleri:
 

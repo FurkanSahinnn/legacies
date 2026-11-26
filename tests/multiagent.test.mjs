@@ -105,6 +105,13 @@ test('the lead is told to end with which agent did what and how it was checked',
   assert.match(leadRules(), /hangi işi hangi ajan yaptı, nasıl doğrulandı/);
 });
 
+test('Claude delegation asks for separate questions and source evidence before synthesis', () => {
+  const text = leadRules();
+  assert.match(text, /farklı ve bağımsız bir soru/);
+  assert.match(text, /bulgu.*dosya:satır.*doğrulanamayan/);
+  assert.match(text, /çelişen bulguların kaynağını/i);
+});
+
 test('a project follows the computer default until it sets its own', () => {
   const m = machine();
   const first = project();

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: trace-session-ttl
+description: The first answer should follow the route into the current settings and resolve a conflicting historical note.
+expected_outcome: The answer explains the development TTL, production default, and valid override using the current source.
+context:
+  scaffold_script: setup.sh

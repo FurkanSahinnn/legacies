@@ -94,25 +94,31 @@ export function roleOf(agent, assignments = {}) {
 export const describeRole = ({ model, effort }) => `${MODEL_LABEL[model] || model} · ${effort}`;
 
 // What the lead reads at session start while the setup is on.
-export function policyText(settings) {
-  const table = roleTable(settings);
-  const lines = [
-    `## Çoklu ajan düzeni (açık · ${PROFILE_LABEL[settings.profile] || settings.profile})`,
-    'Ajan kullanırken lider sensin: işi böl, ajanlara ver, sonuçları birleştir ve doğrula. Bir ajanı Agent aracıyla başlatırken rolüne göre aşağıdaki model ve effort\'u ver; model "senin modelin" ise model verme. Ajan adı `paket:ad` biçimindeyse `ad` kısmına bak.',
-    '| Rol | Ajanlar | Model | Effort |',
-    '|---|---|---|---|',
-    ...ROLES.map((role) => `| ${ROLE_LABEL[role]} | ${ROLE_MEMBERS[role]} | ${MODEL_LABEL[table[role].model] || table[role].model} | ${table[role].effort} |`),
-  ];
-  const assigned = Object.entries(settings.agents || {});
-  if (assigned.length) lines.push(`Kullanıcının atamaları tablodan önce gelir: ${assigned.map(([agent, role]) => `${agent} → ${ROLE_LABEL[role] || role}`).join(', ')}.`);
+export function policyText(settings, harness = 'claude') {
+  const lines = [];
+  if (harness === 'claude') {
+    const table = roleTable(settings);
+    lines.push(
+      `## Çoklu ajan düzeni (açık · ${PROFILE_LABEL[settings.profile] || settings.profile})`,
+      'Ajanı Agent aracıyla başlatırken rolüne göre model ve effort seç. Model "senin modelin" ise model alanını boş bırak. Rol seçiminde önce özel atamaya, sonra ajan adının tam eşleşmesine, ardından adın son ekine bak. `paket:ad` biçimindeki ajanlarda `ad` kısmını kullan.',
+      '| Rol | Ajanlar | Model | Effort |',
+      '|---|---|---|---|',
+      ...ROLES.map((role) => `| ${ROLE_LABEL[role]} | ${ROLE_MEMBERS[role]} | ${MODEL_LABEL[table[role].model] || table[role].model} | ${table[role].effort} |`),
+    );
+    const assigned = Object.entries(settings.agents || {});
+    if (assigned.length) lines.push(`Kullanıcının atamaları tablodan önce gelir: ${assigned.map(([agent, role]) => `${agent} → ${ROLE_LABEL[role] || role}`).join(', ')}.`);
+  } else {
+    lines.push('## Çoklu ajan düzeni (açık)', 'Alt ajanlara görev verirken Codex oturumunda kullanılabilen yerel rolleri ve ayarları kullan. Oturumun yetki ve eşzamanlılık sınırlarına uy.');
+  }
   // When not to fan out, and how writers stay apart: the parts of ruflo's and ECC's orchestration rules
   // that cost almost nothing and save the most tokens and broken merges.
   lines.push(
     '- Tek dosyalık ya da birkaç satırlık değişiklik, belge ya da ayar düzenlemesi ve kısa sorular için ajan açma; kendin yap.',
-    `- Aynı anda en fazla ${settings.maxParallel} ajan çalıştır. Bağımsız işleri paralel, birbirine bağlı olanları sırayla ver.`,
-    '- Yalnız okuyan ajanlar aynı çalışma kopyasını paylaşabilir. Yazan her ajanın dosyaları ayrı olsun; çakışma riski varsa ayrı worktree ver. Paket tanımı ve kilit dosyalarını (package.json, pyproject.toml, go.mod, *.lock) ve ortak ayarları yalnız sen değiştir.',
+    `- Aynı anda en fazla ${settings.maxParallel} ajan çalıştır. Her ajana farklı ve bağımsız bir soru ver. Bir adım diğerinin sonucuna bağlıysa sırayla ilerle.`,
+    '- Göreve bakılacak alanı, yazma yetkisini ve beklenen çıktıyı ekle. İnceleme çıktısında bulgu, dosya:satır kanıtı ve doğrulanamayan noktalar iste.',
+    '- Yalnız okuyan ajanlar aynı çalışma kopyasını paylaşabilir. Yazan her ajanın dosyaları ayrı olsun. Çakışma riski varsa ayrı worktree ver. Paket tanımı ve kilit dosyalarını (package.json, pyproject.toml, go.mod, *.lock) ve ortak ayarları yalnız sen değiştir.',
   );
-  if (settings.escalate) lines.push('- Bir ajan başarısız olursa ya da sonucu kontrolünden geçmezse bir kez daha bir üst effort\'la dene; yine olmazsa senin modelinle.');
-  lines.push('- Ajanın "bitti" demesi yetmez: sonucu sen doğrula. Bitince kısa bir özet ver: hangi işi hangi ajan yaptı, nasıl doğrulandı.');
+  if (settings.escalate) lines.push('- Sonuç yetersizse önce görev kapsamını ve eldeki kanıtı kontrol et. Sorun muhakeme derinliğiyse bir kez daha bir üst effort ile dene. Eksik dosya veya yetki sorununu doğrudan ele al.');
+  lines.push('- Çelişen bulguların kaynağını aç ve sonucu kendin doğrula. Kullanıcıya tek bir sonuç sun. Sorarsa hangi işi hangi ajan yaptı, nasıl doğrulandı açıkla.');
   return lines.join('\n');
 }

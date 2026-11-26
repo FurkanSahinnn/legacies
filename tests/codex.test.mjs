@@ -21,6 +21,7 @@ test('planCodexHooks keeps other hooks and is idempotent', () => {
   assert.match(once.hooks.SessionStart[0].hooks[0].command, /node "D:\/Plugins\/legacies\/scripts\/legacies\.mjs" hook session-start --harness codex/);
   assert.equal(once.hooks.SessionStart[0].hooks[0].commandWindows, once.hooks.SessionStart[0].hooks[0].command);
   assert.equal(once.hooks.PostToolUse[0].matcher, 'apply_patch|Edit|Write|MultiEdit|NotebookEdit');
+  assert.match(once.hooks.SubagentStart[0].hooks[0].command, /hook subagent-start --harness codex/);
 
   const removed = removeCodexHooks(once);
   assert.deepEqual(Object.keys(removed.hooks), ['PreToolUse', 'Stop']);
@@ -124,6 +125,31 @@ test('codex harness: apply_patch edits are recorded and the context names CLI co
   const text = JSON.parse(start.stdout).hookSpecificOutput.additionalContext;
   assert.match(text, /legacies handoff --text/);
   assert.doesNotMatch(text, /\/legacies:remember/);
+});
+
+test('codex harness: the lead and its subagent get evidence guidance using native roles', () => {
+  const root = gitRepo();
+  initMemory(root);
+  const env = { CLAUDE_CONFIG_DIR: tempDir('legacies-agent-policy-') };
+  assert.equal(cli(root, ['multiagent', 'on'], { env }).status, 0);
+  assert.equal(cli(root, ['add', '--type', 'decision', '--title', 'Verify the webhook source'], { input: 'Inspect current handlers.', env }).status, 0);
+  write(root, '.legacies/config.json', JSON.stringify({ answerStyle: 'plain' }));
+
+  const context = (event, extra = {}) => {
+    const res = cli(root, ['hook', event, '--harness', 'codex'], {
+      input: JSON.stringify({ cwd: root, session_id: 'codex-agent-1', ...extra }), env,
+    });
+    assert.equal(res.status, 0, res.stderr);
+    return JSON.parse(res.stdout).hookSpecificOutput.additionalContext;
+  };
+  const lead = context('session-start', { source: 'startup' });
+  assert.match(lead, /farklı ve bağımsız bir soru/);
+  assert.match(lead, /Sade, açıklayıcı ve anlaşılır/);
+  assert.doesNotMatch(lead, /\| Rol \||Sonnet|Haiku/);
+
+  const agent = context('subagent-start', { agent_id: 'codex-1', agent_type: 'explorer' });
+  assert.match(agent, /Verify the webhook source/);
+  assert.match(agent, /Dosya:satır kanıtını ve doğrulayamadığın noktaları/);
 });
 
 test('codex harness: stop keeps the native continuation decision', () => {

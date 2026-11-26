@@ -101,7 +101,7 @@ Bu süreç skill'leri [addyosmani/agent-skills](https://github.com/addyosmani/ag
 
 ## 7. Çoklu ajan düzeni
 
-Açıkken Claude işi alt ajanlara dağıtırken her birine işine uygun model ve effort'u verir: incelemeyi dikkatli, aramayı ucuz yaptırır. Varsayılan olarak kapalıdır.
+Açıkken Claude Code ve Codex, alt ajanlara ayrı görevler vermek ve bulguları kaynak koddan doğrulamak için ortak yönergeleri alır. Model ve effort tablosu Claude Code'da kullanılır. Codex kendi alt ajan ayarlarını kullanır. Düzen varsayılan olarak kapalıdır.
 
 - **Açmak ve kapatmak:** `legacies multiagent on` ve `legacies multiagent off`. Kapatmak hiçbir şeyi silmez.
 - **Ayarlamak:** Terminalde `legacies multiagent` ayar ekranını açar. Orada şunları seçersin:

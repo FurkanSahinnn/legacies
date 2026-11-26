@@ -15,6 +15,7 @@ export function launcherDir() {
 
 const EVENTS = [
   ['SessionStart', null, 10, 'session-start'],
+  ['SubagentStart', null, 10, 'subagent-start'],
   ['UserPromptSubmit', null, 10, 'user-prompt-submit'],
   ['PostToolUse', 'apply_patch|Edit|Write|MultiEdit|NotebookEdit', 5, 'post-tool-use'],
   ['PreCompact', null, 15, 'pre-compact'],

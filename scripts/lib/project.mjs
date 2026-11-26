@@ -47,6 +47,7 @@ const DEFAULT_CONFIG = {
   compactBudget: 9000,
   promptContext: true,
   promptBudget: 2500,
+  answerStyle: 'default',
   subagentContext: true,
   subagentBudget: 4000,
   stopReminder: true,
@@ -61,10 +62,10 @@ export function loadConfig(paths) {
   return { ...DEFAULT_CONFIG, ...((paths && readJson(paths.config, {})) || {}) };
 }
 
-export function git(root, args, { timeout = 3000 } = {}) {
+export function git(root, args, { timeout = 3000, trim = true } = {}) {
   const res = spawnSync('git', args, { cwd: root, encoding: 'utf8', timeout, windowsHide: true });
   if (res.error || res.status !== 0) return null;
-  return res.stdout.trim();
+  return trim ? res.stdout.trim() : res.stdout;
 }
 
 export function gitHead(root) {

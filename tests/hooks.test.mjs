@@ -53,6 +53,19 @@ test('session-start with memory injects state, index and the newest card within 
   assert.ok(fs.existsSync(path.join(base, 'state', 'current-session.json')));
 });
 
+test('session-start tells Claude to ground behavior answers in code and applies plain style on request', () => {
+  const root = gitRepo();
+  initMemory(root);
+  const normal = hook(root, 'session-start', { source: 'startup' }).json.hookSpecificOutput.additionalContext;
+  assert.match(normal, /giriş noktasını.*çağıran kodu.*dosya:satır/);
+  assert.doesNotMatch(normal, /noktalı virgül/);
+
+  write(root, '.legacies/config.json', JSON.stringify({ answerStyle: 'plain' }));
+  const plain = hook(root, 'session-start', { source: 'startup' }).json.hookSpecificOutput.additionalContext;
+  assert.match(plain, /Sade, açıklayıcı ve anlaşılır/);
+  assert.match(plain, /noktalı virgül/);
+});
+
 test('session-start tells Claude to translate a question in another language with legacies vocab', () => {
   const root = gitRepo();
   initMemory(root);

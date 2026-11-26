@@ -63,6 +63,44 @@ test('user-prompt-submit does not repeat itself until the context restarts', () 
   assert.match(context(hook(root, 'user-prompt-submit', { prompt })), /Profil kartı/);
 });
 
+test('code locations survive a long note and undelivered notes can be retrieved later', () => {
+  const root = projectWithMemory();
+  write(root, '.legacies/config.json', JSON.stringify({ promptBudget: 240 }));
+  const added = cli(root, ['add', '--type', 'gotcha', '--title', 'Shopier webhook route details', '--paths', 'src/app/api/webhook/route.ts', '--summary', 'Shopier webhook route '.repeat(130)]);
+  assert.equal(added.status, 0, added.stderr);
+  const prompt = 'Shopier webhook route';
+  const first = context(hook(root, 'user-prompt-submit', { prompt }));
+  assert.match(first, /src\/app\/api\/webhook\/route\.ts/);
+  assert.doesNotMatch(first, /Shopier webhook route details/);
+  assert.ok(first.length <= 240);
+
+  write(root, '.legacies/config.json', JSON.stringify({ promptBudget: 2500 }));
+  const second = context(hook(root, 'user-prompt-submit', { prompt }));
+  assert.match(second, /Shopier webhook route details/);
+  assert.ok(second.length <= 2500);
+});
+
+test('user-prompt-submit labels stale notes beside the claim they describe', () => {
+  const root = projectWithMemory();
+  write(root, 'src/app/api/webhook/route.ts', 'export async function PUT() {}\n');
+  commit(root, 'change webhook');
+  const text = context(hook(root, 'user-prompt-submit', { prompt: 'Shopier webhook HMAC imzası' }));
+  assert.match(text, /doğrulanmalı[^\n]*Shopier webhook imzası HMAC ile doğrulanır/);
+});
+
+test('map picks up saved working tree edits without staging them', () => {
+  const root = gitRepo();
+  const file = 'src/services/settings.ts';
+  write(root, file, 'export const label = "bronze lantern";\n');
+  commit(root, 'add settings');
+  initMemory(root);
+  assert.match(cli(root, ['map', 'bronze lantern']).stdout, /src\/services\/settings\.ts/);
+
+  write(root, file, 'export const label = "indigo compass";\n');
+  assert.match(cli(root, ['map', 'indigo compass']).stdout, /src\/services\/settings\.ts/);
+  assert.doesNotMatch(cli(root, ['map', 'bronze lantern']).stdout, /src\/services\/settings\.ts/);
+});
+
 test('user-prompt-submit maps identifiers to file:line through the code graph', () => {
   const root = projectWithMemory();
   write(

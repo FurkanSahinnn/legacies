@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { gitIndexStamp, PATH_STOPWORDS } from './codeindex.mjs';
+import { git } from './project.mjs';
 import { classify } from './routekeys.mjs';
 import { tokenize } from './search.mjs';
 import { readJson, readText, writeAtomic } from './util.mjs';
@@ -9,7 +10,7 @@ import { readJson, readText, writeAtomic } from './util.mjs';
 // live inside the code: identifiers, error codes, table names, comments, URL strings. Every tracked code
 // file, in any language, becomes a small document of its path words and its most frequent words, scored
 // against the question. Framework routes (Next.js, SvelteKit, Expo Router) also get a method/URL label.
-const CONTENT_VERSION = 2;
+const CONTENT_VERSION = 3;
 const WORDS_PER_FILE = 40;
 // Doc comments and docstrings say what the code is for, often in words used once (a vendor's name,
 // "idempotent") that the most frequent words leave out; up to this many of them are kept as well.
@@ -52,7 +53,7 @@ function expoRouterIn(root) {
 function fileStamp(root, file) {
   try {
     const stat = fs.statSync(path.join(root, file));
-    return stat.size > MAX_FILE_BYTES ? null : `${stat.size}:${stat.mtimeMs}`;
+    return stat.size > MAX_FILE_BYTES ? null : `${stat.size}:${stat.mtimeMs}:${stat.ctimeMs}`;
   } catch {
     return null;
   }
@@ -94,19 +95,23 @@ function fileDocument(root, file, route) {
   return { words, pathWords, label, line, page: route.kind !== 'api' };
 }
 
-// Rebuilt when git's index changes, rereading only the files whose size or time changed.
+// Include unstaged edits in the cache key. On rebuild, reuse documents for files that did not change.
 export function contentIndex(paths, files) {
   const stamp = gitIndexStamp(paths);
   if (!stamp) return null;
-  const key = `${CONTENT_VERSION}|${stamp}`;
+  const dirty = git(paths.root, ['--no-optional-locks', 'diff', '--name-only', '-z', '--'], { trim: false });
+  const changed = dirty?.split('\0').filter((file) => CODE_FILE.test(file) || file === 'package.json');
+  const key = changed ? JSON.stringify([CONTENT_VERSION, stamp, changed.map((file) => [file, fileStamp(paths.root, file)])]) : null;
   const cacheFile = path.join(paths.runtime, 'content.json');
   // The per-file documents live apart from the lookup index: only a rebuild reads them.
   const docsFile = path.join(paths.runtime, 'content-docs.json');
   const cached = readJson(cacheFile);
-  if (cached && cached.key === key && Array.isArray(cached.files)) return cached;
+  if (key && cached && cached.key === key && Array.isArray(cached.files)) return cached;
   const saved = readJson(docsFile);
-  const previous = saved && saved.version === CONTENT_VERSION && Array.isArray(saved.docs) ? new Map(saved.docs.map((d) => [d.file, d])) : new Map();
   const expoRouter = expoRouterIn(paths.root);
+  const previous = saved?.version === CONTENT_VERSION && saved.expoRouter === expoRouter && Array.isArray(saved.docs)
+    ? new Map(saved.docs.map((d) => [d.file, d]))
+    : new Map();
   const docs = [];
   for (const file of files) {
     if (!CODE_FILE.test(file)) continue;
@@ -133,7 +138,7 @@ export function contentIndex(paths, files) {
   try {
     fs.mkdirSync(paths.runtime, { recursive: true });
     writeAtomic(cacheFile, JSON.stringify(index));
-    writeAtomic(docsFile, JSON.stringify({ version: CONTENT_VERSION, docs }));
+    writeAtomic(docsFile, JSON.stringify({ version: CONTENT_VERSION, expoRouter, docs }));
   } catch {
     // Still usable for this call.
   }

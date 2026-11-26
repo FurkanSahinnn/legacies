@@ -101,6 +101,8 @@ export function collectDocuments(paths, { sessionCards = 20 } = {}) {
       title: note.title,
       rel: note.rel,
       paths: note.paths,
+      verified: note.verified,
+      status: note.status,
       summary: note.summary,
       body: note.body,
       // The title is repeated so that a title hit outweighs a passing mention in a long body.
